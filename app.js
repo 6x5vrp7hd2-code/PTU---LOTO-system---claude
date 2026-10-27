@@ -62,18 +62,18 @@ const LOGS = {
 const ROOT = document.body.dataset.root || '';
 const LOGO = window.PT_LOGO || '', MARK = window.PT_MARK || '';
 const PAGES = {
-  keys:{file:'trackers/keys.html',title:'Key tracker',code:'H · L',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
+  keys:{file:'keys.html',title:'Key tracker',code:'H · L',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
     cols:[['id','Lock no.'],['sys','System'],['board','Board'],['point','Point of isolation'],['status','Status'],['where','Key location']]},
-  info:{file:'trackers/info.html',title:'Information tracker',code:'LB',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
+  info:{file:'info.html',title:'Information tracker',code:'LB',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
     cols:[['id','Box no.'],['status','Status'],['doc','Safety document'],['keysN','Keys inside'],['plocksN','Personal locks'],['issued','Issued']]},
-  ptw:{file:'trackers/ptw.html',title:'Permit to work tracker',code:'PTW',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
+  ptw:{file:'ptw.html',title:'Permit to work tracker',code:'PTW',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
     cols:[['id','Permit no.'],['status','Status'],['work','Work'],['loc','Location'],['cp','Competent person'],['box','Box']]},
-  sft:{file:'trackers/sft.html',title:'Sanction for test tracker',code:'SFT',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
+  sft:{file:'sft.html',title:'Sanction for test tracker',code:'SFT',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
     cols:[['id','Sanction no.'],['status','Status'],['work','Work'],['test','Test'],['cp','Competent person'],['box','Box']]},
-  loa:{file:'trackers/loa.html',title:'Limitation of access tracker',code:'LOA',blurb:'Areas with restricted access, who holds the limitation, and its boundaries.',
+  loa:{file:'loa.html',title:'Limitation of access tracker',code:'LOA',blurb:'Areas with restricted access, who holds the limitation, and its boundaries.',
     cols:[['id','LOA no.'],['status','Status'],['area','Area'],['reason','Reason'],['holder','Holder'],['expiry','Expires']]}
 };
-const NAV = [['index.html','Home','HOME','home'],['trackers/keys.html','Key tracker','H · L','keys'],['trackers/info.html','Information tracker','LB','info'],['trackers/ptw.html','Permit to work tracker','PTW','ptw'],['trackers/sft.html','Sanction for test tracker','SFT','sft'],['trackers/loa.html','Limitation of access tracker','LOA','loa'],['drawings/lv-schematic.html','LV schematic','SLD','schematic'],['guides/implementation.html','Implementation plan','PLAN','plan']];
+const NAV = [['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['lv-schematic.html','LV schematic','SLD','schematic'],['implementation.html','Implementation plan','PLAN','plan']];
 const U = path => ROOT + path;
 
 /* ---------- Icons ---------- */
@@ -101,7 +101,7 @@ const ICON_FOR = {keys:I.key, info:I.box, ptw:I.ptw, sft:I.sft, loa:I.loa};
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SETS = Object.keys(DATA);
 function find(id){ id = String(id||'').toUpperCase(); for(const s of SETS){ const r = DATA[s].find(x => x.id.toUpperCase() === id); if(r) return {set:s, r}; } return null; }
-const recUrl = id => U(`trackers/record.html?id=${encodeURIComponent(id)}`);
+const recUrl = id => U(`record.html?id=${encodeURIComponent(id)}`);
 const link = id => !id ? '' : find(id) ? `<a href="${recUrl(id)}">${esc(id)}</a>` : `<span>${esc(id)}</span>`;
 const linkList = ids => ids && ids.length ? `<div class="links">${ids.map(link).join('')}</div>` : '<p>None</p>';
 function chipClass(s){
@@ -161,8 +161,8 @@ function home(){
     <p class="sub">Isolation and safety document control for critical infrastructure.</p>
     <p class="lead">Every point of isolation has its own numbered lock, shown on the single line diagram. When a key leaves its hook, a tag takes its place, and this register shows where it went, which permit it serves and who is working under it.</p>
     <div class="cta">
-      <a class="btn primary" href="${U('trackers/keys.html')}">Open key tracker ${I.arrow}</a>
-      <a class="btn ghost" href="${U('trackers/ptw.html')}">${I.ptw.replace('stroke-width="2.4"','stroke-width="3"')} Live permits</a>
+      <a class="btn primary" href="${U('keys.html')}">Open key tracker ${I.arrow}</a>
+      <a class="btn ghost" href="${U('ptw.html')}">${I.ptw.replace('stroke-width="2.4"','stroke-width="3"')} Live permits</a>
     </div>
     <div class="stats" aria-label="Site status now">
       <div><b class="hot">${n('ptw','Live')}</b><span>Live permits</span></div>
@@ -180,8 +180,8 @@ function home(){
     <div class="block-head"><div class="eyebrow">Trackers</div><h2>Every key, permit and sanction in one place.</h2><p class="lead">Select a tracker, then select any line to open its full record.</p></div>
     <div class="cards">
       ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}
-      <a class="card" href="${U('drawings/lv-schematic.html')}"><div class="ico">${I.sld}</div><div><h3>LV schematic</h3><p>Representative 2N LV single line: transformers, main switchboards, UPS and critical distribution.</p><div class="n">Reference drawing · SLD</div><span class="more">View schematic ${I.arrow}</span></div></a>
-      <a class="card" href="${U('guides/implementation.html')}" style="grid-column:1/-1"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>Implementation plan</h3><p>How the system goes live on site: nine phases from approval and survey through installation, training and go-live to audit, with a gate at the end of each phase and a go-live readiness checklist.</p><div class="n">9 phases · indicative 20 weeks · PLAN</div><span class="more">View plan ${I.arrow}</span></div></a>
+      <a class="card" href="${U('lv-schematic.html')}"><div class="ico">${I.sld}</div><div><h3>LV schematic</h3><p>Representative 2N LV single line: transformers, main switchboards, UPS and critical distribution.</p><div class="n">Reference drawing · SLD</div><span class="more">View schematic ${I.arrow}</span></div></a>
+      <a class="card" href="${U('implementation.html')}" style="grid-column:1/-1"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>Implementation plan</h3><p>How the system goes live on site: nine phases from approval and survey through installation, training and go-live to audit, with a gate at the end of each phase and a go-live readiness checklist.</p><div class="n">9 phases · indicative 20 weeks · PLAN</div><span class="more">View plan ${I.arrow}</span></div></a>
     </div>
   </div></section>
   <section class="block alt"><div class="wrap">
@@ -254,7 +254,7 @@ function record(){
   const id = new URLSearchParams(location.search).get('id');
   const hit = find(id);
   if(!hit){
-    shell('', pageHero(`<a href="${U('index.html')}">Home</a>`, 'Record', 'Record not found', `No record matches “${esc(id || '')}”. Open a tracker and select a line.`, `<div class="cta"><a class="btn primary" href="${U('trackers/keys.html')}">Open key tracker ${I.arrow}</a></div>`), '');
+    shell('', pageHero(`<a href="${U('index.html')}">Home</a>`, 'Record', 'Record not found', `No record matches “${esc(id || '')}”. Open a tracker and select a line.`, `<div class="cta"><a class="btn primary" href="${U('keys.html')}">Open key tracker ${I.arrow}</a></div>`), '');
     return;
   }
   const {set, r} = hit, p = PAGES[set];
