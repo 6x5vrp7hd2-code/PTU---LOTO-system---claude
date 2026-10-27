@@ -40,6 +40,19 @@ const DATA = {
     {id:'SFT-2026-0088',status:'Live',sys:'LV',work:'Insulation resistance test, cable UPS-B to CDB-B1',test:'Insulation resistance, 1000 V DC',loc:'LV switchroom B to data hall 2',ap:AP.J,cp:'M. Ek · P-052',keys:['L-124'],box:'LB-08',issued:'2026-10-27 09:20',expiry:'2026-10-27 16:00'},
     {id:'SFT-2026-0086',status:'Cancelled',sys:'LV',work:'Primary injection test, ACB I1 LV-MSB-A',test:'Primary current injection',loc:'LV switchroom A',ap:AP.E,cp:'T. Sjöberg · P-044',keys:['L-101'],box:'LB-09',issued:'2026-10-21 08:00',expiry:'2026-10-21 15:00'}
   ],
+  cp: [
+    {id:'P-004',name:'Johan Andersson',company:'Powertec Utilities Ltd',role:'AP',scope:'LV and HV to 22 kV',phone:'+46 70 000 10 04',email:'j.andersson@example.com',id06:'ID06-0000-1004',trained:'2025-03-12',authBy:'E. Berg (SAP)',expiry:'2027-03-11',status:'Active',emergency:'Anna Andersson · +46 70 000 20 04'},
+    {id:'P-009',name:'Rasmus Holm',company:'Kraftservice AB',role:'AP',scope:'LV',phone:'+46 70 000 10 09',email:'r.holm@example.com',id06:'ID06-0000-1009',trained:'2025-06-02',authBy:'E. Berg (SAP)',expiry:'2027-06-01',status:'Active',emergency:'Lena Holm · +46 70 000 20 09'},
+    {id:'P-018',name:'Sara Nyberg',company:'Nordel Electrical AB',role:'CP',scope:'LV mechanical and electrical',phone:'+46 70 000 10 18',email:'s.nyberg@example.com',id06:'ID06-0000-1018',trained:'2026-01-20',authBy:'J. Andersson (AP)',expiry:'2027-01-19',status:'Active',emergency:'Per Nyberg · +46 70 000 20 18'},
+    {id:'P-026',name:'Oskar Dahl',company:'Nordel Electrical AB',role:'CP',scope:'LV',phone:'+46 70 000 10 26',email:'o.dahl@example.com',id06:'ID06-0000-1026',trained:'2026-02-04',authBy:'J. Andersson (AP)',expiry:'2027-02-03',status:'Active',emergency:'Maja Dahl · +46 70 000 20 26'},
+    {id:'P-031',name:'Karin Lindqvist',company:'Nordel Electrical AB',role:'CP',scope:'LV, UPS and critical distribution',phone:'+46 70 000 10 31',email:'k.lindqvist@example.com',id06:'ID06-0000-1031',trained:'2025-11-10',authBy:'J. Andersson (AP)',expiry:'2026-11-09',status:'Active',emergency:'Erik Lindqvist · +46 70 000 20 31'},
+    {id:'P-037',name:'Liam Byrne',company:'Hall Mechanical Ltd',role:'CP',scope:'LV',phone:'+44 7700 900 037',email:'l.byrne@example.com',id06:'ID06-0000-1037',trained:'2026-04-15',authBy:'R. Holm (AP)',expiry:'2027-04-14',status:'Active',emergency:'Niamh Byrne · +44 7700 900 137'},
+    {id:'P-042',name:'Jonas Wikström',company:'Nordel Electrical AB',role:'CP',scope:'LV',phone:'+46 70 000 10 42',email:'j.wikstrom@example.com',id06:'ID06-0000-1042',trained:'2026-05-06',authBy:'J. Andersson (AP)',expiry:'2027-05-05',status:'Active',emergency:'Ida Wikström · +46 70 000 20 42'},
+    {id:'P-044',name:'Tove Sjöberg',company:'Voltwise Testing AB',role:'CP',scope:'LV testing and commissioning',phone:'+46 70 000 10 44',email:'t.sjoberg@example.com',id06:'ID06-0000-1044',trained:'2025-09-01',authBy:'E. Berg (SAP)',expiry:'2026-08-31',status:'Expired',emergency:'Mats Sjöberg · +46 70 000 20 44'},
+    {id:'P-052',name:'Mikael Ek',company:'Voltwise Testing AB',role:'CP',scope:'LV testing and commissioning',phone:'+46 70 000 10 52',email:'m.ek@example.com',id06:'ID06-0000-1052',trained:'2026-03-18',authBy:'E. Berg (SAP)',expiry:'2027-03-17',status:'Active',emergency:'Sofia Ek · +46 70 000 20 52'},
+    {id:'P-061',name:'Alva Lund',company:'Kraftservice AB',role:'CP',scope:'Battery and BESS rooms, inspection only',phone:'+46 70 000 10 61',email:'a.lund@example.com',id06:'ID06-0000-1061',trained:'2026-06-22',authBy:'R. Holm (AP)',expiry:'2027-06-21',status:'Active',emergency:'Hugo Lund · +46 70 000 20 61'},
+    {id:'P-070',name:'Filip Strand',company:'Brandskydd Norr AB',role:'CP',scope:'Battery rooms, non-electrical work',phone:'+46 70 000 10 70',email:'f.strand@example.com',id06:'ID06-0000-1070',trained:'2026-07-01',authBy:'E. Berg (SAP)',expiry:'2027-06-30',status:'Suspended',emergency:'Elin Strand · +46 70 000 20 70'}
+  ],
   loa: [
     {id:'LOA-2026-0046',status:'Live',area:'Battery room B',reason:'Visual inspection of BESS-B racks, no contact',ap:AP.R,holder:'A. Lund · P-061',bounds:'Inspection walkway only; rack doors stay shut',issued:'2026-10-27 10:00',expiry:'2026-10-27 14:00',ptw:''},
     {id:'LOA-2026-0045',status:'Live',area:'LV switchroom B, bays 1 to 4',reason:'Live LV equipment next to the PTW-2026-0412 work area',ap:AP.J,holder:'K. Lindqvist · P-031',bounds:'Barrier and signage at bay 4; no entry beyond bay 4',issued:'2026-10-27 07:15',expiry:'2026-10-28 18:00',ptw:'PTW-2026-0412'},
@@ -71,9 +84,11 @@ const PAGES = {
   sft:{file:'sft.html',title:'Sanction for test tracker',code:'SFT',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
     cols:[['id','Sanction no.'],['status','Status'],['work','Work'],['test','Test'],['cp','Competent person'],['box','Box']]},
   loa:{file:'loa.html',title:'Limitation of access tracker',code:'LOA',blurb:'Areas with restricted access, who holds the limitation, and its boundaries.',
-    cols:[['id','LOA no.'],['status','Status'],['area','Area'],['reason','Reason'],['holder','Holder'],['expiry','Expires']]}
+    cols:[['id','LOA no.'],['status','Status'],['area','Area'],['reason','Reason'],['holder','Holder'],['expiry','Expires']]},
+  cp:{file:'cp.html',title:'CP register',code:'P',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
+    cols:[['id','Lock no.'],['name','Name'],['company','Company'],['role','Role'],['phone','Phone'],['status','Status'],['expiry','Authorised until']]}
 };
-const NAV = [['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['lv-schematic.html','LV schematic','SLD','schematic'],['implementation.html','Implementation plan','PLAN','plan']];
+const NAV = [['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['lv-schematic.html','LV schematic','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
 const U = path => ROOT + path;
 
 /* ---------- Icons ---------- */
@@ -95,7 +110,7 @@ const I = {
   lock:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="12" y="24" width="32" height="24"/><path d="M18 24v-6a10 10 0 0120 0v6M28 32v8"/></svg>',
   people:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="20" cy="20" r="7"/><circle cx="38" cy="22" r="5"/><path d="M8 46c0-8 6-13 12-13s12 5 12 13M32 46c0-6 3-10 8-10s8 4 8 10"/></svg>'
 };
-const ICON_FOR = {keys:I.key, info:I.box, ptw:I.ptw, sft:I.sft, loa:I.loa};
+const ICON_FOR = {keys:I.key, info:I.box, ptw:I.ptw, sft:I.sft, loa:I.loa, cp:I.people.replace('viewBox="0 0 56 56"','viewBox="0 0 56 56" width="64" height="64"')};
 
 /* ---------- Helpers ---------- */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -103,9 +118,12 @@ const SETS = Object.keys(DATA);
 function find(id){ id = String(id||'').toUpperCase(); for(const s of SETS){ const r = DATA[s].find(x => x.id.toUpperCase() === id); if(r) return {set:s, r}; } return null; }
 const recUrl = id => U(`record.html?id=${encodeURIComponent(id)}`);
 const link = id => !id ? '' : find(id) ? `<a href="${recUrl(id)}">${esc(id)}</a>` : `<span>${esc(id)}</span>`;
+const person = s => { const m = String(s||'').match(/P-\d{3}/); return m && find(m[0]) ? esc(s).replace(m[0], `<a href="${recUrl(m[0])}" class="plink">${m[0]}</a>`) : esc(s); };
 const linkList = ids => ids && ids.length ? `<div class="links">${ids.map(link).join('')}</div>` : '<p>None</p>';
 function chipClass(s){
-  if(s==='In cabinet') return 's-good';
+  if(s==='In cabinet' || s==='Active') return 's-good';
+  if(s==='Expired') return 's-crit';
+  if(s==='Suspended') return 's-warn';
   if(s==='Cancelled') return 's-idle';
   if(['Live','In use','In lockout box'].includes(s)) return 's-hot';
   if(['With AP','Pending issue'].includes(s)) return 's-warn';
@@ -179,9 +197,9 @@ function home(){
   <section class="block"><div class="wrap">
     <div class="block-head"><div class="eyebrow">Trackers</div><h2>Every key, permit and sanction in one place.</h2><p class="lead">Select a tracker, then select any line to open its full record.</p></div>
     <div class="cards">
-      ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}
+      ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}${card('cp')}
       <a class="card" href="${U('lv-schematic.html')}"><div class="ico">${I.sld}</div><div><h3>LV schematic</h3><p>Representative 2N LV single line: transformers, main switchboards, UPS and critical distribution.</p><div class="n">Reference drawing · SLD</div><span class="more">View schematic ${I.arrow}</span></div></a>
-      <a class="card" href="${U('implementation.html')}" style="grid-column:1/-1"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>Implementation plan</h3><p>How the system goes live on site: nine phases from approval and survey through installation, training and go-live to audit, with a gate at the end of each phase and a go-live readiness checklist.</p><div class="n">9 phases · indicative 20 weeks · PLAN</div><span class="more">View plan ${I.arrow}</span></div></a>
+      <a class="card" href="${U('procedure.html')}"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>System procedure</h3><p>Step by step: plan, draw keys, isolate, secure, issue, work, cancel. Plus handover, audits and lost keys.</p><div class="n">7 stages · STEPS</div><span class="more">View procedure ${I.arrow}</span></div></a>
     </div>
   </div></section>
   <section class="block alt"><div class="wrap">
@@ -266,18 +284,28 @@ function record(){
     side = `<div class="panel"><h3>Hook ${esc(r.hook)}</h3>${tag}</div><div class="panel"><h3>Linked records</h3>${linkList([r.doc, r.box].filter(Boolean))}</div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='info'){
-    body = fields([['Box no.',mono(r.id)],['Cabinet 3 bay',mono(r.bay)],['Safety document',link(r.doc)],['Issued',mono(r.issued)],['AP lock',esc(r.aplock),1],['Isolation keys inside',r.keys.length?linkList(r.keys):'',1],['Personal locks applied',r.plocks.length?mono(r.plocks.join(', ')):'',1]]);
+    body = fields([['Box no.',mono(r.id)],['Cabinet 3 bay',mono(r.bay)],['Safety document',link(r.doc)],['Issued',mono(r.issued)],['AP lock',person(r.aplock),1],['Isolation keys inside',r.keys.length?linkList(r.keys):'',1],['Personal locks applied',r.plocks.length?linkList(r.plocks):'',1]]);
     side = `<div class="panel"><h3>Box can be opened when</h3><p>${r.plocks.length ? `All ${r.plocks.length} personal locks have been removed by their holders, then the AP removes their own lock.` : 'Box is empty and not in use.'}</p></div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='ptw' || set==='sft'){
-    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',esc(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)]]);
+    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',person(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)]]);
     side = logPanel(r.id);
   }
   if(set==='loa'){
-    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',esc(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)]]);
+    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',person(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)]]);
     side = logPanel(r.id);
   }
-  const titles = {keys:r.point, info:r.doc ? `Serving ${r.doc}` : 'Lockout box', ptw:r.work, sft:r.work, loa:r.area};
+  if(set==='cp'){
+    const docs = [...DATA.ptw.map(d=>[d,d.cp]), ...DATA.sft.map(d=>[d,d.cp]), ...DATA.loa.map(d=>[d,d.holder])].filter(([d,c]) => String(c).includes(r.id)).map(([d]) => d);
+    const boxes = DATA.info.filter(b => b.plocks.includes(r.id) || String(b.aplock).includes(r.id));
+    const live = docs.filter(d => d.status==='Live');
+    body = fields([['Personal lock no.',mono(r.id)],['Role',esc(r.role)],['Name',esc(r.name)],['Company',esc(r.company)],['Phone',`<span class="mono">${esc(r.phone)}</span>`],['Email',`<span class="mono">${esc(r.email)}</span>`],['ID06 card',mono(r.id06)],['Emergency contact',esc(r.emergency)],['Authorised for',esc(r.scope),1],['CP training completed',mono(r.trained)],['Authorised by',esc(r.authBy)],['Authorised until',mono(r.expiry)],['Status',chip(r.status)]]);
+    side = `<div class="panel"><h3>Lock on site now</h3>${boxes.length ? `<p>Personal lock is on ${boxes.map(b=>link(b.id)).join(', ')}.</p>` : '<p>Not on any lockout box.</p>'}</div>
+      <div class="panel"><h3>Live documents</h3>${live.length ? linkList(live.map(d=>d.id)) : '<p>None</p>'}</div>
+      <div class="panel"><h3>Document history</h3>${docs.length ? linkList(docs.map(d=>d.id)) : '<p>None recorded</p>'}</div>
+      ${r.status!=='Active' ? `<div class="panel" style="border-color:var(--crit)"><h3 style="color:var(--crit)">Not to receive documents</h3><p>Authorisation is ${r.status.toLowerCase()}. Do not issue a PTW, SFT or LOA to this person.</p></div>` : ''}`;
+  }
+  const titles = {cp:r.name, keys:r.point, info:r.doc ? `Serving ${r.doc}` : 'Lockout box', ptw:r.work, sft:r.work, loa:r.area};
   document.title = `${r.id} · Powertec Isolation Control`;
   const hero = `<section class="hero"><div class="wrap">
     <nav class="crumbs"><a href="${U('index.html')}">Home</a><span>/</span><a href="${U(p.file)}">${p.title}</a><span>/</span><span>${esc(r.id)}</span></nav>
@@ -338,116 +366,79 @@ function schematic(){
   shell('schematic', hero, main);
 }
 
-/* ---------- Implementation plan ---------- */
-const PHASES = [
-  {n:'0',name:'Approve',weeks:'Week 1',owner:'Lead SAP',
-   aim:'Agree the system with the client and make it part of the site safety rules.',
-   tasks:['Present the system to the client, the principal contractor and the site Authorising Engineer','Write the procedure amendment to the site electrical safety rules and isolation procedure','Complete a risk assessment for the change, including the cut-over from the current method','Nominate the lead SAP as system owner and a document controller for the SLDs','Brief all current APs and SAPs and collect their comments'],
-   outputs:['Signed approval to proceed','Draft procedure amendment','Change risk assessment'],
-   gate:'Client and AE approval in writing. No work on site starts before this.'},
-  {n:'1',name:'Survey',weeks:'Weeks 1–3',owner:'Lead SAP + APs',
-   aim:'Find and list every point of isolation and earthing on site.',
-   tasks:['Walk down every HV and LV switchboard against the current SLDs','List every circuit breaker, switch, disconnector, isolator and earth switch that can be locked','Record the locking method for each point (padlock hasp, Castell, shutter lock)','Note any point that cannot take a padlock and needs a hasp or adaptor','Mark drawing errors found during the walk-down for the document controller'],
-   outputs:['Master point-of-isolation list','Drawing error list','Hasp and adaptor list'],
-   gate:'Every switchboard walked and signed off by two people.'},
-  {n:'2',name:'Number',weeks:'Weeks 2–3',owner:'Lead SAP',
-   aim:'Give every point its own lock number, for life.',
-   tasks:['Assign H-numbers to HV points and L-numbers to LV points, in SLD order','Assign hook numbers: Cabinet 1 (HV) C1-nn, Cabinet 2 (LV) C2-nn','Assign lockout box numbers LB-nn and Cabinet 3 bays C3-nn','Reserve a block of S-numbers for spares and replacements','Load the numbering into the Key tracker'],
-   outputs:['Numbering schedule','Populated Key tracker'],
-   gate:'Numbering schedule approved by the lead SAP. Numbers are then frozen.'},
-  {n:'3',name:'Procure',weeks:'Weeks 2–5',owner:'Site manager',
-   aim:'Buy everything needed to fit, store and track the locks.',
-   tasks:['Safety padlocks, all keyed differently, no master key: one per point plus 10% spares','Colour-coded bodies or covers: red for HV, blue for LV','Three lockable key cabinets with numbered hooks and bays','Lockout boxes: enough for the peak number of live documents plus 25%','Personal CP locks (orange) for every current CP, plus spares for new starters','Engraved labels for every switch, reusable key-out tags, A1 SLD prints and frames'],
-   outputs:['Purchase orders','Delivery schedule'],
-   gate:'All materials on site and checked against the numbering schedule.'},
-  {n:'4',name:'Drawings',weeks:'Weeks 4–6',owner:'Document controller',
-   aim:'Show every lock number on the controlled SLDs.',
-   tasks:['Add the lock number in a circle beside every switch symbol: red for H, blue for L','Correct the errors found in the survey','Issue the revised HV and LV SLDs under drawing control','Mount A1 prints in the AP office beside the matching cabinet','Withdraw superseded copies from site'],
-   outputs:['Revised SLDs, controlled issue','Wall-mounted AP office copies'],
-   gate:'Drawings checked against the survey list by an AP who did not draw them.'},
-  {n:'5',name:'Install',weeks:'Weeks 5–7',owner:'APs',
-   aim:'Fit the cabinets, labels and locks.',
-   tasks:['Mount the three cabinets in the AP office and number every hook and bay','Fit an engraved label beside each locking point, matching the SLD','Hang each key on its numbered hook; tag and log each lock as it is allocated','Hold locks not yet in use in the cabinet; do not fit to live equipment outside a safety document','Record every lock, hook and box in the trackers'],
-   outputs:['Cabinets installed','Every switch labelled','Trackers fully populated'],
-   gate:'Full reconciliation: every number on the SLD has a label, a lock, a key and a hook.'},
-  {n:'6',name:'Train',weeks:'Weeks 6–8',owner:'Lead SAP',
-   aim:'Make sure everyone knows the new method before it goes live.',
-   tasks:['AP and SAP briefing: issue, cancellation, handover, audits and lost keys','Practical run-through of a full permit issue and cancellation on the new system','Issue personal locks to all current CPs and record P-numbers','Add personal lock issue to the CP training course for new starters','Toolbox talk for working parties: own lock on, own lock off'],
-   outputs:['Training record for every AP, SAP and CP','Personal lock register complete'],
-   gate:'Every AP who will issue documents has been briefed and has done a practical run-through.'},
-  {n:'7',name:'Go live',weeks:'Week 8',owner:'Lead SAP',
-   aim:'Switch over on a set date without disturbing live work.',
-   tasks:['Set a go-live date and publish it to all parties','From go-live, issue every new PTW, SFT and LOA under the new system','Let documents already live finish under the current method; do not transfer mid-document','Lead SAP in the AP office for the first week of issues','Daily debrief with APs for the first two weeks'],
-   outputs:['Go-live notice','First documents issued on the new system'],
-   gate:'Go-live readiness checklist complete (below).'},
-  {n:'8',name:'Audit',weeks:'Weeks 9–20',owner:'Lead SAP',
-   aim:'Prove the system works and keep it working.',
-   tasks:['Daily: every empty hook has a tag that matches the tracker and a live document','Weekly: walk-down of 10% of fitted locks, number versus label versus SLD','Monthly: full reconciliation of all trackers','30-day and 90-day reviews with APs, CPs and the client','Update the procedure from lessons learned'],
-   outputs:['Audit records','30-day and 90-day review reports'],
-   gate:'90-day review signed off. The system becomes standard site practice.'}
+/* ---------- System procedure (step-by-step plan of the system) ---------- */
+const STAGES = [
+  {k:'plan',name:'Plan the isolation',who:'AP',icon:'ptw',
+   steps:['Mark the points of isolation and earthing on a copy of the SLD. Read the circled lock number beside each switch.','Write the switching programme, listing every point with its lock number, for example LV-MSB-B ACB Q1 · L-121.','Open the Key tracker and check every listed lock shows IN CABINET.','Open the CP register and check the CP who will receive the document is Active and authorised for this system.'],
+   site:'No change yet. The switching programme is ready.',
+   stop:'Any lock not IN CABINET, or a CP not Active: stop and resolve before going on.'},
+  {k:'draw',name:'Draw the keys and a lockout box',who:'AP',icon:'key',
+   steps:['Take each key from its numbered hook in Cabinet 1 (HV) or Cabinet 2 (LV).','Hang a key-out tag on each empty hook: lock no., status WITH AP, document no., your name, time.','Take a free lockout box from Cabinet 3 and tag its empty bay the same way.'],
+   site:'Key tracker: each key → With AP. Information tracker: box → In use, against the document number.',
+   stop:'Every empty hook and bay carries a tag before you leave the AP office.'},
+  {k:'isolate',name:'Isolate, lock and earth',who:'AP',icon:'lock',
+   steps:['Carry out the switching programme in order.','At each point, fit its dedicated lock. Check the number on the lock matches the switch label and the SLD.','Prove dead and apply earths as the safety rules require. Lock earth switches with their own dedicated locks.','Post caution and danger notices.'],
+   site:'No change. Keys stay in the AP\'s hand.',
+   stop:'A lock number that does not match the label or SLD: stop. Do not fit a different lock.'},
+  {k:'secure',name:'Secure the keys',who:'AP',icon:'box',
+   steps:['Place every isolation key in the lockout box. Count them against the switching programme.','Close the box and fit your own personal lock (your P-number) as the AP lock.','Update each hook tag from WITH AP to IN LOCKOUT BOX, LB-nn.'],
+   site:'Key tracker: each key → In lockout box, LB-nn. Information tracker: AP lock recorded.',
+   stop:'Key count must match the switching programme exactly.'},
+  {k:'issue',name:'Issue the safety document',who:'AP and CP',icon:'ptw',
+   steps:['Write the lockout box number and every lock number on the PTW or SFT.','At the point of work, show the CP the isolation, earths and notices, and brief the work.','Issue the document. The CP signs receipt.','The CP and every member of the working party fit their own personal lock to the lockout box. Record each P-number on the document.'],
+   site:'PTW or SFT tracker: document → Live. Information tracker: personal locks recorded. CP register: document shown against the CP.',
+   stop:'Nobody works without their own lock on the box.'},
+  {k:'work',name:'During the work',who:'CP and working party',icon:'people',
+   steps:['The CP keeps the working party within the limits of the document.','A person joining fits their own lock and is added to the document. A person leaving removes their own lock and is signed off.','Nobody removes another person\'s lock, for any reason.','Where live equipment is close by, the AP issues a Limitation of Access with clear boundaries.'],
+   site:'Information tracker: personal locks added or removed. LOA tracker: LOA → Live if issued.',
+   stop:'The box cannot be opened while any personal lock is on it.'},
+  {k:'cancel',name:'Cancel and restore',who:'CP then AP',icon:'shield',
+   steps:['The CP confirms the work is complete, the working party is withdrawn, and signs the document for cancellation.','Each person removes their own personal lock.','The AP removes the AP lock, opens the box and counts the keys against the document.','Remove earths and locks, and restore the system as per the switching programme.','Return each key to its own numbered hook and remove the key-out tag. Return the box to its bay.'],
+   site:'Key tracker: each key → In cabinet. Information tracker: box → In cabinet. PTW/SFT/LOA tracker: → Cancelled.',
+   stop:'Tag, hook and tracker must agree before the AP leaves the office.'}
 ];
-const READY = [
-  'Client and AE approval received in writing','Procedure amendment issued','Every point of isolation surveyed and numbered','Revised SLDs issued and mounted in the AP office','Every switch labelled with its lock number','Every key on its numbered hook','Lockout boxes numbered and in Cabinet 3','Key-out tags available at every cabinet','Trackers populated and checked','All APs and SAPs briefed with a practical run-through','Personal locks issued to all current CPs','Go-live date published to all parties'
+const ROUTINES = [
+  {name:'Shift handover',who:'Outgoing and incoming AP',steps:['Check together: empty hooks against tags, against the Key tracker, against live documents.','Resolve any difference before the outgoing AP leaves.','Both APs sign the handover entry.']},
+  {name:'Daily check',who:'AP on duty · 5 minutes',steps:['Every empty hook has a tag.','Every tag matches the Key tracker and a live document.','Every lockout box out of Cabinet 3 is tied to a live document.']},
+  {name:'Weekly walk-down',who:'AP',steps:['Pick 10% of fitted locks on site.','Check lock number against switch label against SLD.','Record the result; correct any error the same day.']},
+  {name:'Monthly reconciliation',who:'Lead SAP',steps:['Reconcile every tracker and the CP register.','Check CP authorisations due to expire in the next 30 days.','Review incidents and near misses.']},
+  {name:'Lost key or unknown lock',who:'AP and lead SAP',steps:['Stop. Treat the isolation as uncertain; do not issue or cancel against it.','Tell the lead SAP and record an incident.','Under SAP control re-prove the isolation, then remove the lock by an approved method.','Fit a new lock with a new number; update the label, the SLD and the Key tracker. Retire the old number.']},
+  {name:'New CP joins site',who:'Lead SAP',steps:['Confirm CP training is complete and the authorisation is signed.','Issue the next free personal lock and engrave the P-number.','Add the person to the CP register with their contact details.']}
 ];
-const KPIS = [
-  ['Time to locate keys for a new PTW','Under 5 minutes'],['Hooks without a tag or key at daily audit','Zero'],['Tracker mismatches at monthly reconciliation','Zero'],['Lost keys or unidentified locks','Zero; every one investigated'],['Documents issued with all lock numbers recorded','100%']
-];
-const RISKS = [
-  ['Locks fitted before numbering is frozen','Numbers frozen at the end of phase 2; no fitting before phase 5'],
-  ['Drawing and labels disagree','Independent check in phase 4; weekly walk-down in phase 8'],
-  ['Two methods in use at once','Clear go-live date; no transfer of live documents mid-way'],
-  ['Spare or duplicate keys bypass the system','Spares sealed in Cabinet 1; seal breaks logged by lead SAP'],
-  ['Tracker not kept up to date','Daily audit and shift handover sign-off by both APs']
-];
-function plan(){
-  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Implementation plan</span>`, 'Implementation · PLAN', 'Implementation plan', 'Nine phases take the site from approval to a fully audited system in about 20 weeks. Each phase ends with a gate that must be passed before the next phase relies on it. Durations are indicative and set by the size of the site.');
-  const bar = `<div class="phasebar">${PHASES.map(p => `<a href="#phase-${p.n}"><b>${p.n}</b><span>${p.name}</span><small>${p.weeks}</small></a>`).join('')}</div>`;
-  const cards = PHASES.map(p => `
-    <article class="phase" id="phase-${p.n}">
-      <div class="pnum">${p.n}</div>
+function procedure(){
+  let n = 0;
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>System procedure</span>`, 'System procedure · Step by step', 'How the system works', 'Every safety document follows the same seven stages, from planning the isolation to returning the last key to its hook. Each stage says who does it, what changes in the trackers, and when to stop.');
+  const bar = `<div class="phasebar" style="grid-template-columns:repeat(${STAGES.length},minmax(118px,1fr))">${STAGES.map((s,i) => `<a href="#stage-${s.k}"><b>${i+1}</b><span>${s.name}</span><small>${s.who}</small></a>`).join('')}</div>`;
+  const cards = STAGES.map((s,i) => `
+    <article class="phase" id="stage-${s.k}">
+      <div class="pnum">${i+1}</div>
       <div class="pbody">
-        <div class="pmeta"><span>${p.weeks}</span><span>Owner: ${p.owner}</span></div>
-        <h3>${p.name}</h3>
-        <p class="aim">${p.aim}</p>
+        <div class="pmeta"><span>Stage ${i+1} of ${STAGES.length}</span><span>Done by: ${s.who}</span></div>
+        <h3>${s.name}</h3>
         <div class="pcols">
-          <div><h4>Tasks</h4><ul>${p.tasks.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>
-          <div><h4>Outputs</h4><ul>${p.outputs.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>
+          <div><h4>Steps</h4><ol class="steps-list">${s.steps.map(t => `<li><span class="sn">${++n}</span><span>${esc(t)}</span></li>`).join('')}</ol></div>
+          <div><h4>On this site</h4><p class="site-note">${esc(s.site)}</p></div>
         </div>
-        <p class="gate"><b>Gate</b>${esc(p.gate)}</p>
+        <p class="gate"><b>Stop check</b>${esc(s.stop)}</p>
       </div>
     </article>`).join('');
+  const routines = ROUTINES.map(r => `<div class="panel"><h3>${r.name}</h3><div class="pmeta" style="margin-bottom:12px"><span>${r.who}</span></div><ol class="mini">${r.steps.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div>`).join('');
+  const statuses = [['In cabinet','Key on its own hook. Free to use.'],['With AP','Drawn for a document, being taken out to the switch. Never left overnight.'],['In lockout box','Inside a box under a live document. Box locked by AP and working party.'],['Out of service','Lock damaged or under replacement. Hook carries a tag.']];
   const main = `
   <section class="block"><div class="wrap">
-    <div class="block-head"><div class="eyebrow">Phases</div><h2>From approval to standard practice.</h2></div>
+    <div class="block-head"><div class="eyebrow">Stages</div><h2>One document, seven stages.</h2><p class="lead">The same stages apply to a Permit to Work and a Sanction for Test. Tap a stage to jump to it.</p></div>
     <div class="barbox">${bar}</div>
     <div class="phases">${cards}</div>
   </div></section>
-  <section class="block alt" id="ready"><div class="wrap">
-    <div class="block-head"><div class="eyebrow">Gate for phase 7</div><h2>Go-live readiness checklist.</h2><p class="lead">Every item is ticked before the first document is issued on the new system. Ticks are saved on this device only.</p></div>
-    <div class="ready-head"><span id="readyCount"></span><button type="button" class="btn ghost" id="readyReset" style="padding:10px 16px">Clear ticks</button></div>
-    <ul class="checks">${READY.map((t,i)=>`<li><label><input type="checkbox" id="ready-${i}"><span>${esc(t)}</span></label></li>`).join('')}</ul>
+  <section class="block alt"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Routines</div><h2>Keeping the system right.</h2></div>
+    <div class="routines">${routines}</div>
   </div></section>
-  <section class="block"><div class="wrap two">
-    <div><div class="block-head"><div class="eyebrow">Measures</div><h2>How we know it works.</h2></div>
-      <div class="tablebox plain"><table><thead><tr><th scope="col">Measure</th><th scope="col">Target</th></tr></thead><tbody>${KPIS.map(([a,b])=>`<tr><td data-label="Measure">${a}</td><td data-label="Target" style="color:var(--text);font-weight:700">${b}</td></tr>`).join('')}</tbody></table></div></div>
-    <div><div class="block-head"><div class="eyebrow">Risks</div><h2>What could go wrong.</h2></div>
-      <div class="tablebox plain"><table><thead><tr><th scope="col">Risk</th><th scope="col">Control</th></tr></thead><tbody>${RISKS.map(([a,b])=>`<tr><td data-label="Risk" style="color:var(--text)">${a}</td><td data-label="Control">${b}</td></tr>`).join('')}</tbody></table></div></div>
+  <section class="block"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Quick reference</div><h2>What each key status means.</h2></div>
+    <div class="tablebox plain"><table><thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead><tbody>${statuses.map(([s,m]) => `<tr><td data-label="Status">${chip(s)}</td><td data-label="Meaning">${m}</td></tr>`).join('')}</tbody></table></div>
   </div></section>`;
-  shell('plan', hero, main);
-  const KEY = 'pt-ready';
-  let saved = [];
-  try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(_) {}
-  const boxes = READY.map((_,i) => document.getElementById(`ready-${i}`));
-  const count = document.getElementById('readyCount');
-  const update = () => {
-    const ticked = boxes.filter(b => b.checked).length;
-    count.textContent = `${ticked} of ${READY.length} complete${ticked===READY.length ? ' · ready to go live' : ''}`;
-    count.className = ticked===READY.length ? 'done' : '';
-    try { localStorage.setItem(KEY, JSON.stringify(boxes.map(b => b.checked))); } catch(_) {}
-  };
-  boxes.forEach((b,i) => { b.checked = !!saved[i]; b.addEventListener('change', update); });
-  document.getElementById('readyReset').addEventListener('click', () => { boxes.forEach(b => b.checked = false); update(); });
-  update();
+  shell('procedure', hero, main);
 }
 
 /* ---------- Start ---------- */
@@ -457,4 +448,4 @@ if(page==='home') home();
 else if(PAGES[page]) tracker(page);
 else if(page==='record') record();
 else if(page==='schematic') schematic();
-else if(page==='plan') plan();
+else if(page==='procedure') procedure();
