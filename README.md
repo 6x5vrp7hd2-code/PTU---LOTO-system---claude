@@ -123,3 +123,10 @@ The page and alert refresh every 15 seconds while open, and on tab focus/visibil
 - Free/occupied inventory is based on the current browser's stored transactions; if none are available, do not issue a document until the physical inventory and record state are reconciled.
 - Homepage replaced with compact metrics and direct register links; expired-document alert remains.
 - Browser-local data is not shared between devices. Dropdown changes do not provide operational authorisation.
+
+## Release: 30 lockout boxes, expanded duration choices, expiry alert preview
+- The lockout box inventory is guaranteed to contain LB-01 through LB-30, each with a matching dedicated box lock identifier. Existing allocations are retained.
+- Document validity choices now range from 30 minutes to 7 days, plus end of shift. Fractional hours are calculated in milliseconds.
+- The expired-documents alert is centred on the dashboard and slowly pulses red when overdue live documents exist (3.6-second cycle). Reduced-motion settings disable the animation.
+- For a **fictional visual preview only**, visit `index.html?demo=expired` and `expired.html?demo=expired`. Three fabricated expired records are created in memory; they are not stored. Exit preview by visiting the regular page URL.
+- The prototype continues to use browser-local records and browser time; it is NOT a central, server-side real-time alert system.

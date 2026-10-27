@@ -59,6 +59,14 @@ const LOGS = {
   'LOA-2026-0046':[['10:00','LOA issued to A. Lund']]
 };
 
+/* Maintain a minimum stock of 30 individually numbered boxes and matching box locks.
+   Existing allocations are preserved; missing numbers are registered as available. */
+for (let i=1;i<=30;i++) {
+  const id=`LB-${String(i).padStart(2,'0')}`;
+  if (!DATA.info.some(b=>b.id===id)) DATA.info.push({id,boxLock:id,status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:`C3-${String(i).padStart(2,'0')}`});
+}
+DATA.info.sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
+
 /* ---------- Drawings and dedicated locks ----------
    Every lock sits at an x,y point on its drawing (pixels on the drawing image).
    Columns: lock id, number shown in the circle, drawing, system, item of plant, point of isolation, x, y */
@@ -136,7 +144,7 @@ function expiryMillis(value){
   return dt.getTime();
 }
 function expiredDocuments(now=Date.now()){
-  return ['ptw','sft','loa'].flatMap(set => DATA[set].filter(d => d.status === 'Live' && Number.isFinite(expiryMillis(d.expiry)) && expiryMillis(d.expiry) <= now).map(d=>({set,doc:d})))
+  return ['ptw','sft','loa'].flatMap(set => DATA[set].filter(d => (!DEMO_EXPIRED || d.demo === true) && d.status === 'Live' && Number.isFinite(expiryMillis(d.expiry)) && expiryMillis(d.expiry) <= now).map(d=>({set,doc:d})))
     .sort((a,b)=>expiryMillis(a.doc.expiry)-expiryMillis(b.doc.expiry));
 }
 function recipientRecord(doc){
@@ -147,7 +155,7 @@ function recipientRecord(doc){
 function expiryAlertMarkup(){
   const count = expiredDocuments().length;
   return `<a class="expiry-alert${count ? ' has-expired' : ''}" href="${U('expired.html')}" id="expiryAlert" aria-live="polite" aria-label="${count} expired live safety documents. Open expired document list.">
-    <span class="expiry-alert-title">Expired documents</span><span class="expiry-alert-count" id="expiryAlertCount">${count}</span>
+    <span class="expiry-alert-title">Expired documents</span>${DEMO_EXPIRED ? `<span class="demo-alert-label">PREVIEW · 3 FICTIONAL RECORDS</span>` : ``}<span class="expiry-alert-count" id="expiryAlertCount">${count}</span>
     <span class="expiry-alert-sub" id="expiryAlertSub">${count ? 'Action required — contact the document recipient' : 'No overdue live documents recorded'}</span><span class="expiry-alert-arrow">View register →</span>
   </a>`;
 }
@@ -162,6 +170,7 @@ function refreshExpiryAlert(){
 function expiredPage(){
   const hero=pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Expired documents</span>`, 'Safety document monitoring', 'Expired documents', 'Live PTW, SFT and LOA records that have exceeded their recorded expiry date and time. Contact the recipient and follow the applicable site safety rules.');
   const main=`<section class="block"><div class="wrap">
+    ${DEMO_EXPIRED ? `<div class="demo-notice">DESIGN PREVIEW — Fictional document records for visual review. <a href="${U('index.html')}">Exit preview →</a></div>` : ``}
     <div class="expiry-notice"><strong>Overdue does not mean cancelled.</strong> A document remains live in the tracker until formally cancelled. Expiry does not release an isolation or authorise the removal of locks.</div>
     <div class="expiry-register-head"><h2>Overdue live documents <span id="expiryTableCount"></span></h2><span id="expiryLastChecked"></span></div>
     <div class="tablebox expiry-table-wrap"><table class="expiry-table"><thead><tr><th>Document number</th><th>Date issued</th><th>Date expired and time</th><th>Recipient name</th><th>Recipient contact no.</th></tr></thead><tbody id="expiredRows"></tbody></table></div>
@@ -180,7 +189,7 @@ function updateExpiredRows(){
     const recipient=person?.name || String(doc.cp || doc.holder || 'Not recorded').replace(/\s*·\s*P-\d{3}.*/, '');
     const tel=person?.phone || doc.recipientPhone || '';
     const safeTel=String(tel).replace(/[^+\d]/g,'');
-    return `<tr><td data-label="Document number"><a class="expiry-doc-link mono" href="${recUrl(doc.id)}">${esc(doc.id)} ↗</a></td>
+    return `<tr><td data-label="Document number"><a class="expiry-doc-link mono" href="${recUrl(doc.id)}${DEMO_EXPIRED ? `&demo=expired` : ``}">${esc(doc.id)} ↗</a></td>
       <td data-label="Date issued" class="mono">${esc(doc.issued || 'Not recorded')}</td>
       <td data-label="Date expired and time" class="mono expiry-date">${esc(doc.expiry)}</td>
       <td data-label="Recipient name">${esc(recipient)}</td>
@@ -295,6 +304,7 @@ function home(){
   const main = `
   <section class="block dashboard-block"><div class="wrap">
     <div class="dashboard-heading"><div><div class="eyebrow">Operational overview</div><h2>Site dashboard</h2><p>Document status and key custody at a glance.</p></div><a class="btn primary small" href="${U('new.html')}">+ New document</a></div>
+    ${DEMO_EXPIRED ? `<div class="demo-notice">DESIGN PREVIEW — Three fictional overdue documents. No live site data is being shown. <a href="${U('index.html')}">Exit preview →</a></div>` : ``}
     ${expiryAlertMarkup()}
     <div class="dashboard-metrics" aria-label="Site status">
       <a href="${U('ptw.html')}"><b>${n('ptw','Live')}</b><span>Live PTWs</span></a>
@@ -573,7 +583,7 @@ const OPTIONS = {
   locations:['HV substation A','HV substation B','LV switchroom A','LV switchroom B','UPS room A','UPS room B','Battery room A','Battery room B','Mechanical plant room A','Mechanical plant room B','Data hall 1','Data hall 2'],
   loaReason:['Live equipment next to the work area','Visual inspection, no contact','Survey, non-electrical','Fire detection works','Cleaning, no contact','Escorted visit'],
   loaBounds:['Barrier and signage at the boundary; no entry beyond','Inspection walkway only; panel and rack doors stay shut','Ceiling void access from walkway only','Escorted access only, AP present'],
-  duration:[['End of shift (18:00)','eos'],['4 hours',4],['8 hours',8],['12 hours',12],['24 hours',24],['48 hours',48]]
+  duration:[['30 minutes',0.5],['1 hour',1],['1 hour 30 minutes',1.5],['2 hours',2],['3 hours',3],['4 hours',4],['6 hours',6],['8 hours',8],['10 hours',10],['12 hours',12],['16 hours',16],['End of shift (18:00)','eos'],['24 hours · 1 day',24],['36 hours',36],['48 hours · 2 days',48],['72 hours · 3 days',72],['96 hours · 4 days',96],['120 hours · 5 days',120],['144 hours · 6 days',144],['168 hours · 7 days',168]]
 };
 const opts = (list, ph) => `<option value="">${ph}</option>` + list.map(o => Array.isArray(o) ? `<option value="${esc(o[1])}">${esc(o[0])}</option>` : `<option value="${esc(o)}">${esc(o)}</option>`).join('');
 const cpLabel = c => `${c.name} · ${c.company} · ${c.id}`;
@@ -585,7 +595,7 @@ function nextId(prefix){
 function expiryFrom(v){
   const d = new Date();
   if(v === 'eos'){ d.setHours(18,0,0,0); if(d < new Date()) d.setDate(d.getDate()+1); }
-  else d.setHours(d.getHours() + Number(v));
+  else d.setTime(d.getTime() + Number(v) * 60 * 60 * 1000);
   return stamp(d);
 }
 
@@ -862,6 +872,16 @@ function references(){
  shell('references',hero,main);
 }
 
+/* Preview-only demonstration: three overdue documents, generated relative to the
+   visitor's clock. These are never saved and cannot be used for operational control. */
+const DEMO_EXPIRED = new URLSearchParams(location.search).get('demo') === 'expired';
+if (DEMO_EXPIRED) {
+  const now=Date.now();
+  const when=hours=>stamp(new Date(now+hours*3600000));
+  DATA.ptw.push({id:'PTW-DEMO-001',status:'Live',sys:'LV',work:'Circuit breaker inspection — demonstration',loc:'LV switchroom A',ap:'E. Berg (SAP)',cp:'Sara Nyberg · P-018',keys:[],box:'',issued:when(-11),expiry:when(-2),demo:true});
+  DATA.sft.push({id:'SFT-DEMO-002',status:'Live',sys:'HV',work:'Protection relay secondary injection — demonstration',test:'Secondary injection',loc:'HV substation B',ap:'J. Andersson (AP)',cp:'Mikael Ek · P-052',keys:[],box:'',issued:when(-8),expiry:when(-1.5),demo:true});
+  DATA.loa.push({id:'LOA-DEMO-003',status:'Live',area:'Battery room B',reason:'Inspection — demonstration',ap:'R. Holm (AP)',holder:'Alva Lund · P-061',issued:when(-5),expiry:when(-0.5),demo:true});
+}
 /* ---------- Start ---------- */
 loadEvents().forEach(applyEvent);
 syncKeys();
