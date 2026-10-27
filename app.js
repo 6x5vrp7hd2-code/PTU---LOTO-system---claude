@@ -121,8 +121,73 @@ const PAGES = {
   cp:{file:'cp.html',title:'CP register',code:'P',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
     cols:[['id','Lock no.'],['name','Name'],['company','Company'],['role','Role'],['phone','Phone'],['status','Status'],['expiry','Authorised until']]}
 };
-const NAV = [['references.html','System references','REF','references'],['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
+const NAV = [['references.html','System references','REF','references'],['index.html','Home','HOME','home'],['expired.html','Expired documents','ALERT','expired'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
 const U = path => ROOT + path;
+
+/* Expiry is derived from the document's absolute local expiry timestamp, not its issue duration.
+   Cancelled and pending documents never appear. The browser clock is authoritative only for
+   this demonstration; a production deployment requires server time and shared notifications. */
+function expiryMillis(value){
+  const m = String(value || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?$/);
+  if(!m) return NaN;
+  const [,y,mo,d,h,mi,sec] = m;
+  const dt = new Date(+y,+mo-1,+d,+h,+mi,+(sec||0));
+  if(dt.getFullYear()!==+y || dt.getMonth()!==+mo-1 || dt.getDate()!==+d || dt.getHours()!==+h || dt.getMinutes()!==+mi) return NaN;
+  return dt.getTime();
+}
+function expiredDocuments(now=Date.now()){
+  return ['ptw','sft','loa'].flatMap(set => DATA[set].filter(d => d.status === 'Live' && Number.isFinite(expiryMillis(d.expiry)) && expiryMillis(d.expiry) <= now).map(d=>({set,doc:d})))
+    .sort((a,b)=>expiryMillis(a.doc.expiry)-expiryMillis(b.doc.expiry));
+}
+function recipientRecord(doc){
+  const source = doc.cp || doc.holder || '';
+  const m = String(source).match(/P-\d{3}/i);
+  return m ? DATA.cp.find(p=>p.id.toUpperCase()===m[0].toUpperCase()) : null;
+}
+function expiryAlertMarkup(){
+  const count = expiredDocuments().length;
+  return `<a class="expiry-alert${count ? ' has-expired' : ''}" href="${U('expired.html')}" id="expiryAlert" aria-live="polite" aria-label="${count} expired live safety documents. Open expired document list.">
+    <span class="expiry-alert-title">Expired documents</span><span class="expiry-alert-count" id="expiryAlertCount">${count}</span>
+    <span class="expiry-alert-sub" id="expiryAlertSub">${count ? 'Action required — contact the document recipient' : 'No overdue live documents recorded'}</span><span class="expiry-alert-arrow">View register →</span>
+  </a>`;
+}
+function refreshExpiryAlert(){
+  const el=document.getElementById('expiryAlert'); if(!el) return;
+  const count=expiredDocuments().length;
+  el.classList.toggle('has-expired',count>0);
+  document.getElementById('expiryAlertCount').textContent=String(count);
+  document.getElementById('expiryAlertSub').textContent=count ? 'Action required — contact the document recipient' : 'No overdue live documents recorded';
+  el.setAttribute('aria-label',`${count} expired live safety documents. Open expired document list.`);
+}
+function expiredPage(){
+  const hero=pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Expired documents</span>`, 'Safety document monitoring', 'Expired documents', 'Live PTW, SFT and LOA records that have exceeded their recorded expiry date and time. Contact the recipient and follow the applicable site safety rules.');
+  const main=`<section class="block"><div class="wrap">
+    <div class="expiry-notice"><strong>Overdue does not mean cancelled.</strong> A document remains live in the tracker until formally cancelled. Expiry does not release an isolation or authorise the removal of locks.</div>
+    <div class="expiry-register-head"><h2>Overdue live documents <span id="expiryTableCount"></span></h2><span id="expiryLastChecked"></span></div>
+    <div class="tablebox expiry-table-wrap"><table class="expiry-table"><thead><tr><th>Document number</th><th>Date issued</th><th>Date expired and time</th><th>Recipient name</th><th>Recipient contact no.</th></tr></thead><tbody id="expiredRows"></tbody></table></div>
+    <p class="expiry-help">Select a document number to open its full document record. Select a telephone number to call the recipient on a supported device.</p>
+  </div></section>`;
+  shell('expired',hero,main); updateExpiredRows();
+  window.setInterval(updateExpiredRows,15000);
+}
+function updateExpiredRows(){
+  const tbody=document.getElementById('expiredRows'); if(!tbody) return;
+  const rows=expiredDocuments();
+  document.getElementById('expiryTableCount').textContent=`(${rows.length})`;
+  document.getElementById('expiryLastChecked').textContent=`Checked ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+  tbody.innerHTML=rows.length ? rows.map(({doc})=>{
+    const person=recipientRecord(doc);
+    const recipient=person?.name || String(doc.cp || doc.holder || 'Not recorded').replace(/\s*·\s*P-\d{3}.*/, '');
+    const tel=person?.phone || doc.recipientPhone || '';
+    const safeTel=String(tel).replace(/[^+\d]/g,'');
+    return `<tr><td data-label="Document number"><a class="expiry-doc-link mono" href="${recUrl(doc.id)}">${esc(doc.id)} ↗</a></td>
+      <td data-label="Date issued" class="mono">${esc(doc.issued || 'Not recorded')}</td>
+      <td data-label="Date expired and time" class="mono expiry-date">${esc(doc.expiry)}</td>
+      <td data-label="Recipient name">${esc(recipient)}</td>
+      <td data-label="Recipient contact no.">${tel ? `<a href="tel:${safeTel}">${esc(tel)}</a>` : '<span class="missing-contact">Not recorded — check personnel register</span>'}</td></tr>`;
+  }).join('') : `<tr><td colspan="5" class="expiry-empty">No expired live documents at this time.</td></tr>`;
+}
+
 
 /* ---------- Icons ---------- */
 const I = {
@@ -230,6 +295,7 @@ function home(){
   const main = `
   <section class="block"><div class="wrap">
     <div class="block-head"><div class="eyebrow">Site status now</div><h2>Live on site.</h2></div>
+    ${expiryAlertMarkup()}
     <div class="stats" style="margin-top:0;margin-bottom:12px" aria-label="Site status now">
       <div><b class="hot">${n('ptw','Live')}</b><span>Live permits</span></div>
       <div><b class="hot">${n('keys','In lockout box')}</b><span>Keys in lockout boxes</span></div>
@@ -772,9 +838,21 @@ loadEvents().forEach(applyEvent);
 syncKeys();
 const page = document.body.dataset.page;
 if(page==='references') references();
+if(page==='expired') expiredPage();
 if(page==='home') home();
 else if(PAGES[page]) tracker(page);
 else if(page==='record') record();
 else if(page==='schematic') schematic();
 else if(page==='procedure') procedure();
 else if(page==='new') newDoc();
+
+/* Refresh the home alert while the tab remains open, including when a sleeping tab resumes. */
+if(page==='home'){
+  window.setInterval(refreshExpiryAlert,15000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden) refreshExpiryAlert();});
+  window.addEventListener('focus',refreshExpiryAlert);
+}
+if(page==='expired'){
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden) updateExpiredRows();});
+  window.addEventListener('focus',updateExpiredRows);
+}

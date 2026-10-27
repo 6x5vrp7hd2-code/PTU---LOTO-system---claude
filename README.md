@@ -110,3 +110,9 @@ Edit, add or remove rows there; every tracker, record page and front page count 
 - Every rendered page includes a Back button, using same-site history or a homepage fallback.
 - Existing preloaded records may conflict; they remain unverified. A single lock appearing on multiple boxes is flagged for reconciliation rather than silently represented as physically present in multiple places.
 - Data is browser-local and cannot be treated as a secure, shared or tamper-evident safety record.
+
+
+## Expired live document alert (v7)
+The homepage displays an Expired Documents alert. Live PTW/SFT/LOA records with a valid recorded expiry timestamp at or before the device's current time appear in a dedicated `expired.html` register. The five columns are document number (click for full record), date issued, date/time expired, recipient name, and recipient telephone number (click to call). The user asked for four columns but supplied five distinct fields; all five are included.
+
+The page and alert refresh every 15 seconds while open, and on tab focus/visibility. This is *browser-local monitoring*, NOT a real-time server push, background notification, SMS, email, or cross-device alert. It works only while the page is open and relies on the device clock. Production requires a shared database, server clock, authenticated accounts, a scheduled expiry checker and push/notification delivery. An expired document remains LIVE until formally cancelled under site safety rules.
