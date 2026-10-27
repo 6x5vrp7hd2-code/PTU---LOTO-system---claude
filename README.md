@@ -100,3 +100,13 @@ Edit, add or remove rows there; every tracker, record page and front page count 
 - Every lockout box `LB-xx` has one dedicated box lock bearing exactly the same identifier `LB-xx`; this is separate from AP/CP personal locks `P-xxx`.
 - The electronic tracker is a prototype. It cannot authorise switching, key release or document cancellation.
 - The original build contains unverified preloaded personnel, equipment and document records; do not treat them as live site information.
+
+
+## October 2026 control corrections
+- Personal lock assignment is checked across all *in-use* lockout boxes. Conflicting assignments are flagged; one physical personal lock cannot be used on multiple boxes.
+- New PTW/SFT forms reject personal locks already assigned to another in-use box, including AP and working-party locks.
+- Cancellation requires the cancelling AP/SAP to select their identity from the personnel register and confirm cancellation checks. Selection is a declaration, **not authenticated proof of identity**.
+- Cancelling a document no longer automatically marks keys or boxes physically returned. A separate, approved custody reconciliation workflow is needed before operational use.
+- Every rendered page includes a Back button, using same-site history or a homepage fallback.
+- Existing preloaded records may conflict; they remain unverified. A single lock appearing on multiple boxes is flagged for reconciliation rather than silently represented as physically present in multiple places.
+- Data is browser-local and cannot be treated as a secure, shared or tamper-evident safety record.

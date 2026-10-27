@@ -518,3 +518,6 @@ h1,h2,h3{font-family:var(--head)}
 .foot-legal{grid-column:1/-1;margin:0;padding-top:20px;line-height:1.6}
 @media(max-width:750px){.site-foot .wrap{grid-template-columns:1fr}.foot-links{grid-template-columns:repeat(2,minmax(0,1fr))}.menu nav a{font-size:16px!important}}
 @media(max-width:430px){.foot-links{grid-template-columns:1fr;gap:24px}.menu nav a{font-size:15px!important;padding:10px 0}.menu nav a small{font-size:9px}}
+
+/* Navigation and administrative validation */
+.universal-back{padding-top:20px;padding-bottom:4px}.back-nav{background:#17191d;color:#fff;border:1px solid #525762;border-radius:5px;padding:11px 22px;font:600 14px Arial,Helvetica,sans-serif;cursor:pointer}.back-nav:hover,.back-nav:focus-visible{border-color:#f58220;color:#f58220}.placement-alert{border-left:4px solid #f58220;background:#33271d;padding:14px;line-height:1.55}.confirm-check{display:flex;align-items:flex-start;gap:10px;margin:14px 0;font-size:14px}.confirm-check input{margin-top:3px;min-width:18px;min-height:18px}#cancellingAp{width:100%;padding:12px;background:#11151a;color:#fff;border:1px solid #646b76;border-radius:4px;margin:9px 0 14px}

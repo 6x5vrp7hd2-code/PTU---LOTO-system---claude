@@ -180,7 +180,7 @@ function shell(page, heroHtml, mainHtml){
     <p class="note">Powertec Isolation Control · AP office key, lock and safety document control</p>
   </div>
   ${heroHtml}
-  <main>${mainHtml}</main>
+  <main><div class="wrap universal-back"><button type="button" class="back-nav" id="pageBack" aria-label="Go back to previous page">← Back</button></div>${mainHtml}</main>
   <footer class="site-foot"><div class="wrap">
     <a class="foot-brand" href="${U('index.html')}"><img src="${MARK}" alt=""><span><b>powertec</b><small>isolation control</small></span></a>
     <div class="foot-links">
@@ -190,6 +190,13 @@ function shell(page, heroHtml, mainHtml){
     </div>
     <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Version 6 · Records require site verification before operational use.</p>
   </div></footer>`;
+  const back = document.getElementById('pageBack');
+  if(back) back.addEventListener('click', () => {
+    let sameSite = false;
+    try { sameSite = Boolean(document.referrer && new URL(document.referrer).origin === location.origin && new URL(document.referrer).pathname !== location.pathname); } catch(_){}
+    if(sameSite && history.length > 1) history.back();
+    else location.href = U((PAGES[page] && PAGES[page].file) || 'index.html');
+  });
   const menu = document.getElementById('menu'), open = document.getElementById('openMenu');
   const close = () => { menu.hidden = true; open.setAttribute('aria-expanded','false'); document.body.style.overflow=''; open.focus(); };
   open.addEventListener('click', () => { menu.hidden = false; open.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; document.getElementById('closeMenu').focus(); });
@@ -298,6 +305,17 @@ function tracker(key){
   draw();
 }
 
+/* One numbered personal lock cannot physically be on more than one box.
+   Resolve conflicts visibly instead of representing a single lock as multiple physical locks. */
+function personalLockLocations(lockId){
+  return DATA.info.filter(b => b.status === 'In use' && (b.plocks || []).includes(lockId) || (b.status === 'In use' && String(b.aplock || '').includes(lockId)));
+}
+function lockPlacement(lockId){
+  const locations = personalLockLocations(lockId);
+  if(locations.length > 1) return {state:'conflict', boxes:locations};
+  if(locations.length === 1) return {state:'placed', boxes:locations};
+  return {state:'available', boxes:[]};
+}
 /* ---------- Record (detail) page ---------- */
 const fields = list => `<dl class="fields">${list.map(([k,v,w]) => `<div class="field${w?' wide':''}"><dt>${k}</dt><dd>${v || '—'}</dd></div>`).join('')}</dl>`;
 const mono = v => v ? `<span class="mono">${esc(v)}</span>` : '';
@@ -325,19 +343,19 @@ function record(){
     side = `<div class="panel"><h3>Box can be opened when</h3><p>${r.plocks.length ? `All ${r.plocks.length} personal locks have been removed by their holders, then the AP removes their own lock.` : 'Box is empty and not in use.'}</p></div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='ptw' || set==='sft'){
-    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',person(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)],...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
+    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',person(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],...(r.cancelledBy?[['Cancelled by',esc(r.cancelledBy)],['Cancelled at',mono(r.cancelledAt)],['Reconciliation',esc(r.reconciliation)]]:[]),['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)],...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
     side = cpPanel(r.cp,'Competent person') + cancelPanel(r) + logPanel(r.id);
   }
   if(set==='loa'){
-    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',person(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
+    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',person(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],...(r.cancelledBy?[['Cancelled by',esc(r.cancelledBy)],['Cancelled at',mono(r.cancelledAt)]]:[]),...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
     side = cpPanel(r.holder,'LOA holder') + cancelPanel(r) + logPanel(r.id);
   }
   if(set==='cp'){
     const docs = [...DATA.ptw.map(d=>[d,d.cp]), ...DATA.sft.map(d=>[d,d.cp]), ...DATA.loa.map(d=>[d,d.holder])].filter(([d,c]) => String(c).includes(r.id)).map(([d]) => d);
-    const boxes = DATA.info.filter(b => b.plocks.includes(r.id) || String(b.aplock).includes(r.id));
+    const placement = lockPlacement(r.id), boxes = placement.boxes;
     const live = docs.filter(d => d.status==='Live');
     body = fields([['Personal lock no.',mono(r.id)],['Role',esc(r.role)],['Name',esc(r.name)],['Company',esc(r.company)],['Phone',`<span class="mono">${esc(r.phone)}</span>`],['Email',`<span class="mono">${esc(r.email)}</span>`],['ID06 card',mono(r.id06)],['Emergency contact',esc(r.emergency)],['Authorised for',esc(r.scope),1],['CP training completed',mono(r.trained)],['Authorised by',esc(r.authBy)],['Authorised until',mono(r.expiry)],['Status',chip(r.status)]]);
-    side = `<div class="panel cppanel"><h3>Contact</h3>${cpCard(r, false)}</div><div class="panel"><h3>Lock on site now</h3>${boxes.length ? `<p>Personal lock is on ${boxes.map(b=>link(b.id)).join(', ')}.</p>` : '<p>Not on any lockout box.</p>'}</div>
+    side = `<div class="panel cppanel"><h3>Contact</h3>${cpCard(r, false)}</div><div class="panel"><h3>Lock on site now</h3>${placement.state === 'conflict' ? `<p class="placement-alert"><strong>RECORD CONFLICT — VERIFY PHYSICALLY.</strong> This single personal lock is recorded against ${boxes.map(b=>link(b.id)).join(', ')}. A single lock cannot be fitted to several boxes. No location is confirmed until reconciled.</p>` : boxes.length ? `<p>Personal lock is recorded on ${link(boxes[0].id)}.</p>` : '<p>Not recorded on any lockout box.</p>'}</div>
       <div class="panel"><h3>Live documents</h3>${live.length ? linkList(live.map(d=>d.id)) : '<p>None</p>'}</div>
       <div class="panel"><h3>Document history</h3>${docs.length ? linkList(docs.map(d=>d.id)) : '<p>None recorded</p>'}</div>
       ${r.status!=='Active' ? `<div class="panel" style="border-color:var(--crit)"><h3 style="color:var(--crit)">Not to receive documents</h3><p>Authorisation is ${r.status.toLowerCase()}. Do not issue a PTW, SFT or LOA to this person.</p></div>` : ''}`;
@@ -479,10 +497,10 @@ function applyEvent(e){
   }
   if(e.op === 'cancel'){
     const hit = find(e.id); if(!hit || hit.r.status === 'Cancelled') return;
-    const d = hit.r; d.status = 'Cancelled';
-    (d.keys || []).forEach(k => { const r = DATA.keys.find(x => x.id === k); if(r && r.doc === d.id){ r.status = 'In cabinet'; r.doc = ''; r.box = ''; } });
-    if(d.box){ const b = DATA.info.find(x => x.id === d.box); if(b && b.doc === d.id){ b.status = 'In cabinet'; b.doc = ''; b.keys = []; b.aplock = ''; b.plocks = []; b.issued = ''; } }
-    LOGS[d.id] = (LOGS[d.id] || []).concat([[hhmm(e.at), `${d.id} cancelled by ${e.by}. ${d.keys && d.keys.length ? 'Physical key return requires independent confirmation' : 'Boundaries removed'}${d.box ? `, ${d.box} returned to its bay` : ''}.`]]);
+    const d = hit.r; d.status = 'Cancelled'; d.cancelledBy = e.by; d.cancelledAt = e.at; d.reconciliation = d.box ? 'Physical key/box return not verified' : 'Not applicable';
+    // Do not mark physical keys returned merely because a document is cancelled.
+    // Box custody also remains unchanged pending a separate physical reconciliation.
+    LOGS[d.id] = (LOGS[d.id] || []).concat([[hhmm(e.at), `${d.id} cancelled by ${e.by}. ${d.keys && d.keys.length ? 'Physical key and box return NOT verified' : 'Boundaries require independent confirmation'}.`]]);
   }
 }
 
@@ -514,7 +532,7 @@ function newDoc(){
   const qType = (new URLSearchParams(location.search).get('type') || '').toUpperCase();
   const people = DATA.cp;
   const aps = people.filter(c => ['AP','SAP'].includes(c.role) && c.status === 'Active');
-  const cpOptions = people.filter(c => c.role === 'CP').map(c => `<option value="${c.id}"${c.status !== 'Active' ? ' disabled' : ''}>${esc(cpLabel(c))}${c.status !== 'Active' ? ` (${c.status.toLowerCase()})` : ''}</option>`).join('');
+  const cpOptions = people.filter(c => c.role === 'CP').map(c => `<option value="${c.id}"${c.status !== 'Active' || lockPlacement(c.id).state !== 'available' ? ' disabled' : ''}>${esc(cpLabel(c))}${c.status !== 'Active' ? ` (${c.status.toLowerCase()})` : ''}</option>`).join('');
   const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>New safety document</span>`, 'Issue · PTW · SFT · LOA', 'New safety document', 'Choose each item from its list. Only locks on their hooks, free lockout boxes and active CPs can be chosen.');
   const main = `<section class="block"><div class="wrap">
     <form class="docform" id="docform" novalidate>
@@ -627,7 +645,7 @@ function newDoc(){
   function fillPtw(){ $('f-ptw').innerHTML = opts(DATA.ptw.filter(p => p.status === 'Live').map(p => [`${p.id} · ${p.work}`, p.id]), 'None'); }
   function fillWp(){
     const cp = $('f-cp').value;
-    const avail = people.filter(c => c.status === 'Active' && c.role === 'CP' && c.id !== cp && !wp.includes(c.id));
+    const avail = people.filter(c => c.status === 'Active' && c.role === 'CP' && lockPlacement(c.id).state === 'available' && c.id !== cp && !wp.includes(c.id));
     $('f-wp').innerHTML = opts(avail.map(c => [cpLabel(c), c.id]), 'Choose a person');
     $('pickedWp').innerHTML = wp.map(id => { const c = find(id).r; return `<li><span class="mono">${id}</span> ${esc(c.name)} · ${esc(c.company)}<button type="button" data-rm-wp="${id}" aria-label="Remove ${id}">×</button></li>`; }).join('');
   }
@@ -667,6 +685,13 @@ function newDoc(){
     need('f-ap','Choose the issuing AP.');
     need('f-cp', t === 'LOA' ? 'Choose the LOA holder.' : 'Choose the competent person.');
     need('f-dur','Choose how long the document is valid for.');
+    if(t === 'PTW' || t === 'SFT') {
+      for(const id of [$('f-ap').value, $('f-cp').value, ...wp].filter(Boolean)) {
+        const placement = lockPlacement(id);
+        if(placement.state === 'conflict') err.push(`Personal lock ${id} has conflicting box assignments; reconcile before continuing.`);
+        if(placement.state === 'placed') err.push(`Personal lock ${id} is already recorded on ${placement.boxes[0].id}; one lock cannot secure two boxes simultaneously.`);
+      }
+    }
     const box = $('errors');
     if(err.length){ box.innerHTML = `<b>Before issuing:</b><ul>${err.map(x => `<li>${x}</li>`).join('')}</ul>`; box.hidden = false; box.scrollIntoView({behavior:'smooth', block:'center'}); return; }
     box.hidden = true;
@@ -701,10 +726,16 @@ function cpPanel(str, label){
 }
 function cancelPanel(r){
   if(r.status !== 'Live') return '';
-  return `<div class="panel"><h3>Cancel this document</h3><p>Use when the CP has signed for cancellation and every personal lock is off the box.</p>
+  const aps = DATA.cp.filter(c => (c.role === 'AP' || c.role === 'SAP') && c.status === 'Active');
+  return `<div class="panel"><h3>Cancel this document</h3><p>Cancellation must be completed by an authorised AP/SAP after the physical requirements of the applicable safety rules are satisfied.</p>
     <button type="button" class="btn ghost small" id="cancelStart" style="margin-top:14px">Cancel document</button>
-    <div id="cancelConfirm" hidden style="margin-top:14px"><p><b>Confirm:</b> all personal locks removed and keys counted?</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn primary small" id="cancelYes">Yes, cancel ${esc(r.id)}</button><button type="button" class="btn ghost small" id="cancelNo">Go back</button></div></div></div>`;
+    <div id="cancelConfirm" hidden style="margin-top:14px">
+      <label class="f"><span>AP / SAP cancelling the document *</span><select id="cancellingAp" required><option value="">Select your name</option>${aps.map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(c.role)}) · ${esc(c.id)}</option>`).join('')}</select></label>
+      <p><b>Confirm:</b> document returned and cancellation conditions satisfied, including personal lock removal as applicable. This action records cancellation only; it does not verify that isolation keys have physically returned to cabinets.</p>
+      <label class="confirm-check"><input type="checkbox" id="cancelCheck"> I confirm the applicable cancellation checks have been completed.</label>
+      <p class="placement-alert" id="cancelError" hidden></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn primary small" id="cancelYes">Record cancellation</button><button type="button" class="btn ghost small" id="cancelNo">Go back</button></div>
+    </div></div>`;
 }
 function wireRecord(r){
   const start = document.getElementById('cancelStart'); if(!start) return;
@@ -712,11 +743,15 @@ function wireRecord(r){
   start.addEventListener('click', () => { conf.hidden = false; start.hidden = true; });
   document.getElementById('cancelNo').addEventListener('click', () => { conf.hidden = true; start.hidden = false; });
   document.getElementById('cancelYes').addEventListener('click', () => {
-    const by = String(r.ap || 'AP');
-    if(addEvent({op:'cancel', id:r.id, at:stamp(), by})) location.reload();
+    const id = document.getElementById('cancellingAp').value;
+    const ap = DATA.cp.find(c => c.id === id && ['AP','SAP'].includes(c.role) && c.status === 'Active');
+    const checked = document.getElementById('cancelCheck').checked;
+    const error = document.getElementById('cancelError');
+    if(!ap || !checked){ error.textContent = 'Select the cancelling AP/SAP and confirm the cancellation checks.'; error.hidden = false; return; }
+    if(addEvent({op:'cancel', id:r.id, at:stamp(), by:ap.name, byLock:ap.id})) location.reload();
+    else {error.textContent='Unable to save cancellation on this device.'; error.hidden=false;}
   });
 }
-
 
 /* Uploaded architectural references: illustrative only; never use as a controlled site SLD. */
 function references(){
