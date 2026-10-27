@@ -71,137 +71,148 @@ const LOGS = {
   'LOA-2026-0046':[['10:00','LOA issued to A. Lund']]
 };
 
-
-/* ---------- Pages ---------- */
+/* ---------- Page definitions ---------- */
+/* ROOT is set on each page's <body data-root="...">: '' at the top level, '../' inside a folder. */
+const ROOT = document.body.dataset.root || '';
+const LOGO = 'logo.png', MARK = 'mark.png';
 const PAGES = {
-  keys:{file:'keys.html',nav:'KEYS',title:'Key Tracker',code:'H · L',banner:'banner-keys.jpg',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
+  keys:{file:'keys.html',title:'Key tracker',code:'H · L',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
     cols:[['id','Lock no.'],['sys','System'],['board','Board'],['point','Point of isolation'],['status','Status'],['where','Key location']]},
-  info:{file:'info.html',nav:'INFORMATION',title:'Information Tracker',code:'LB',banner:'banner-keys.jpg',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
+  info:{file:'info.html',title:'Information tracker',code:'LB',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
     cols:[['id','Box no.'],['status','Status'],['doc','Safety document'],['keysN','Keys inside'],['plocksN','Personal locks'],['issued','Issued']]},
-  ptw:{file:'ptw.html',nav:'PTW',title:'Permit to Work Tracker',code:'PTW',banner:'banner-permits.jpg',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
+  ptw:{file:'ptw.html',title:'Permit to work tracker',code:'PTW',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
     cols:[['id','Permit no.'],['status','Status'],['work','Work'],['loc','Location'],['cp','Competent person'],['box','Box']]},
-  sft:{file:'sft.html',nav:'SFT',title:'Sanction for Test Tracker',code:'SFT',banner:'banner-permits.jpg',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
+  sft:{file:'sft.html',title:'Sanction for test tracker',code:'SFT',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
     cols:[['id','Sanction no.'],['status','Status'],['work','Work'],['test','Test'],['cp','Competent person'],['box','Box']]},
-  loa:{file:'loa.html',nav:'LOA',title:'Limitation of Access Tracker',code:'LOA',banner:'banner-substation.jpg',blurb:'Areas with restricted access, who holds the limitation, and its boundaries.',
+  loa:{file:'loa.html',title:'Limitation of access tracker',code:'LOA',blurb:'Areas with restricted access, who holds the limitation, and its boundaries.',
     cols:[['id','LOA no.'],['status','Status'],['area','Area'],['reason','Reason'],['holder','Holder'],['expiry','Expires']]},
-  cp:{file:'cp.html',nav:'CP REGISTER',title:'CP Register',code:'P',banner:'banner-substation.jpg',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
+  cp:{file:'cp.html',title:'CP register',code:'P',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
     cols:[['id','Lock no.'],['name','Name'],['company','Company'],['role','Role'],['phone','Phone'],['status','Status'],['expiry','Authorised until']]}
 };
-const NAV = [['index.html','HOME','home'],['keys.html','KEYS','keys'],['info.html','INFORMATION','info'],['ptw.html','PTW','ptw'],['sft.html','SFT','sft'],['loa.html','LOA','loa'],['cp.html','CP REGISTER','cp'],['procedure.html','PROCEDURE','procedure'],['lv-schematic.html','SCHEMATICS','schematic']];
+const NAV = [['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
+const U = path => ROOT + path;
 
-/* ---------- Icons (Powertec orange) ---------- */
+/* ---------- Icons ---------- */
 const I = {
-  arrow:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" style="vertical-align:-4px"><path d="M4 12h15M13 6l6 6-6 6"/></svg>',
+  burger:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg>',
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
-  keys:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><circle cx="20" cy="24" r="10"/><circle cx="20" cy="24" r="3" fill="currentColor"/><path d="M28 30l22 22M42 44l5-5M47 49l5-5"/></svg>',
-  info:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><rect x="10" y="26" width="44" height="28" fill="currentColor" fill-opacity=".15"/><path d="M20 26v-7a12 12 0 0124 0v7M32 36v8"/><circle cx="32" cy="36" r="3" fill="currentColor"/></svg>',
-  ptw:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M16 8h24l10 10v38H16z"/><path d="M40 8v10h10M23 30h20M23 38h20M23 46h12"/></svg>',
-  sft:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M36 6L18 36h14l-4 22 18-30H32z" fill="currentColor"/></svg>',
-  loa:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M8 54h48M14 54V22M50 54V22M14 26h36v12H14z"/><path d="M22 26l-8 12M34 26l-8 12M46 26l-8 12"/></svg>',
-  cp:'<svg viewBox="0 0 64 64" fill="currentColor"><path d="M18 28a14 14 0 0128 0v2H18z"/><rect x="14" y="30" width="36" height="4" rx="2"/><circle cx="32" cy="42" r="8"/><path d="M14 62c0-10 8-14 18-14s18 4 18 14z"/></svg>',
-  procedure:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><rect x="12" y="10" width="40" height="48" rx="3"/><path d="M24 6h16v8H24z" fill="currentColor"/><path d="M20 30l4 4 8-8M36 32h10M20 46l4 4 8-8M36 48h10"/></svg>',
-  schematic:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M32 4v10"/><circle cx="32" cy="20" r="6"/><circle cx="32" cy="29" r="6"/><path d="M32 35v9M10 44h44M16 44v12M32 44v12M48 44v12"/></svg>',
-  shield:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M32 4l22 8v16c0 14-9 25-22 30C19 53 10 42 10 28V12z"/><path d="M32 4v54C45 53 54 42 54 28V12z" fill="currentColor"/></svg>',
-  lock:'<svg viewBox="0 0 64 64" fill="currentColor"><path d="M20 28v-8a12 12 0 0124 0v8h-6v-8a6 6 0 00-12 0v8z"/><rect x="12" y="28" width="40" height="30" rx="3"/></svg>',
-  tag:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4"><path d="M8 8h24l24 24-24 24L8 32z"/><circle cx="20" cy="20" r="4" fill="currentColor"/></svg>'
+  plan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M12 4v16M4 12h8M16 8h0M16 16h0"/></svg>',
+  key:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="20" cy="24" r="10"/><circle cx="20" cy="24" r="3"/><path d="M28 30l22 22M42 44l5-5M47 49l5-5"/></svg>',
+  box:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="10" y="24" width="44" height="30"/><path d="M20 24v-6a12 12 0 0124 0v6"/><path d="M32 34v8"/><circle cx="32" cy="34" r="3"/></svg>',
+  ptw:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M16 8h24l10 10v38H16z"/><path d="M40 8v10h10M23 30h20M23 38h20M23 46h12"/></svg>',
+  sft:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="12" y="12" width="40" height="40" rx="4"/><path d="M20 40a14 14 0 0124 0"/><path d="M32 40l7-9"/><circle cx="32" cy="40" r="2"/></svg>',
+  loa:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M8 52h48M14 52V22M50 52V22M14 26h36M14 36h36"/><path d="M20 26l6 10M30 26l6 10M40 26l6 10"/></svg>',
+  sld:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M32 6v10"/><circle cx="32" cy="22" r="6"/><circle cx="32" cy="30" r="6"/><path d="M32 36v8M10 44h44M16 44v10M32 44v10M48 44v10"/></svg>',
+  shield:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M28 6l18 6v14c0 12-8 20-18 24-10-4-18-12-18-24V12z"/><path d="M20 28l6 6 10-12"/></svg>',
+  tag:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 8h20l20 20-20 20L8 28z"/><circle cx="18" cy="18" r="3"/></svg>',
+  lock:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="12" y="24" width="32" height="24"/><path d="M18 24v-6a10 10 0 0120 0v6M28 32v8"/></svg>',
+  people:'<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="20" cy="20" r="7"/><circle cx="38" cy="22" r="5"/><path d="M8 46c0-8 6-13 12-13s12 5 12 13M32 46c0-6 3-10 8-10s8 4 8 10"/></svg>'
 };
+const ICON_FOR = {keys:I.key, info:I.box, ptw:I.ptw, sft:I.sft, loa:I.loa, cp:I.people.replace('viewBox="0 0 56 56"','viewBox="0 0 56 56" width="64" height="64"')};
 
 /* ---------- Helpers ---------- */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SETS = Object.keys(DATA);
 function find(id){ id = String(id||'').toUpperCase(); for(const s of SETS){ const r = DATA[s].find(x => x.id.toUpperCase() === id); if(r) return {set:s, r}; } return null; }
-const recUrl = id => `record.html?id=${encodeURIComponent(id)}`;
+const recUrl = id => U(`record.html?id=${encodeURIComponent(id)}`);
 const link = id => !id ? '' : find(id) ? `<a href="${recUrl(id)}">${esc(id)}</a>` : `<span>${esc(id)}</span>`;
 const person = s => { const m = String(s||'').match(/P-\d{3}/); return m && find(m[0]) ? esc(s).replace(m[0], `<a href="${recUrl(m[0])}" class="plink">${m[0]}</a>`) : esc(s); };
-const linkList = ids => ids && ids.length ? `<div class="links">${ids.map(link).join('')}</div>` : '<p style="margin:0;color:#777">None</p>';
+const linkList = ids => ids && ids.length ? `<div class="links">${ids.map(link).join('')}</div>` : '<p>None</p>';
 function chipClass(s){
   if(s==='In cabinet' || s==='Active') return 's-good';
-  if(s==='Expired' || s==='Out of service') return 's-crit';
-  if(s==='Suspended' || s==='With AP' || s==='Pending issue') return 's-warn';
+  if(s==='Expired') return 's-crit';
+  if(s==='Suspended') return 's-warn';
+  if(s==='Cancelled') return 's-idle';
   if(['Live','In use','In lockout box'].includes(s)) return 's-hot';
+  if(['With AP','Pending issue'].includes(s)) return 's-warn';
+  if(s==='Out of service') return 's-crit';
   return 's-idle';
 }
 const chip = s => `<span class="chip ${chipClass(s)}">${esc(s)}</span>`;
 const sys = s => `<span class="sys ${s.toLowerCase()}">${s}</span>`;
-const mono = v => v ? `<span class="mono">${esc(v)}</span>` : '';
-const U = p => p;
 
-/* ---------- Header and footer: same structure as the Powertec Utilities site ---------- */
-const lockup = (dark=false) => `<span class="lockup${dark?' dark':''}"><img src="mark.png" alt=""><span><b>POWERTEC</b><i>UTILITIES</i></span></span>`;
-function shell(page, top, body){
+/* ---------- Header, menu, footer ---------- */
+function shell(page, heroHtml, mainHtml){
+  const nav = NAV.map(([href,label,code,key]) => `<a href="${U(href)}"${key===page?' aria-current="page"':''}>${label}<small>${code}</small></a>`).join('');
   document.body.innerHTML = `
-  <header class="site-header"><div class="wrap nav">
-    <a href="index.html" aria-label="Powertec Utilities, isolation control home">${lockup()}</a>
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks">☰</button>
-    <nav class="navlinks" id="navlinks" aria-label="Main menu">${NAV.map(([h,l,k]) => `<a href="${h}"${k===page?' class="active" aria-current="page"':''}>${l}</a>`).join('')}<a class="enquire${page==='new'?' active':''}" href="new.html">+ NEW DOCUMENT</a></nav>
+  <header class="site-head"><div class="wrap">
+    <a href="${U('index.html')}" aria-label="Powertec Isolation Control home"><span class="brand"><img class="brand-logo" src="logo-stack.png" alt="Powertec"><span class="brand-name">ISOLATION CONTROL</span></span></a>
+    <button class="menu-btn" id="openMenu" aria-label="Open menu" aria-expanded="false" aria-controls="menu">${I.burger}</button>
   </div></header>
-  ${top}
-  <main>${body}</main>
-  <footer><div class="wrap">
-    <div class="footer-grid">
-      <a href="index.html">${lockup(true)}</a>
-      <div class="footer-tag">KEYS<i>|</i>LOCKS<i>|</i>PERMITS<i>|</i>SANCTIONS<i>|</i>ACCESS</div>
-      <div class="footer-copy">© ${new Date().getFullYear()} Powertec Utilities Ltd</div>
-    </div>
-    <nav class="footer-nav" aria-label="Footer">${NAV.map(([h,l]) => `<a href="${h}">${l}</a>`).join('')}<a href="new.html">NEW DOCUMENT</a></nav>
+  <div class="menu" id="menu" hidden role="dialog" aria-label="Menu">
+    <div class="top"><span class="brand"><img class="brand-logo" src="logo-stack.png" alt="Powertec"><span class="brand-name">ISOLATION CONTROL</span></span><button class="menu-btn" id="closeMenu" aria-label="Close menu">${I.close}</button></div>
+    <nav>${nav}</nav>
+    <p class="note">Powertec Isolation Control · AP office key, lock and safety document control</p>
+  </div>
+  ${heroHtml}
+  <main>${mainHtml}</main>
+  <footer class="site-foot"><div class="wrap">
+    <a class="foot-brand" href="${U('index.html')}"><img src="${MARK}" alt=""><span><b>powertec</b><small>isolation control</small></span></a>
+    <nav class="foot-nav">${NAV.map(([href,label,code]) => `<a href="${U(href)}">${code==='HOME'?'Home':code}</a>`).join('')}</nav>
+    <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Records shown are example data. Version 4.</p>
   </div></footer>`;
-  const button = document.querySelector('.menu-toggle'), nav = document.querySelector('.navlinks');
-  button.addEventListener('click', () => { const open = nav.classList.toggle('open'); button.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); button.setAttribute('aria-expanded','false'); }));
+  const menu = document.getElementById('menu'), open = document.getElementById('openMenu');
+  const close = () => { menu.hidden = true; open.setAttribute('aria-expanded','false'); document.body.style.overflow=''; open.focus(); };
+  open.addEventListener('click', () => { menu.hidden = false; open.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; document.getElementById('closeMenu').focus(); });
+  document.getElementById('closeMenu').addEventListener('click', close);
+  document.addEventListener('keydown', e => { if(e.key==='Escape' && !menu.hidden) close(); });
 }
-const banner = (img, title, crumbs, tag=true) => `
-  <section class="page-banner" style="background-image:url('${img}')"><div class="wrap">
-    ${crumbs ? `<div class="crumbs">${crumbs}</div>` : ''}
-    <h1>${title.toUpperCase()}</h1>
-    ${tag ? '<span class="example-tag">EXAMPLE DATA</span>' : ''}
+const pageHero = (crumbs, eyebrow, title, lead, extra='') => `
+  <section class="hero"><span class="orb" aria-hidden="true"></span><div class="wrap">
+    <nav class="crumbs">${crumbs}</nav>
+    <div class="kicker orange">${eyebrow}</div>
+    <h1>${title}</h1>
+    ${lead ? `<p class="lead">${lead}</p>` : ''}
+    ${extra}
   </div></section>`;
-const crumb = (...parts) => ['<a href="index.html">HOME</a>', ...parts].join('<span>/</span>');
 
 /* ---------- Home ---------- */
 function home(){
   const n = (set, st) => DATA[set].filter(r => r.status===st).length;
-  const top = `
-  <section class="home-hero"><div class="wrap hero-grid">
-    <div class="hero-copy">
-      <h1>ISOLATION &amp; SAFETY DOCUMENT CONTROL</h1>
-      <div class="orange-line">Keys | Locks | Permits | Sanctions | Limitation of Access</div>
-      <p>One dedicated, numbered lock on every switch, circuit breaker and isolator, shown beside it on the single line diagram.</p>
-      <p>When a key leaves its hook, a tag takes its place and this register shows where it went, which safety document it serves and who is working under it.</p>
-      <div class="btn-row"><a class="btn" href="new.html">+ NEW SAFETY DOCUMENT</a><a class="btn ghost" href="keys.html">OPEN KEY TRACKER</a></div>
-    </div>
-    <div class="hero-photo"><img src="hero.jpg" alt="HV substation at night"></div>
-  </div></section>`;
-  const svc = (icon, title, text) => `<div class="home-service"><div class="svc-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`;
-  const row = key => { const p = PAGES[key]; return `<div class="service-row"><div class="bigicon">${I[key]}</div><div><h3>${p.title.toUpperCase()}</h3><p class="count">${DATA[key].length} RECORDS · ${p.code}</p><p>${p.blurb}</p><a class="more" href="${p.file}">OPEN ${p.nav} →</a></div></div>`; };
-  const body = `
-  <section><div class="wrap home-services">
-    ${svc(I.lock,'DEDICATED LOCKS','One numbered lock per switch, CB and isolator, shown in a circle on the single line diagram.')}
-    ${svc(I.tag,'KEY-OUT TAGS','An empty hook always carries a tag naming the safety document, lockout box, AP and time.')}
-    ${svc(I.cp,'PERSONAL LOCKS','Each competent person is issued their own numbered lock at CP training, for life on site.')}
-    ${svc(I.procedure,'ONE REGISTER','Locks, lockout boxes, people and safety documents tied together in one record.')}
-  </div></section>
-  <section class="home-positioning"><div class="wrap position-grid">
-    <h2>A structured key system for the AP office.</h2>
-    <p>No more searching for keys. Each lock has a fixed home, every key movement is tagged and logged, and every safety document shows exactly which locks and lockout box secure it.</p>
-  </div></section>
-  <section class="page-body"><div class="wrap">
-    <span class="eyebrow">SITE STATUS NOW</span>
-    <div class="capability-grid status-grid">
-      <div class="capability"><strong>${n('ptw','Live')}</strong><span>Live permits to work</span></div>
-      <div class="capability"><strong>${n('keys','In lockout box')}</strong><span>Keys in lockout boxes</span></div>
-      <div class="capability"><strong>${n('sft','Live')}</strong><span>Live sanctions for test</span></div>
-      <div class="capability"><strong>${n('loa','Live')}</strong><span>Live limitations of access</span></div>
-    </div>
-    <span class="example-tag" style="margin-bottom:44px">EXAMPLE DATA</span>
-    <span class="eyebrow">TRACKERS AND REGISTERS</span>
-    <h2 class="section-title">Every key, permit and person in one place.</h2>
-    <div class="service-stack">
-      ${row('keys')}${row('info')}${row('ptw')}${row('sft')}${row('loa')}${row('cp')}
-      <div class="service-row"><div class="bigicon">${I.procedure}</div><div><h3>SYSTEM PROCEDURE</h3><p class="count">7 STAGES · STEP BY STEP</p><p>Plan, draw keys, isolate, secure, issue, work, cancel. Plus handover, audits and lost keys.</p><a class="more" href="procedure.html">OPEN PROCEDURE →</a></div></div>
-      <div class="service-row"><div class="bigicon">${I.schematic}</div><div><h3>SCHEMATICS</h3><p class="count">2 DRAWINGS · LOCK NUMBERS</p><p>Single line diagrams with a numbered lock circle beside every switch, CB and isolator: red for HV, blue for LV.</p><a class="more" href="lv-schematic.html">OPEN SCHEMATICS →</a></div></div>
+  const card = key => { const p = PAGES[key]; return `<a class="card" href="${U(p.file)}"><div class="ico">${ICON_FOR[key]}</div><div><h3>${p.title}</h3><p>${p.blurb}</p><div class="n">${DATA[key].length} records · ${p.code}</div><span class="more">Open tracker ${I.arrow}</span></div></a>`; };
+  const hero = `
+  <section class="hero home"><div class="wrap">
+    <div class="kicker">AP OFFICE KEY &amp; SAFETY DOCUMENT CONTROL</div>
+    <h1 class="mega">One lock on every switch. Every key accounted for.</h1>
+    <p class="sub">A structured lock and key system for data centre AP offices: a dedicated numbered lock on every point of isolation, and a register that shows where every key is.</p>
+    <p class="lead">When a key leaves its hook, a tag takes its place. Every permit, sanction and limitation of access shows exactly which locks, which lockout box and which competent person it relies on.</p>
+    <div class="textlinks">
+      <a href="${U('keys.html')}">Open key tracker <span>→</span></a>
+      <a href="${U('new.html')}">New safety document <span>→</span></a>
     </div>
   </div></section>`;
-  shell('home', top, body);
+  const main = `
+  <section class="block"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Site status now</div><h2>Live on site.</h2></div>
+    <div class="stats" style="margin-top:0;margin-bottom:12px" aria-label="Site status now">
+      <div><b class="hot">${n('ptw','Live')}</b><span>Live permits</span></div>
+      <div><b class="hot">${n('keys','In lockout box')}</b><span>Keys in lockout boxes</span></div>
+      <div><b>${n('keys','With AP')}</b><span>Keys with an AP</span></div>
+      <div><b>${n('sft','Live')}</b><span>Live sanctions for test</span></div>
+      <div><b>${n('loa','Live')}</b><span>Live limitations of access</span></div>
+      <div><b>${n('keys','Out of service')}</b><span>Locks out of service</span></div>
+    </div>
+    <span class="example" style="margin:0 0 56px">Showing example data</span>
+    <div class="block-head"><div class="eyebrow">Trackers</div><h2>Every key, permit and sanction in one place.</h2><p class="lead">Select a tracker, then select any line to open its full record.</p></div>
+    <div class="cards">
+      ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}${card('cp')}
+      <a class="card" href="${U('lv-schematic.html')}"><div class="ico">${I.sld}</div><div><h3>Schematics</h3><p>Two single line diagrams with a numbered lock circle beside every switch, CB and isolator: red HV, blue LV.</p><div class="n">Reference drawing · SLD</div><span class="more">View schematic ${I.arrow}</span></div></a>
+      <a class="card" href="${U('procedure.html')}"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>System procedure</h3><p>Step by step: plan, draw keys, isolate, secure, issue, work, cancel. Plus handover, audits and lost keys.</p><div class="n">7 stages · STEPS</div><span class="more">View procedure ${I.arrow}</span></div></a>
+    </div>
+  </div></section>
+  <section class="block alt"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">How it works</div><h2>Our system is built on four fundamentals.</h2></div>
+    <div class="trio">
+      <div>${I.lock}<b>Dedicated locks</b><p>One numbered lock per switch, shown in a circle on the SLD.</p></div>
+      <div>${I.tag}<b>Key-out tags</b><p>An empty hook always carries a tag: permit, box, AP and time.</p></div>
+      <div>${I.people}<b>Personal locks</b><p>Each CP gets their own numbered lock at CP training.</p></div>
+      <div>${I.shield}<b>One register</b><p>Locks, boxes, people and documents tied together in one record.</p></div>
+    </div>
+  </div></section>`;
+  shell('home', hero, main);
 }
 
 /* ---------- Tracker pages ---------- */
@@ -211,37 +222,35 @@ function cell(r, key){
     case 'status': return chip(r.status);
     case 'sys': return sys(r.sys);
     case 'where': return r.status==='In cabinet' ? `Hook <span class="mono">${esc(r.hook)}</span>` : r.box ? `<span class="mono">${esc(r.box)} · ${esc(r.doc)}</span>` : r.status==='With AP' ? `With AP · <span class="mono">${esc(r.doc)}</span>` : 'Withdrawn';
-    case 'keysN': return r.keys.length ? mono(r.keys.join(', ')) : '—';
-    case 'plocksN': return r.plocks.length ? mono(r.plocks.join(', ')) : '—';
-    case 'doc': case 'box': case 'issued': case 'expiry': case 'phone': return r[key] ? mono(r[key]) : '—';
-    case 'name': return `<b style="color:#171717">${esc(r.name)}</b>`;
+    case 'keysN': return r.keys.length ? `<span class="mono">${r.keys.join(', ')}</span>` : '—';
+    case 'plocksN': return r.plocks.length ? `<span class="mono">${r.plocks.join(', ')}</span>` : '—';
+    case 'doc': case 'box': case 'issued': case 'expiry': return r[key] ? `<span class="mono">${esc(r[key])}</span>` : '—';
     default: return esc(r[key]) || '—';
   }
 }
 function tracker(key){
   const p = PAGES[key], rows = DATA[key];
   const statuses = ['All', ...new Set(rows.map(r => r.status))];
-  const canNew = ['ptw','sft','loa'].includes(key);
-  const body = `<section class="page-body"><div class="wrap">
-    <div class="intro-row"><div class="service-intro"><span class="eyebrow">${p.code}</span><p style="margin:0;font-size:17px">${p.blurb} Select any line to open its full record.</p></div>${canNew ? `<a class="btn" style="margin:0" href="new.html?type=${key.toUpperCase()}">+ NEW ${key.toUpperCase()}</a>` : ''}</div>
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>${p.title}</span>`, `Tracker · ${p.code}`, p.title, p.blurb, `${['ptw','sft','loa'].includes(key) ? `<div class="cta" style="margin-top:22px"><a class="btn primary" href="${U('new.html')}?type=${key.toUpperCase()}">+ New ${key.toUpperCase()}</a></div>` : ''}<span class="example">Showing example data</span>`);
+  const main = `<section class="block"><div class="wrap">
     <div class="toolbar">
       <label class="search">${I.search}<input id="q" type="search" placeholder="Search number, board, name…" aria-label="Search ${p.title}"></label>
-      <div class="filters" role="group" aria-label="Filter by status">${statuses.map((s,i) => `<button type="button" data-f="${esc(s)}" aria-pressed="${i===0}">${esc(s.toUpperCase())}</button>`).join('')}</div>
+      <div class="filters" role="group" aria-label="Filter by status">${statuses.map((s,i)=>`<button type="button" data-f="${esc(s)}" aria-pressed="${i===0}">${esc(s)}</button>`).join('')}</div>
     </div>
-    <div class="result-count" id="count"></div>
+    <div class="count" id="count"></div>
     <div class="tablebox"><table>
-      <thead><tr>${p.cols.map(c => `<th scope="col">${c[1].toUpperCase()}</th>`).join('')}<th scope="col"><span style="position:absolute;left:-9999px">Open record</span></th></tr></thead>
+      <thead><tr>${p.cols.map(c=>`<th scope="col">${c[1]}</th>`).join('')}<th scope="col"><span style="position:absolute;left:-9999px">Open record</span></th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
   </div></section>`;
-  shell(key, banner(p.banner, p.title, crumb(p.nav)), body);
+  shell(key, hero, main);
   let q = '', f = 'All';
   const tbody = document.getElementById('rows'), count = document.getElementById('count');
   function draw(){
     const ql = q.toLowerCase();
     const shown = rows.filter(r => (f==='All' || r.status===f) && (!ql || JSON.stringify(r).toLowerCase().includes(ql)));
-    count.textContent = `${shown.length} OF ${rows.length} RECORDS`;
-    tbody.innerHTML = shown.length ? shown.map(r => `<tr data-id="${esc(r.id)}" tabindex="0">${p.cols.map(c => `<td data-label="${c[1]}">${cell(r,c[0])}</td>`).join('')}<td class="go">OPEN →</td></tr>`).join('')
+    count.textContent = `${shown.length} of ${rows.length} records`;
+    tbody.innerHTML = shown.length ? shown.map(r => `<tr data-id="${esc(r.id)}" tabindex="0">${p.cols.map(c=>`<td data-label="${c[1]}">${cell(r,c[0])}</td>`).join('')}<td class="go"><span>Open →</span></td></tr>`).join('')
       : `<tr><td class="empty" colspan="${p.cols.length+1}">No records match. Clear the search or choose another status.</td></tr>`;
   }
   tbody.addEventListener('click', e => { const tr = e.target.closest('tr[data-id]'); if(tr && !e.target.closest('a')) location.href = recUrl(tr.dataset.id); });
@@ -253,151 +262,155 @@ function tracker(key){
   draw();
 }
 
-/* ---------- Record pages ---------- */
-const fields = list => `<dl class="fields">${list.map(([k,v,w]) => `<div class="field${w?' wide':''}"><dt>${k.toUpperCase()}</dt><dd>${v || '—'}</dd></div>`).join('')}</dl>`;
-const card = (title, html, cls='') => `<div class="value-card ${cls}"><h3>${title}</h3>${html}</div>`;
-function logCard(id){
+/* ---------- Record (detail) page ---------- */
+const fields = list => `<dl class="fields">${list.map(([k,v,w]) => `<div class="field${w?' wide':''}"><dt>${k}</dt><dd>${v || '—'}</dd></div>`).join('')}</dl>`;
+const mono = v => v ? `<span class="mono">${esc(v)}</span>` : '';
+function logPanel(id){
   const L = id && LOGS[id];
-  return card('Activity log', L ? `<ol class="log">${L.map(([t,m]) => `<li><time>${esc(t)}</time><span>${esc(m)}</span></li>`).join('')}</ol>` : '<p>No movements recorded.</p>');
+  return `<div class="panel"><h3>Activity log</h3>${L ? `<ol class="log">${L.map(([t,m]) => `<li><time>${esc(t)}</time><span>${esc(m)}</span></li>`).join('')}</ol>` : '<p>No movements recorded.</p>'}</div>`;
 }
 function record(){
-  const qs = new URLSearchParams(location.search), id = qs.get('id');
+  const id = new URLSearchParams(location.search).get('id');
   const hit = find(id);
   if(!hit){
-    shell('', banner('banner-keys.jpg','Record not found', crumb('RECORD'), false), `<section class="page-body"><div class="wrap"><p>No record matches “${esc(id || '')}”. Open a tracker and select a line.</p><a class="btn" href="keys.html">OPEN KEY TRACKER</a></div></section>`);
+    shell('', pageHero(`<a href="${U('index.html')}">Home</a>`, 'Record', 'Record not found', `No record matches “${esc(id || '')}”. Open a tracker and select a line.`, `<div class="cta"><a class="btn primary" href="${U('keys.html')}">Open key tracker ${I.arrow}</a></div>`), '');
     return;
   }
   const {set, r} = hit, p = PAGES[set];
-  const notes = r.notes ? [['Notes',esc(r.notes),1]] : [];
   let body = '', side = '';
   if(set==='keys'){
     body = fields([['Lock no.',mono(r.id)],['System',sys(r.sys)],['Board',esc(r.board)],['Cabinet hook',mono(r.hook)],['Point of isolation',esc(r.point),1],['SLD drawing',mono(r.sld)],['Lock fitted',mono(r.fitted)],['Condition',esc(r.cond),1]]);
     const tag = (r.status==='In lockout box' || r.status==='With AP') ? `<div class="hooktag"><b>KEY-OUT TAG · HOOK ${esc(r.hook)}</b><div><span>Lock / key</span><span class="mono">${esc(r.id)}</span></div><div><span>Status</span><span>${esc(r.status.toUpperCase())}</span></div><div><span>Lockout box</span><span class="mono">${esc(r.box || '—')}</span></div><div><span>Document</span><span class="mono">${esc(r.doc)}</span></div></div>`
       : r.status==='Out of service' ? '<p>Hook empty. Lock withdrawn from service; see condition.</p>' : `<p>Key is on hook <span class="mono">${esc(r.hook)}</span>.</p>`;
-    side = card(`Hook ${esc(r.hook)}`, tag) + card('Linked records', linkList([r.doc, r.box].filter(Boolean))) + (r.doc ? logCard(r.doc) : '');
+    side = `<div class="panel"><h3>Hook ${esc(r.hook)}</h3>${tag}</div><div class="panel"><h3>Linked records</h3>${linkList([r.doc, r.box].filter(Boolean))}</div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='info'){
     body = fields([['Box no.',mono(r.id)],['Cabinet 3 bay',mono(r.bay)],['Safety document',link(r.doc)],['Issued',mono(r.issued)],['AP lock',person(r.aplock),1],['Isolation keys inside',r.keys.length?linkList(r.keys):'',1],['Personal locks applied',r.plocks.length?linkList(r.plocks):'',1]]);
-    side = card('Box can be opened when', `<p>${r.plocks.length ? `All ${r.plocks.length} personal locks have been removed by their holders, then the AP removes their own lock.` : 'Box is empty and not in use.'}</p>`) + (r.doc ? logCard(r.doc) : '');
+    side = `<div class="panel"><h3>Box can be opened when</h3><p>${r.plocks.length ? `All ${r.plocks.length} personal locks have been removed by their holders, then the AP removes their own lock.` : 'Box is empty and not in use.'}</p></div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='ptw' || set==='sft'){
-    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',person(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)],...notes]);
-    side = cpPanel(r.cp,'Competent person') + cancelPanel(r) + logCard(r.id);
+    body = fields([[set==='ptw'?'Permit no.':'Sanction no.',mono(r.id)],['System',sys(r.sys)],['Work',esc(r.work),1],...(set==='sft'?[['Test',esc(r.test),1]]:[]),['Location',esc(r.loc),1],['Issued by',esc(r.ap)],['Competent person',person(r.cp)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],['Isolation locks',linkList(r.keys),1],['Lockout box',link(r.box)],['Limitation of access',link(r.loa)],...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
+    side = cpPanel(r.cp,'Competent person') + cancelPanel(r) + logPanel(r.id);
   }
   if(set==='loa'){
-    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',person(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],...notes]);
-    side = cpPanel(r.holder,'LOA holder') + cancelPanel(r) + logCard(r.id);
+    body = fields([['LOA no.',mono(r.id)],['Linked permit',link(r.ptw)],['Area',esc(r.area),1],['Reason',esc(r.reason),1],['Boundaries',esc(r.bounds),1],['Issued by',esc(r.ap)],['Holder',person(r.holder)],['Issued',mono(r.issued)],['Expires',mono(r.expiry)],...(r.notes?[['Notes',esc(r.notes),1]]:[])]);
+    side = cpPanel(r.holder,'LOA holder') + cancelPanel(r) + logPanel(r.id);
   }
   if(set==='cp'){
     const docs = [...DATA.ptw.map(d=>[d,d.cp]), ...DATA.sft.map(d=>[d,d.cp]), ...DATA.loa.map(d=>[d,d.holder])].filter(([d,c]) => String(c).includes(r.id)).map(([d]) => d);
     const boxes = DATA.info.filter(b => b.plocks.includes(r.id) || String(b.aplock).includes(r.id));
     const live = docs.filter(d => d.status==='Live');
-    body = fields([['Personal lock no.',mono(r.id)],['Role',esc(r.role)],['Name',esc(r.name)],['Company',esc(r.company)],['Phone',mono(r.phone)],['Email',mono(r.email)],['ID06 card',mono(r.id06)],['Emergency contact',esc(r.emergency)],['Authorised for',esc(r.scope),1],['CP training completed',mono(r.trained)],['Authorised by',esc(r.authBy)],['Authorised until',mono(r.expiry)],['Status',chip(r.status)]]);
-    side = card('Contact', `<div class="cpcard">${cpCard(r,false)}</div>`, 'cpwrap')
-      + (r.status!=='Active' ? card('Not to receive documents', `<p>Authorisation is ${r.status.toLowerCase()}. Do not issue a PTW, SFT or LOA to this person.</p>`, 'warn-card') : '')
-      + card('Lock on site now', boxes.length ? `<p>Personal lock is on ${boxes.map(b => link(b.id)).join(', ')}.</p>` : '<p>Not on any lockout box.</p>')
-      + card('Live documents', live.length ? linkList(live.map(d => d.id)) : '<p>None</p>')
-      + card('Document history', docs.length ? linkList(docs.map(d => d.id)) : '<p>None recorded</p>');
+    body = fields([['Personal lock no.',mono(r.id)],['Role',esc(r.role)],['Name',esc(r.name)],['Company',esc(r.company)],['Phone',`<span class="mono">${esc(r.phone)}</span>`],['Email',`<span class="mono">${esc(r.email)}</span>`],['ID06 card',mono(r.id06)],['Emergency contact',esc(r.emergency)],['Authorised for',esc(r.scope),1],['CP training completed',mono(r.trained)],['Authorised by',esc(r.authBy)],['Authorised until',mono(r.expiry)],['Status',chip(r.status)]]);
+    side = `<div class="panel cppanel"><h3>Contact</h3>${cpCard(r, false)}</div><div class="panel"><h3>Lock on site now</h3>${boxes.length ? `<p>Personal lock is on ${boxes.map(b=>link(b.id)).join(', ')}.</p>` : '<p>Not on any lockout box.</p>'}</div>
+      <div class="panel"><h3>Live documents</h3>${live.length ? linkList(live.map(d=>d.id)) : '<p>None</p>'}</div>
+      <div class="panel"><h3>Document history</h3>${docs.length ? linkList(docs.map(d=>d.id)) : '<p>None recorded</p>'}</div>
+      ${r.status!=='Active' ? `<div class="panel" style="border-color:var(--crit)"><h3 style="color:var(--crit)">Not to receive documents</h3><p>Authorisation is ${r.status.toLowerCase()}. Do not issue a PTW, SFT or LOA to this person.</p></div>` : ''}`;
   }
   const titles = {cp:r.name, keys:r.point, info:r.doc ? `Serving ${r.doc}` : 'Lockout box', ptw:r.work, sft:r.work, loa:r.area};
   document.title = `${r.id} · Powertec Isolation Control`;
-  const main = `<section class="page-body"><div class="wrap">
-    <div class="rec-head"><div><div class="rec-id">${esc(r.id)}${r.local ? ' · ISSUED ON THIS DEVICE' : ''}</div><h2>${esc(titles[set])}</h2></div>${chip(r.status)}</div>
-    ${qs.get('created') ? `<p class="saved">${esc(r.id)} issued and saved on this device. Its keys and lockout box are now shown against it in the trackers.</p>` : ''}
-    <div class="rec-grid"><div>${body}</div><aside class="side">${side}</aside></div>
-    <a class="back" href="${p.file}">← BACK TO ${p.title.toUpperCase()}</a>
+  const hero = `<section class="hero"><span class="orb" aria-hidden="true"></span><div class="wrap">
+    <nav class="crumbs"><a href="${U('index.html')}">Home</a><span>/</span><a href="${U(p.file)}">${p.title}</a><span>/</span><span>${esc(r.id)}</span></nav>
+    <div class="rec-head"><div><div class="rec-id">${esc(r.id)}</div><h1 style="font-size:clamp(28px,4.4vw,46px)">${esc(titles[set])}</h1><span class="example">${r.local ? 'Issued on this device' : 'Example record'}</span></div>${chip(r.status)}</div>
+    ${new URLSearchParams(location.search).get('created') ? `<p class="saved">${esc(r.id)} issued and saved on this device. The keys and lockout box are now shown against it in the trackers.</p>` : ''}
   </div></section>`;
-  shell(set, banner(p.banner, p.title, crumb(`<a href="${p.file}">${p.nav}</a>`, esc(r.id)), !r.local), main);
+  const main = `<section class="block"><div class="wrap">
+    <div class="rec-grid"><div>${body}</div><aside class="side">${side}</aside></div>
+    <a class="back" href="${U(p.file)}">← Back to ${p.title}</a>
+  </div></section>`;
+  shell(set, hero, main);
   wireRecord(r);
 }
 
-/* ---------- System procedure ---------- */
+/* ---------- LV schematic ---------- */
+function schematic(){
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Lock numbers', 'Schematics', 'Every switch, circuit breaker and isolator carries a numbered circle: red for HV, blue for LV. The number is the dedicated lock for that point, H-number for HV and L-number for LV. Tap a drawing to open it full size and zoom in.');
+  const dwg = (file, title, sub, h, l) => `<figure class="dwg"><figcaption><div><h3>${title}</h3><p>${sub}</p></div><div class="dwg-count"><span class="pill hv">${h} HV</span><span class="pill lv">${l} LV</span></div></figcaption><a href="${file}" target="_blank" rel="noopener"><img src="${file}" alt="${title}, numbered" loading="lazy"></a><a class="btn ghost small" href="${file}" target="_blank" rel="noopener">Open full size ${I.arrow}</a></figure>`;
+  const main = `<section class="block"><div class="wrap">
+    <div class="legend" style="margin:0 0 24px"><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#C81E1E" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#C81E1E">1</text></svg>HV switch, CB or isolator · lock H-001</span><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#145AC8" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#145AC8">1</text></svg>LV switch, CB, ATS or STS · lock L-001</span></div>
+    <div class="dwgs">
+      ${dwg('sld-tier4.jpg','Tier IV data centre','132 kV dual utility feed, 11 kV switchboards, 415 V distribution to row PDUs',25,55)}
+      ${dwg('sld-hyperscale.jpg','Hyperscale 2N architecture','400 kV GIS, 22 kV ring main, 11 kV generators, 400 V switchboards to STS',32,26)}
+    </div>
+    <p class="hint" style="margin-top:20px">Earth switches on the 400 kV drawing are numbered too, as they take a dedicated lock. Generators, transformers, CTs and PTs are not switching points and carry no number.</p>
+  </div></section>`;
+  shell('schematic', hero, main);
+}
+
+/* ---------- System procedure (step-by-step plan of the system) ---------- */
 const STAGES = [
-  {k:'plan',name:'Plan the isolation',who:'AP',
+  {k:'plan',name:'Plan the isolation',who:'AP',icon:'ptw',
    steps:['Mark the points of isolation and earthing on a copy of the SLD. Read the circled lock number beside each switch.','Write the switching programme, listing every point with its lock number, for example LV-MSB-B ACB Q1 · L-121.','Open the Key tracker and check every listed lock shows IN CABINET.','Open the CP register and check the CP who will receive the document is Active and authorised for this system.'],
    site:'No change yet. The switching programme is ready.',
    stop:'Any lock not IN CABINET, or a CP not Active: stop and resolve before going on.'},
-  {k:'draw',name:'Draw the keys and a lockout box',who:'AP',
+  {k:'draw',name:'Draw the keys and a lockout box',who:'AP',icon:'key',
    steps:['Take each key from its numbered hook in Cabinet 1 (HV) or Cabinet 2 (LV).','Hang a key-out tag on each empty hook: lock no., status WITH AP, document no., your name, time.','Take a free lockout box from Cabinet 3 and tag its empty bay the same way.'],
    site:'Key tracker: each key → With AP. Information tracker: box → In use, against the document number.',
    stop:'Every empty hook and bay carries a tag before you leave the AP office.'},
-  {k:'isolate',name:'Isolate, lock and earth',who:'AP',
+  {k:'isolate',name:'Isolate, lock and earth',who:'AP',icon:'lock',
    steps:['Carry out the switching programme in order.','At each point, fit its dedicated lock. Check the number on the lock matches the switch label and the SLD.','Prove dead and apply earths as the safety rules require. Lock earth switches with their own dedicated locks.','Post caution and danger notices.'],
    site:'No change. Keys stay in the AP\'s hand.',
    stop:'A lock number that does not match the label or SLD: stop. Do not fit a different lock.'},
-  {k:'secure',name:'Secure the keys',who:'AP',
+  {k:'secure',name:'Secure the keys',who:'AP',icon:'box',
    steps:['Place every isolation key in the lockout box. Count them against the switching programme.','Close the box and fit your own personal lock (your P-number) as the AP lock.','Update each hook tag from WITH AP to IN LOCKOUT BOX, LB-nn.'],
    site:'Key tracker: each key → In lockout box, LB-nn. Information tracker: AP lock recorded.',
    stop:'Key count must match the switching programme exactly.'},
-  {k:'issue',name:'Issue the safety document',who:'AP and CP',
-   steps:['Use + New document to raise the PTW or SFT. Choose the locks, lockout box, CP and working party from the lists.','At the point of work, show the CP the isolation, earths and notices, and brief the work.','Issue the document. The CP signs receipt.','The CP and every member of the working party fit their own personal lock to the lockout box.'],
+  {k:'issue',name:'Issue the safety document',who:'AP and CP',icon:'ptw',
+   steps:['Write the lockout box number and every lock number on the PTW or SFT.','At the point of work, show the CP the isolation, earths and notices, and brief the work.','Issue the document. The CP signs receipt.','The CP and every member of the working party fit their own personal lock to the lockout box. Record each P-number on the document.'],
    site:'PTW or SFT tracker: document → Live. Information tracker: personal locks recorded. CP register: document shown against the CP.',
    stop:'Nobody works without their own lock on the box.'},
-  {k:'work',name:'During the work',who:'CP and working party',
+  {k:'work',name:'During the work',who:'CP and working party',icon:'people',
    steps:['The CP keeps the working party within the limits of the document.','A person joining fits their own lock and is added to the document. A person leaving removes their own lock and is signed off.','Nobody removes another person\'s lock, for any reason.','Where live equipment is close by, the AP issues a Limitation of Access with clear boundaries.'],
    site:'Information tracker: personal locks added or removed. LOA tracker: LOA → Live if issued.',
    stop:'The box cannot be opened while any personal lock is on it.'},
-  {k:'cancel',name:'Cancel and restore',who:'CP then AP',
-   steps:['The CP confirms the work is complete, the working party is withdrawn, and signs the document for cancellation.','Each person removes their own personal lock.','The AP removes the AP lock, opens the box and counts the keys against the document.','Remove earths and locks, and restore the system as per the switching programme.','Return each key to its own numbered hook, remove the key-out tag, return the box to its bay, then press Cancel document on the record.'],
-   site:'Key tracker: each key → In cabinet. Information tracker: box → In cabinet. PTW / SFT / LOA tracker: → Cancelled.',
+  {k:'cancel',name:'Cancel and restore',who:'CP then AP',icon:'shield',
+   steps:['The CP confirms the work is complete, the working party is withdrawn, and signs the document for cancellation.','Each person removes their own personal lock.','The AP removes the AP lock, opens the box and counts the keys against the document.','Remove earths and locks, and restore the system as per the switching programme.','Return each key to its own numbered hook and remove the key-out tag. Return the box to its bay.'],
+   site:'Key tracker: each key → In cabinet. Information tracker: box → In cabinet. PTW/SFT/LOA tracker: → Cancelled.',
    stop:'Tag, hook and tracker must agree before the AP leaves the office.'}
 ];
 const ROUTINES = [
-  {name:'Shift handover',who:'OUTGOING AND INCOMING AP',steps:['Check together: empty hooks against tags, against the Key tracker, against live documents.','Resolve any difference before the outgoing AP leaves.','Both APs sign the handover entry.']},
-  {name:'Daily check',who:'AP ON DUTY · 5 MINUTES',steps:['Every empty hook has a tag.','Every tag matches the Key tracker and a live document.','Every lockout box out of Cabinet 3 is tied to a live document.']},
+  {name:'Shift handover',who:'Outgoing and incoming AP',steps:['Check together: empty hooks against tags, against the Key tracker, against live documents.','Resolve any difference before the outgoing AP leaves.','Both APs sign the handover entry.']},
+  {name:'Daily check',who:'AP on duty · 5 minutes',steps:['Every empty hook has a tag.','Every tag matches the Key tracker and a live document.','Every lockout box out of Cabinet 3 is tied to a live document.']},
   {name:'Weekly walk-down',who:'AP',steps:['Pick 10% of fitted locks on site.','Check lock number against switch label against SLD.','Record the result; correct any error the same day.']},
-  {name:'Monthly reconciliation',who:'LEAD SAP',steps:['Reconcile every tracker and the CP register.','Check CP authorisations due to expire in the next 30 days.','Review incidents and near misses.']},
-  {name:'Lost key or unknown lock',who:'AP AND LEAD SAP',steps:['Stop. Treat the isolation as uncertain; do not issue or cancel against it.','Tell the lead SAP and record an incident.','Under SAP control re-prove the isolation, then remove the lock by an approved method.','Fit a new lock with a new number; update the label, the SLD and the Key tracker. Retire the old number.']},
-  {name:'New CP joins site',who:'LEAD SAP',steps:['Confirm CP training is complete and the authorisation is signed.','Issue the next free personal lock and engrave the P-number.','Add the person to the CP register with their contact details.']}
+  {name:'Monthly reconciliation',who:'Lead SAP',steps:['Reconcile every tracker and the CP register.','Check CP authorisations due to expire in the next 30 days.','Review incidents and near misses.']},
+  {name:'Lost key or unknown lock',who:'AP and lead SAP',steps:['Stop. Treat the isolation as uncertain; do not issue or cancel against it.','Tell the lead SAP and record an incident.','Under SAP control re-prove the isolation, then remove the lock by an approved method.','Fit a new lock with a new number; update the label, the SLD and the Key tracker. Retire the old number.']},
+  {name:'New CP joins site',who:'Lead SAP',steps:['Confirm CP training is complete and the authorisation is signed.','Issue the next free personal lock and engrave the P-number.','Add the person to the CP register with their contact details.']}
 ];
 function procedure(){
   let n = 0;
-  const bar = `<div class="work-flow stage-bar">${STAGES.map((s,i) => `<a class="work-step" href="#stage-${s.k}"><b>STAGE ${i+1}</b><h3>${s.name}</h3><p>${s.who}</p></a>`).join('')}</div>`;
-  const stages = STAGES.map((s,i) => `
-    <article class="stage" id="stage-${s.k}">
-      <div class="stage-num">${i+1}</div>
-      <div>
-        <h3>${s.name.toUpperCase()}</h3>
-        <div class="who">STAGE ${i+1} OF ${STAGES.length} · DONE BY: ${s.who.toUpperCase()}</div>
-        <div class="stage-cols">
-          <div><h4>STEPS</h4><ol class="steps-list">${s.steps.map(t => `<li><span class="sn">${++n}</span><span>${esc(t)}</span></li>`).join('')}</ol></div>
-          <div><h4>ON THIS SITE</h4><p class="site-note">${esc(s.site)}</p></div>
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>System procedure</span>`, 'System procedure · Step by step', 'How the system works', 'Every safety document follows the same seven stages, from planning the isolation to returning the last key to its hook. Each stage says who does it, what changes in the trackers, and when to stop.');
+  const bar = `<div class="phasebar" style="grid-template-columns:repeat(${STAGES.length},minmax(118px,1fr))">${STAGES.map((s,i) => `<a href="#stage-${s.k}"><b>${i+1}</b><span>${s.name}</span><small>${s.who}</small></a>`).join('')}</div>`;
+  const cards = STAGES.map((s,i) => `
+    <article class="phase" id="stage-${s.k}">
+      <div class="pnum">${i+1}</div>
+      <div class="pbody">
+        <div class="pmeta"><span>Stage ${i+1} of ${STAGES.length}</span><span>Done by: ${s.who}</span></div>
+        <h3>${s.name}</h3>
+        <div class="pcols">
+          <div><h4>Steps</h4><ol class="steps-list">${s.steps.map(t => `<li><span class="sn">${++n}</span><span>${esc(t)}</span></li>`).join('')}</ol></div>
+          <div><h4>On this site</h4><p class="site-note">${esc(s.site)}</p></div>
         </div>
-        <p class="stop"><b>STOP CHECK</b>${esc(s.stop)}</p>
+        <p class="gate"><b>Stop check</b>${esc(s.stop)}</p>
       </div>
     </article>`).join('');
-  const statuses = [['In cabinet','Key on its own hook. Free to use.'],['With AP','Drawn for a document and being taken to the switch. Never left overnight.'],['In lockout box','Inside a box under a live document. Box locked by the AP and working party.'],['Out of service','Lock damaged or under replacement. Hook carries a tag.']];
-  const body = `
-  <section class="page-body"><div class="wrap">
-    <div class="service-intro"><span class="eyebrow">STEP BY STEP</span><h2 class="section-title">One document, seven stages.</h2><p>Every Permit to Work and Sanction for Test follows the same seven stages, from planning the isolation to returning the last key to its hook. Each stage says who does it, what changes in the trackers, and when to stop.</p></div>
-    <div class="work-section" style="margin-top:0">${bar}</div>
-    <div class="service-stack" style="margin-top:20px">${stages}</div>
+  const routines = ROUTINES.map(r => `<div class="panel"><h3>${r.name}</h3><div class="pmeta" style="margin-bottom:12px"><span>${r.who}</span></div><ol class="mini">${r.steps.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div>`).join('');
+  const statuses = [['In cabinet','Key on its own hook. Free to use.'],['With AP','Drawn for a document, being taken out to the switch. Never left overnight.'],['In lockout box','Inside a box under a live document. Box locked by AP and working party.'],['Out of service','Lock damaged or under replacement. Hook carries a tag.']];
+  const main = `
+  <section class="block"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Stages</div><h2>One document, seven stages.</h2><p class="lead">The same stages apply to a Permit to Work and a Sanction for Test. Tap a stage to jump to it.</p></div>
+    <div class="barbox">${bar}</div>
+    <div class="phases">${cards}</div>
   </div></section>
-  <section class="values-section"><div class="wrap">
-    <div class="section-heading"><span class="eyebrow">ROUTINES</span><h2 class="section-title">Keeping the system right.</h2></div>
-    <div class="routines">${ROUTINES.map(r => `<div class="value-card"><strong>${r.who}</strong><h3>${r.name}</h3><ol>${r.steps.map(t => `<li>${esc(t)}</li>`).join('')}</ol></div>`).join('')}</div>
+  <section class="block alt"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Routines</div><h2>Keeping the system right.</h2></div>
+    <div class="routines">${routines}</div>
   </div></section>
-  <section class="approach-section"><div class="wrap approach-grid">
-    <div><span class="eyebrow">QUICK REFERENCE</span><h2 class="section-title">What each key status means.</h2></div>
-    <div class="approach-points">${statuses.map(([s,m]) => `<div class="approach-point"><h3>${chip(s)}</h3><p>${m}</p></div>`).join('')}</div>
+  <section class="block"><div class="wrap">
+    <div class="block-head"><div class="eyebrow">Quick reference</div><h2>What each key status means.</h2></div>
+    <div class="tablebox plain"><table><thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead><tbody>${statuses.map(([s,m]) => `<tr><td data-label="Status">${chip(s)}</td><td data-label="Meaning">${m}</td></tr>`).join('')}</tbody></table></div>
   </div></section>`;
-  shell('procedure', banner('banner-network.jpg','System Procedure', crumb('PROCEDURE'), false), body);
+  shell('procedure', hero, main);
 }
 
-/* ---------- Schematics ---------- */
-function schematic(){
-  const dwg = (file, title, sub, h, l) => `<figure class="dwg"><figcaption><div><h3>${title}</h3><p>${sub}</p></div><div class="dwg-count"><span class="pill hv">${h} HV</span><span class="pill lv">${l} LV</span></div></figcaption><a href="${file}" target="_blank" rel="noopener"><img src="${file}" alt="${title}, numbered" loading="lazy"></a><a class="btn" style="margin:0" href="${file}" target="_blank" rel="noopener">OPEN FULL SIZE</a></figure>`;
-  const body = `<section class="page-body"><div class="wrap">
-    <div class="service-intro"><span class="eyebrow">SINGLE LINE DIAGRAMS · LOCK NUMBERS</span><p style="margin:0;font-size:17px">Every switch, circuit breaker and isolator carries a numbered circle: red for HV, blue for LV. The number is the dedicated lock for that point, H-number for HV and L-number for LV. Tap a drawing to open it full size and zoom in.</p></div>
-    <div class="legend" style="margin:0 0 24px"><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#C81E1E" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#C81E1E">1</text></svg>HV switch, CB or isolator · lock H-001</span><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#145AC8" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#145AC8">1</text></svg>LV switch, CB, ATS or STS · lock L-001</span></div>
-    <div class="dwgs">
-      ${dwg('sld-tier4.jpg','TIER IV DATA CENTRE','132 kV dual utility feed, 11 kV switchboards, 415 V distribution to row PDUs',25,55)}
-      ${dwg('sld-hyperscale.jpg','HYPERSCALE 2N ARCHITECTURE','400 kV GIS, 22 kV ring main, 11 kV generators, 400 V switchboards to STS',32,26)}
-    </div>
-    <p style="margin-top:20px;color:#777;font-size:14px">Earth switches on the 400 kV drawing are numbered too, as they take a dedicated lock. Generators, transformers, CTs and PTs are not switching points and carry no number.</p>
-  </div></section>`;
-  shell('schematic', banner('banner-network.jpg','Schematics', crumb('SCHEMATICS'), false), body);
-}
 /* ---------- New safety documents (saved on this device) ----------
    Every new PTW, SFT or LOA, and every cancellation, is stored as an event in this browser's
    storage and replayed over the example data each time a page opens. */
@@ -456,9 +469,8 @@ function newDoc(){
   const people = DATA.cp;
   const aps = people.filter(c => ['AP','SAP'].includes(c.role) && c.status === 'Active');
   const cpOptions = people.filter(c => c.role === 'CP').map(c => `<option value="${c.id}"${c.status !== 'Active' ? ' disabled' : ''}>${esc(cpLabel(c))}${c.status !== 'Active' ? ` (${c.status.toLowerCase()})` : ''}</option>`).join('');
-  const hero = banner('banner-permits.jpg','New safety document', crumb('NEW DOCUMENT'), false);
-  const main = `<section class="page-body"><div class="wrap">
-    <div class="service-intro"><span class="eyebrow">ISSUE · PTW · SFT · LOA</span><p style="margin:0;font-size:17px">Choose each item from its list. Only locks on their hooks, free lockout boxes and active CPs can be chosen.</p></div>
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>New safety document</span>`, 'Issue · PTW · SFT · LOA', 'New safety document', 'Choose each item from its list. Only locks on their hooks, free lockout boxes and active CPs can be chosen.');
+  const main = `<section class="block"><div class="wrap">
     <form class="docform" id="docform" novalidate>
       <div class="fgroup"><h3>1 · Document</h3><div class="fgrid">
         <label class="f"><span>Document type *</span><select id="f-type" required>${opts([['Permit to Work (PTW)','PTW'],['Sanction for Test (SFT)','SFT'],['Limitation of Access (LOA)','LOA']],'Choose a document type')}</select></label>
@@ -474,7 +486,7 @@ function newDoc(){
       </div></div>
       <div class="fgroup" data-for="PTW SFT"><h3>2 · Isolation</h3><div class="fgrid">
         <div class="f wide"><span>Isolation locks * <small>Choose the system first. Only locks IN CABINET are listed.</small></span>
-          <div class="addrow"><select id="f-lock"></select><button type="button" class="btn ghost-dark small" id="addLock">ADD LOCK</button></div>
+          <div class="addrow"><select id="f-lock"></select><button type="button" class="btn ghost small" id="addLock">Add lock</button></div>
           <ul class="picked" id="pickedLocks"></ul></div>
         <label class="f"><span>Lockout box *</span><select id="f-box"></select></label>
       </div></div>
@@ -482,7 +494,7 @@ function newDoc(){
         <label class="f"><span>Issuing AP *</span><select id="f-ap">${opts(aps.map(a => [`${a.name} (${a.role}) · ${a.id}`, a.id]),'Choose the issuing AP')}</select></label>
         <label class="f"><span><b data-cp-label>Competent person *</b></span><select id="f-cp"><option value="">Choose the CP</option>${cpOptions}</select></label>
         <div class="f wide" data-for="PTW SFT"><span>Working party <small>Each person's personal lock goes on the box.</small></span>
-          <div class="addrow"><select id="f-wp"></select><button type="button" class="btn ghost-dark small" id="addWp">ADD PERSON</button></div>
+          <div class="addrow"><select id="f-wp"></select><button type="button" class="btn ghost small" id="addWp">Add person</button></div>
           <ul class="picked" id="pickedWp"></ul></div>
         <div class="cpcard wide" id="cpPreview" hidden></div>
       </div></div>
@@ -492,8 +504,8 @@ function newDoc(){
       </div></div>
       <div class="errors" id="errors" role="alert" hidden></div>
       <div class="formfoot">
-        <button type="submit" class="btn">ISSUE DOCUMENT</button>
-        <a class="btn ghost-dark" href="index.html">CANCEL</a>
+        <button type="submit" class="btn primary">Issue document ${I.arrow}</button>
+        <a class="btn ghost" href="${U('index.html')}">Cancel</a>
       </div>
       <p class="hint">Documents you issue here are saved on this phone or computer only. Other devices will not see them.</p>
     </form>
@@ -581,19 +593,19 @@ function cpCard(c, withButton = true){
   const tel = String(c.phone).replace(/[^+\d]/g,'');
   return `<div class="cpc-head"><div><div class="cpc-role">${esc(c.role)} · <span class="mono">${esc(c.id)}</span></div><b>${esc(c.name)}</b><span>${esc(c.company)}</span></div>${chip(c.status)}</div>
     <div class="cpc-lines"><a href="tel:${tel}"><span>Phone</span><b class="mono">${esc(c.phone)}</b></a><a href="mailto:${esc(c.email)}"><span>Email</span><b class="mono">${esc(c.email)}</b></a></div>
-    ${withButton ? `<a class="btn small" href="${recUrl(c.id)}">OPEN CP DETAILS</a>` : ''}`;
+    ${withButton ? `<a class="btn primary small" href="${recUrl(c.id)}">Open CP details ${I.arrow}</a>` : ''}`;
 }
 function cpPanel(str, label){
   const m = String(str || '').match(/P-\d{3}/), hit = m && find(m[0]);
   if(!hit) return '';
-  return `<div class="value-card cpwrap"><h3>${label}</h3><div class="cpcard">${cpCard(hit.r)}</div></div>`;
+  return `<div class="panel cppanel"><h3>${label}</h3>${cpCard(hit.r)}</div>`;
 }
 function cancelPanel(r){
   if(r.status !== 'Live') return '';
-  return `<div class="value-card"><h3>Cancel this document</h3><p>Use when the CP has signed for cancellation and every personal lock is off the box.</p>
-    <button type="button" class="btn ghost-dark small" id="cancelStart" style="margin-top:14px">CANCEL DOCUMENT</button>
+  return `<div class="panel"><h3>Cancel this document</h3><p>Use when the CP has signed for cancellation and every personal lock is off the box.</p>
+    <button type="button" class="btn ghost small" id="cancelStart" style="margin-top:14px">Cancel document</button>
     <div id="cancelConfirm" hidden style="margin-top:14px"><p><b>Confirm:</b> all personal locks removed and keys counted?</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn small" id="cancelYes">YES, CANCEL ${esc(r.id)}</button><button type="button" class="btn ghost-dark small" id="cancelNo">GO BACK</button></div></div></div>`;
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn primary small" id="cancelYes">Yes, cancel ${esc(r.id)}</button><button type="button" class="btn ghost small" id="cancelNo">Go back</button></div></div></div>`;
 }
 function wireRecord(r){
   const start = document.getElementById('cancelStart'); if(!start) return;
@@ -612,6 +624,6 @@ const page = document.body.dataset.page;
 if(page==='home') home();
 else if(PAGES[page]) tracker(page);
 else if(page==='record') record();
-else if(page==='procedure') procedure();
 else if(page==='schematic') schematic();
+else if(page==='procedure') procedure();
 else if(page==='new') newDoc();
