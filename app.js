@@ -1,9 +1,9 @@
 /* Powertec Isolation Control — shared script.
    Every page loads this file. It draws the header, menu and footer,
    then builds the page named in <body data-page="...">.
-   All records below are EXAMPLE DATA. Replace them with your own site records. */
+   Preloaded records are unverified and must not be used as operational evidence. */
 
-/* ---------- Example data ---------- */
+/* ---------- Initial records (unverified) ---------- */
 const AP = {J:'J. Andersson (AP)', E:'E. Berg (SAP)', R:'R. Holm (AP)'};
 const DATA = {
   keys: [],  /* built from LOCKS below: one key per dedicated lock on the drawings */
@@ -183,8 +183,12 @@ function shell(page, heroHtml, mainHtml){
   <main>${mainHtml}</main>
   <footer class="site-foot"><div class="wrap">
     <a class="foot-brand" href="${U('index.html')}"><img src="${MARK}" alt=""><span><b>powertec</b><small>isolation control</small></span></a>
-    <nav class="foot-nav">${NAV.map(([href,label,code]) => `<a href="${U(href)}">${code==='HOME'?'Home':code}</a>`).join('')}</nav>
-    <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Records shown are example data. Version 5.</p>
+    <div class="foot-links">
+      <div class="foot-col"><h3>Registers</h3><a href="${U('keys.html')}">Key control</a><a href="${U('info.html')}">Information tracker</a><a href="${U('cp.html')}">Personnel locks</a></div>
+      <div class="foot-col"><h3>Safety documents</h3><a href="${U('ptw.html')}">Permit to Work</a><a href="${U('sft.html')}">Sanction for Test</a><a href="${U('loa.html')}">Limitation of Access</a></div>
+      <div class="foot-col"><h3>Resources</h3><a href="${U('lv-schematic.html')}">Schematics</a><a href="${U('references.html')}">System references</a><a href="${U('procedure.html')}">Procedure</a></div>
+    </div>
+    <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Version 6 · Records require site verification before operational use.</p>
   </div></footer>`;
   const menu = document.getElementById('menu'), open = document.getElementById('openMenu');
   const close = () => { menu.hidden = true; open.setAttribute('aria-expanded','false'); document.body.style.overflow=''; open.focus(); };
@@ -193,7 +197,7 @@ function shell(page, heroHtml, mainHtml){
   document.addEventListener('keydown', e => { if(e.key==='Escape' && !menu.hidden) close(); });
 }
 const pageHero = (crumbs, eyebrow, title, lead, extra='') => `
-  <section class="hero"><span class="orb" aria-hidden="true"></span><div class="wrap">
+  <section class="hero"><div class="wrap">
     <nav class="crumbs">${crumbs}</nav>
     <div class="kicker orange">${eyebrow}</div>
     <h1>${title}</h1>
@@ -227,7 +231,7 @@ function home(){
       <div><b>${n('loa','Live')}</b><span>Live limitations of access</span></div>
       <div><b>${n('keys','Out of service')}</b><span>Locks out of service</span></div>
     </div>
-    <span class="example" style="margin:0 0 56px">Showing example data</span>
+    
     <div class="block-head"><div class="eyebrow">Trackers</div><h2>Every key, permit and sanction in one place.</h2><p class="lead">Select a tracker, then select any line to open its full record.</p></div>
     <div class="cards">
       ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}${card('cp')}
@@ -263,7 +267,7 @@ function cell(r, key){
 function tracker(key){
   const p = PAGES[key], rows = DATA[key];
   const statuses = ['All', ...new Set(rows.map(r => r.status))];
-  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>${p.title}</span>`, `Tracker · ${p.code}`, p.title, p.blurb, `${['ptw','sft','loa'].includes(key) ? `<div class="cta" style="margin-top:22px"><a class="btn primary" href="${U('new.html')}?type=${key.toUpperCase()}">+ New ${key.toUpperCase()}</a></div>` : ''}<span class="example">Showing example data</span>`);
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>${p.title}</span>`, `Tracker · ${p.code}`, p.title, p.blurb, `${['ptw','sft','loa'].includes(key) ? `<div class="cta" style="margin-top:22px"><a class="btn primary" href="${U('new.html')}?type=${key.toUpperCase()}">+ New ${key.toUpperCase()}</a></div>` : ''}`);
   const main = `<section class="block"><div class="wrap">
     <div class="toolbar">
       <label class="search">${I.search}<input id="q" type="search" placeholder="Search number, board, name…" aria-label="Search ${p.title}"></label>
@@ -340,9 +344,9 @@ function record(){
   }
   const titles = {cp:r.name, keys:r.point, info:r.doc ? `Serving ${r.doc}` : 'Lockout box', ptw:r.work, sft:r.work, loa:r.area};
   document.title = `${r.id} · Powertec Isolation Control`;
-  const hero = `<section class="hero"><span class="orb" aria-hidden="true"></span><div class="wrap">
+  const hero = `<section class="hero"><div class="wrap">
     <nav class="crumbs"><a href="${U('index.html')}">Home</a><span>/</span><a href="${U(p.file)}">${p.title}</a><span>/</span><span>${esc(r.id)}</span></nav>
-    <div class="rec-head"><div><div class="rec-id">${esc(r.id)}</div><h1 style="font-size:clamp(28px,4.4vw,46px)">${esc(titles[set])}</h1><span class="example">${r.local ? 'Issued on this device' : 'Example record'}</span></div>${chip(r.status)}</div>
+    <div class="rec-head"><div><div class="rec-id">${esc(r.id)}</div><h1 style="font-size:clamp(28px,4.4vw,46px)">${esc(titles[set])}</h1></div>${chip(r.status)}</div>
     ${new URLSearchParams(location.search).get('created') ? `<p class="saved">${esc(r.id)} issued and saved on this device. The keys and lockout box are now shown against it in the trackers.</p>` : ''}
   </div></section>`;
   const main = `<section class="block"><div class="wrap">
@@ -358,7 +362,7 @@ function schematic(){
   const q = new URLSearchParams(location.search), hl = (q.get('lock') || '').toUpperCase();
   const hlKey = DATA.keys.find(k => k.id === hl);
   const used = DATA.keys.filter(k => k.doc).length;
-  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Live lock status', 'Schematics', 'DEMONSTRATION ONLY: provisional HV and LV lock markers are shown on the two illustrative diagrams. They are not verified against site apparatus or an approved switching schedule. Tap a marker to view its example record.');
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Live lock status', 'Schematics', 'DEMONSTRATION ONLY: provisional HV and LV lock markers are shown on the two illustrative diagrams. They are not verified against site apparatus or an approved switching schedule. Tap a marker to view the corresponding provisional record.');
   const fig = dw => { const D = DRAWINGS[dw], ks = DATA.keys.filter(k => k.dw === dw); const h = ks.filter(k => k.sys === 'HV').length, l = ks.length - h, u = ks.filter(k => k.doc).length;
     return `<figure class="dwg"><figcaption><div><h3>${D.title}</h3><p>${h} HV and ${l} LV locks · ${u} in use</p></div><div class="dwg-count"><span class="pill hv">H-${String(ks.find(k=>k.sys==='HV').n).padStart(3,'0')} to H-${String([...ks].reverse().find(k=>k.sys==='HV').n).padStart(3,'0')}</span><span class="pill lv">L-${String(ks.find(k=>k.sys==='LV').n).padStart(3,'0')} to L-${String([...ks].reverse().find(k=>k.sys==='LV').n).padStart(3,'0')}</span></div></figcaption>${drawingHTML(dw, {highlight:hl})}<p class="dwg-hint">Drag or scroll the drawing to move around it.</p></figure>`; };
   const main = `<section class="block"><div class="wrap">
@@ -381,7 +385,7 @@ function schematic(){
 /* ---------- System procedure (step-by-step plan of the system) ---------- */
 const STAGES = [
   {k:'plan',name:'Plan the isolation',who:'AP',icon:'ptw',
-   steps:['Mark the points of isolation and earthing on a copy of the SLD. Read the circled lock number beside each switch.','Write the switching programme, listing every point with its lock number, for example LV-MSB-B ACB Q1 · L-121.','Open the Key tracker and check every listed lock shows IN CABINET.','Open the CP register and check the CP who will receive the document is Active and authorised for this system.'],
+   steps:['Mark the points of isolation and earthing on a copy of the SLD. Read the circled lock number beside each switch.','Write the switching programme, listing every point with its lock number, such as LV-MSB-B ACB Q1 · L-121.','Open the Key tracker and check every listed lock shows IN CABINET.','Open the CP register and check the CP who will receive the document is Active and authorised for this system.'],
    site:'No change yet. The switching programme is ready.',
    stop:'Any lock not IN CABINET, or a CP not Active: stop and resolve before going on.'},
   {k:'draw',name:'Draw the keys and a lockout box',who:'AP',icon:'key',
@@ -455,7 +459,7 @@ function procedure(){
 
 /* ---------- New safety documents (saved on this device) ----------
    Every new PTW, SFT or LOA, and every cancellation, is stored as an event in this browser's
-   storage and replayed over the example data each time a page opens. */
+   storage and replayed over the initial records each time a page opens. */
 const STORE = 'pt-events-v1';
 function loadEvents(){ try { return JSON.parse(localStorage.getItem(STORE) || '[]'); } catch(_) { return []; } }
 function saveEvents(ev){ try { localStorage.setItem(STORE, JSON.stringify(ev)); return true; } catch(_) { return false; } }
@@ -678,7 +682,7 @@ function newDoc(){
       doc = {...base, sys:sysList().join(' & '), work:$(t === 'PTW' ? 'f-work-ptw' : 'f-work-sft').value, ...(t === 'SFT' ? {test:$('f-test').value} : {}), loc:$('f-loc').value, cp:`${cp.name} · ${cp.id}`, keys:[...locks], box:$('f-box').value, loa:'', apLock:`${ap.id} · ${ap.name}`, plocks};
       log = [[hhmm(now), `Keys ${locks.join(', ')} drawn by ${ap.name}; tags hung on hooks`],[hhmm(now), `Keys placed in ${doc.box}, AP lock ${ap.id} applied, ${t} issued to ${cp.name}`],[hhmm(now), `Personal locks ${plocks.join(', ')} applied to ${doc.box}`]];
     }
-    if(!addEvent({op:'create', doc, log})){ box.innerHTML = '<b>Could not save.</b> This browser is blocking storage, for example in a private window. Open the site in a normal window and try again.'; box.hidden = false; return; }
+    if(!addEvent({op:'create', doc, log})){ box.innerHTML = '<b>Could not save.</b> This browser is blocking storage, such as in a private window. Open the site in a normal window and try again.'; box.hidden = false; return; }
     location.href = recUrl(id) + '&created=1';
   });
 }

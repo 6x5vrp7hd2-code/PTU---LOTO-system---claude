@@ -45,7 +45,7 @@ File names must stay exactly as they are, lower case. GitHub Pages treats `Logo.
 | File | What it is |
 | --- | --- |
 | `styles.css` | Colours, fonts, layout, photos and phase-in |
-| `app.js` | Menu, trackers, record pages, procedure and example data |
+| `app.js` | Menu, trackers, record pages, procedure and initial unverified records |
 | `logo-stack.png` | Stacked powertec logo, transparent background |
 | `mark.png` | Swoosh mark, used for the browser tab icon |
 | `favicon.png` | Browser tab icon |
@@ -89,7 +89,7 @@ drawing is H-026 to H-057 and L-056 to L-081. The positions, plant names and des
 
 ## Changing the records
 
-All records live at the top of `app.js` under `DATA`. They are example data.
+All records live at the top of `app.js` under `DATA`. They are initial unverified records.
 Edit, add or remove rows there; every tracker, record page and front page count updates automatically.
 
 
@@ -98,5 +98,5 @@ Edit, add or remove rows there; every tracker, record page and front page count 
 - `references.html` shows the four supplied illustrative diagrams. They are **not controlled site drawings**.
 - Existing clickable H-/L- overlays remain **unverified example mappings**, not approved lock assignments.
 - Every lockout box `LB-xx` has one dedicated box lock bearing exactly the same identifier `LB-xx`; this is separate from AP/CP personal locks `P-xxx`.
-- The electronic tracker is demonstrative. It cannot authorise switching, key release or document cancellation.
-- The original demo contains invented sample personnel, equipment and document records; do not treat them as live site information.
+- The electronic tracker is a prototype. It cannot authorise switching, key release or document cancellation.
+- The original build contains unverified preloaded personnel, equipment and document records; do not treat them as live site information.
