@@ -451,3 +451,48 @@ h1,h2,h3{font-family:var(--head)}
 .hero:not(.home) .wrap{position:relative;z-index:1}
 @media (max-width:640px){.hero:not(.home) .orb{width:170px;height:170px;right:-50px;top:56px}}
 @media (prefers-reduced-motion:reduce){.hero .orb{animation:none}}
+
+/* =========================================================
+   INTERACTIVE DRAWINGS AND LOCK PICKER
+   ========================================================= */
+.dwgscroll{overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #2B3036;max-height:78vh}
+.dwgbox{position:relative;width:max(100%,var(--dw));container-type:inline-size}
+.dwgbox img{display:block;width:100%;height:100%;user-select:none;-webkit-user-select:none}
+.lk{position:absolute;transform:translate(-50%,-50%);width:calc(var(--r) * 100cqw);height:calc(var(--r) * 100cqw);min-width:18px;min-height:18px;border-radius:50%;border:2px solid currentColor;background:#fff;font:700 calc(var(--r) * 52cqw)/1 "Helvetica Neue",Arial,sans-serif;display:grid;place-items:center;padding:0;cursor:pointer;z-index:2;transition:transform .12s,box-shadow .12s}
+.lk.hv{color:#C81E1E}.lk.lv{color:#145AC8}
+.lk:hover,.lk:focus-visible{transform:translate(-50%,-50%) scale(1.25);z-index:3;outline:none;box-shadow:0 0 0 3px rgba(245,130,32,.55)}
+.lk.picked{background:currentColor}
+.lk.hv.picked{color:#C81E1E}.lk.lv.picked{color:#145AC8}
+.lk.picked{-webkit-text-fill-color:#fff}
+.lk.used{color:#8A9099!important;background:#E3E5E8;-webkit-text-fill-color:#6E747C}
+.lk.used::after{content:"";position:absolute;left:-18%;right:-18%;top:50%;height:2px;background:#3A3F46;transform:rotate(-40deg)}
+.lk.oos{color:#8A9099!important;background:#fff;border-style:dashed;-webkit-text-fill-color:#8A9099}
+.lk.off{opacity:.35}
+.lk.focus:not(.used):not(.oos){box-shadow:0 0 0 3px #fff,0 0 0 6px var(--orange);animation:lkpulse 1.6s ease-in-out infinite}
+.lk.hl{box-shadow:0 0 0 3px #fff,0 0 0 7px var(--orange);transform:translate(-50%,-50%) scale(1.35);z-index:4}
+@keyframes lkpulse{50%{box-shadow:0 0 0 3px #fff,0 0 0 10px rgba(245,130,32,.35)}}
+@media (prefers-reduced-motion:reduce){.lk.focus{animation:none}}
+.lk.mini{position:relative;transform:none;width:22px;height:22px;min-width:22px;min-height:22px;font-size:11px;display:inline-grid;cursor:default;flex:none}
+.lk.mini:hover{transform:none;box-shadow:none}
+.plegend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:13px;color:var(--muted)}
+.plegend span{display:inline-flex;align-items:center;gap:8px}
+.dwg-hint{color:var(--dim);font-size:13px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:0}
+.dot.hv{background:#E2463F}.dot.lv{background:#3D82E0}
+.none-yet{color:var(--dim);font-size:14px;margin:0}
+.picked li .pl{min-width:0;color:var(--muted)}
+.picked li .pl em{display:block;font-style:normal;font-size:12px;color:var(--dim);margin-top:2px}
+/* full-screen picker */
+.picker{position:fixed;inset:0;z-index:80;background:#0D0F12;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #2B3036}
+.ptitle{min-width:0}
+.ptitle .kicker{margin:0 0 4px;font-size:11px}
+.ptitle b{display:block;font:700 19px/1.2 var(--head);color:#fff}
+.ptitle small{display:block;color:var(--dim);font-size:12.5px;margin-top:4px;max-width:60ch}
+.phead .btn{flex:none;white-space:nowrap}
+.pbody{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff}
+.pbody .dwgscroll{overflow:visible;max-height:none;border:0}
+.picker .plegend{padding:10px 16px;border-top:1px solid #2B3036;background:#0D0F12}
+.ptoast{position:absolute;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 32px));background:#1B1F25;color:#EDEEF0;border:1px solid var(--orange);padding:12px 14px;font-size:14px;line-height:1.45;box-shadow:0 12px 32px rgba(0,0,0,.45);z-index:5}
+.ptoast a{color:var(--orange);font-weight:700}
+@media (max-width:640px){.ptitle small{display:none}.ptitle b{font-size:16px}}

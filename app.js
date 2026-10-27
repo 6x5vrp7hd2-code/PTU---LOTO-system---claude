@@ -6,39 +6,26 @@
 /* ---------- Example data ---------- */
 const AP = {J:'J. Andersson (AP)', E:'E. Berg (SAP)', R:'R. Holm (AP)'};
 const DATA = {
-  keys: [
-    {id:'H-001',sys:'HV',board:'HV-RMU-A',point:'CB1 – Transformer T1 HV feeder',hook:'C1-01',status:'In cabinet',doc:'',box:'',sld:'PT-HV-SLD-001',fitted:'2026-09-14',cond:'Good'},
-    {id:'H-002',sys:'HV',board:'HV-RMU-A',point:'Earth switch ES1 – T1 feeder',hook:'C1-02',status:'In cabinet',doc:'',box:'',sld:'PT-HV-SLD-001',fitted:'2026-09-14',cond:'Good'},
-    {id:'H-011',sys:'HV',board:'HV-RMU-B',point:'CB1 – Transformer T2 HV feeder',hook:'C1-11',status:'With AP',doc:'PTW-2026-0416',box:'',sld:'PT-HV-SLD-001',fitted:'2026-09-14',cond:'Good'},
-    {id:'H-012',sys:'HV',board:'HV-RMU-B',point:'Earth switch ES1 – T2 feeder',hook:'C1-12',status:'With AP',doc:'PTW-2026-0416',box:'',sld:'PT-HV-SLD-001',fitted:'2026-09-14',cond:'Good'},
-    {id:'L-101',sys:'LV',board:'LV-MSB-A',point:'ACB I1 – Transformer T1 incomer',hook:'C2-01',status:'In cabinet',doc:'',box:'',sld:'PT-LV-SLD-001',fitted:'2026-09-15',cond:'Good'},
-    {id:'L-102',sys:'LV',board:'LV-MSB-A',point:'ACB Q1 – UPS-A input',hook:'C2-02',status:'In cabinet',doc:'',box:'',sld:'PT-LV-SLD-001',fitted:'2026-09-15',cond:'Good'},
-    {id:'L-104',sys:'LV',board:'LV-MSB-A',point:'ACB Q2 – Mechanical MCC-A feeder',hook:'C2-04',status:'In lockout box',doc:'PTW-2026-0415',box:'LB-07',sld:'PT-LV-SLD-001',fitted:'2026-09-15',cond:'Good'},
-    {id:'L-105',sys:'LV',board:'MCC-A',point:'Incomer isolator – MCC-A',hook:'C2-05',status:'In lockout box',doc:'PTW-2026-0415',box:'LB-07',sld:'PT-LV-SLD-001',fitted:'2026-09-15',cond:'Good'},
-    {id:'L-121',sys:'LV',board:'LV-MSB-B',point:'ACB Q1 – UPS-B input',hook:'C2-21',status:'In lockout box',doc:'PTW-2026-0412',box:'LB-06',sld:'PT-LV-SLD-001',fitted:'2026-09-16',cond:'Good'},
-    {id:'L-122',sys:'LV',board:'UPS-B',point:'UPS-B input isolator',hook:'C2-22',status:'In lockout box',doc:'PTW-2026-0412',box:'LB-06',sld:'PT-LV-SLD-001',fitted:'2026-09-16',cond:'Good'},
-    {id:'L-123',sys:'LV',board:'UPS-B',point:'UPS-B static bypass isolator',hook:'C2-23',status:'In lockout box',doc:'PTW-2026-0412',box:'LB-06',sld:'PT-LV-SLD-001',fitted:'2026-09-16',cond:'Good'},
-    {id:'L-124',sys:'LV',board:'CDB-B1',point:'Incomer – critical board CDB-B1',hook:'C2-24',status:'In lockout box',doc:'SFT-2026-0088',box:'LB-08',sld:'PT-LV-SLD-001',fitted:'2026-09-16',cond:'Good'},
-    {id:'L-130',sys:'LV',board:'LV-MSB-B',point:'ACB Q3 – House services B',hook:'C2-30',status:'Out of service',doc:'',box:'',sld:'PT-LV-SLD-001',fitted:'2026-09-16',cond:'Hasp damaged, replacement ordered'},
-    {id:'L-140',sys:'LV',board:'CDB-A2',point:'Incomer – critical board CDB-A2',hook:'C2-40',status:'In cabinet',doc:'',box:'',sld:'PT-LV-SLD-001',fitted:'2026-09-17',cond:'Good'}
-  ],
+  keys: [],  /* built from LOCKS below: one key per dedicated lock on the drawings */
   info: [
-    {id:'LB-06',status:'In use',doc:'PTW-2026-0412',keys:['L-121','L-122','L-123'],aplock:'P-004 · J. Andersson',plocks:['P-031','P-037','P-042'],issued:'2026-10-27 07:10',bay:'C3-06'},
-    {id:'LB-07',status:'In use',doc:'PTW-2026-0415',keys:['L-104','L-105'],aplock:'P-009 · R. Holm',plocks:['P-018','P-026'],issued:'2026-10-27 07:45',bay:'C3-07'},
-    {id:'LB-08',status:'In use',doc:'SFT-2026-0088',keys:['L-124'],aplock:'P-004 · J. Andersson',plocks:['P-052'],issued:'2026-10-27 09:20',bay:'C3-08'},
+    {id:'LB-05',status:'In use',doc:'PTW-2026-0414',keys:['H-048','H-049','H-055'],aplock:'P-002 · E. Berg',plocks:['P-042'],issued:'2026-10-27 06:50',bay:'C3-05'},
+    {id:'LB-06',status:'In use',doc:'PTW-2026-0412',keys:['L-013','L-014','L-017'],aplock:'P-004 · J. Andersson',plocks:['P-031','P-037'],issued:'2026-10-27 07:10',bay:'C3-06'},
+    {id:'LB-07',status:'In use',doc:'PTW-2026-0415',keys:['L-019'],aplock:'P-009 · R. Holm',plocks:['P-018','P-026'],issued:'2026-10-27 07:45',bay:'C3-07'},
+    {id:'LB-08',status:'In use',doc:'SFT-2026-0088',keys:['L-041','L-053'],aplock:'P-004 · J. Andersson',plocks:['P-052'],issued:'2026-10-27 09:20',bay:'C3-08'},
     {id:'LB-03',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-03'},
     {id:'LB-09',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-09'},
     {id:'LB-10',status:'Out of service',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-10'}
   ],
   ptw: [
-    {id:'PTW-2026-0416',status:'Pending issue',sys:'HV',work:'Replace HV cable termination, T2 HV feeder',loc:'HV substation B',ap:AP.E,cp:'Not yet issued',keys:['H-011','H-012'],box:'',loa:'',issued:'',expiry:''},
-    {id:'PTW-2026-0415',status:'Live',sys:'LV',work:'Re-torque busbar joints after thermography, MCC-A',loc:'Mechanical plant room A',ap:AP.R,cp:'S. Nyberg · P-018',keys:['L-104','L-105'],box:'LB-07',loa:'',issued:'2026-10-27 07:45',expiry:'2026-10-27 18:00'},
-    {id:'PTW-2026-0412',status:'Live',sys:'LV',work:'Replace protection relay, UPS-B input ACB Q1',loc:'LV switchroom B',ap:AP.J,cp:'K. Lindqvist · P-031',keys:['L-121','L-122','L-123'],box:'LB-06',loa:'LOA-2026-0045',issued:'2026-10-27 07:10',expiry:'2026-10-28 18:00'},
-    {id:'PTW-2026-0409',status:'Cancelled',sys:'LV',work:'Install additional outgoing way, CDB-A2',loc:'Data hall 1, A-side gallery',ap:AP.J,cp:'K. Lindqvist · P-031',keys:['L-140'],box:'LB-03',loa:'',issued:'2026-10-24 07:30',expiry:'2026-10-24 17:00'}
+    {id:'PTW-2026-0416',status:'Pending issue',sys:'HV',work:'Cable termination, TR-2 HV feeder',loc:'HV substation B',ap:AP.E,cp:'Not yet issued',keys:['H-010'],box:'',loa:'',issued:'',expiry:''},
+    {id:'PTW-2026-0415',status:'Live',sys:'LV',work:'Busbar joint inspection and re-torque, RPP A2',loc:'Data hall 1',ap:AP.R,cp:'S. Nyberg · P-018',keys:['L-019'],box:'LB-07',loa:'',issued:'2026-10-27 07:45',expiry:'2026-10-27 18:00'},
+    {id:'PTW-2026-0414',status:'Live',sys:'HV',work:'Transformer maintenance, T4 22/11 kV',loc:'HV substation B',ap:AP.E,cp:'J. Wikström · P-042',keys:['H-048','H-049','H-055'],box:'LB-05',loa:'',issued:'2026-10-27 06:50',expiry:'2026-10-28 18:00'},
+    {id:'PTW-2026-0412',status:'Live',sys:'LV',work:'Replace protection relay, LV Main Distribution B incomers',loc:'LV switchroom B',ap:AP.J,cp:'K. Lindqvist · P-031',keys:['L-013','L-014','L-017'],box:'LB-06',loa:'LOA-2026-0045',issued:'2026-10-27 07:10',expiry:'2026-10-28 18:00'},
+    {id:'PTW-2026-0409',status:'Cancelled',sys:'LV',work:'Install additional outgoing way, RPP B2',loc:'Data hall 2',ap:AP.J,cp:'K. Lindqvist · P-031',keys:['L-040'],box:'LB-03',loa:'',issued:'2026-10-24 07:30',expiry:'2026-10-24 17:00'}
   ],
   sft: [
-    {id:'SFT-2026-0088',status:'Live',sys:'LV',work:'Insulation resistance test, cable UPS-B to CDB-B1',test:'Insulation resistance, 1000 V DC',loc:'LV switchroom B to data hall 2',ap:AP.J,cp:'M. Ek · P-052',keys:['L-124'],box:'LB-08',issued:'2026-10-27 09:20',expiry:'2026-10-27 16:00'},
-    {id:'SFT-2026-0086',status:'Cancelled',sys:'LV',work:'Primary injection test, ACB I1 LV-MSB-A',test:'Primary current injection',loc:'LV switchroom A',ap:AP.E,cp:'T. Sjöberg · P-044',keys:['L-101'],box:'LB-09',issued:'2026-10-21 08:00',expiry:'2026-10-21 15:00'}
+    {id:'SFT-2026-0088',status:'Live',sys:'LV',work:'Insulation resistance test, cable RPP B2 to Row PDU B2',test:'Insulation resistance, 1000 V DC',loc:'Data hall 2',ap:AP.J,cp:'M. Ek · P-052',keys:['L-041','L-053'],box:'LB-08',issued:'2026-10-27 09:20',expiry:'2026-10-27 16:00'},
+    {id:'SFT-2026-0086',status:'Cancelled',sys:'LV',work:'Primary injection test, ATS-A1',test:'Primary current injection',loc:'LV switchroom A',ap:AP.E,cp:'T. Sjöberg · P-044',keys:['L-001'],box:'LB-09',issued:'2026-10-21 08:00',expiry:'2026-10-21 15:00'}
   ],
   cp: [
     {id:'P-002',name:'Erik Berg',company:'Powertec Utilities Ltd',role:'SAP',scope:'LV and HV to 22 kV, site lead SAP',phone:'+46 70 000 10 02',email:'e.berg@example.com',id06:'ID06-0000-1002',trained:'2024-09-02',authBy:'Site Authorising Engineer',expiry:'2027-09-01',status:'Active',emergency:'Karin Berg · +46 70 000 20 02'},
@@ -48,7 +35,7 @@ const DATA = {
     {id:'P-026',name:'Oskar Dahl',company:'Nordel Electrical AB',role:'CP',scope:'LV',phone:'+46 70 000 10 26',email:'o.dahl@example.com',id06:'ID06-0000-1026',trained:'2026-02-04',authBy:'J. Andersson (AP)',expiry:'2027-02-03',status:'Active',emergency:'Maja Dahl · +46 70 000 20 26'},
     {id:'P-031',name:'Karin Lindqvist',company:'Nordel Electrical AB',role:'CP',scope:'LV, UPS and critical distribution',phone:'+46 70 000 10 31',email:'k.lindqvist@example.com',id06:'ID06-0000-1031',trained:'2025-11-10',authBy:'J. Andersson (AP)',expiry:'2026-11-09',status:'Active',emergency:'Erik Lindqvist · +46 70 000 20 31'},
     {id:'P-037',name:'Liam Byrne',company:'Hall Mechanical Ltd',role:'CP',scope:'LV',phone:'+44 7700 900 037',email:'l.byrne@example.com',id06:'ID06-0000-1037',trained:'2026-04-15',authBy:'R. Holm (AP)',expiry:'2027-04-14',status:'Active',emergency:'Niamh Byrne · +44 7700 900 137'},
-    {id:'P-042',name:'Jonas Wikström',company:'Nordel Electrical AB',role:'CP',scope:'LV',phone:'+46 70 000 10 42',email:'j.wikstrom@example.com',id06:'ID06-0000-1042',trained:'2026-05-06',authBy:'J. Andersson (AP)',expiry:'2027-05-05',status:'Active',emergency:'Ida Wikström · +46 70 000 20 42'},
+    {id:'P-042',name:'Jonas Wikström',company:'Nordel Electrical AB',role:'CP',scope:'HV to 22 kV and LV',phone:'+46 70 000 10 42',email:'j.wikstrom@example.com',id06:'ID06-0000-1042',trained:'2026-05-06',authBy:'J. Andersson (AP)',expiry:'2027-05-05',status:'Active',emergency:'Ida Wikström · +46 70 000 20 42'},
     {id:'P-044',name:'Tove Sjöberg',company:'Voltwise Testing AB',role:'CP',scope:'LV testing and commissioning',phone:'+46 70 000 10 44',email:'t.sjoberg@example.com',id06:'ID06-0000-1044',trained:'2025-09-01',authBy:'E. Berg (SAP)',expiry:'2026-08-31',status:'Expired',emergency:'Mats Sjöberg · +46 70 000 20 44'},
     {id:'P-052',name:'Mikael Ek',company:'Voltwise Testing AB',role:'CP',scope:'LV testing and commissioning',phone:'+46 70 000 10 52',email:'m.ek@example.com',id06:'ID06-0000-1052',trained:'2026-03-18',authBy:'E. Berg (SAP)',expiry:'2027-03-17',status:'Active',emergency:'Sofia Ek · +46 70 000 20 52'},
     {id:'P-061',name:'Alva Lund',company:'Kraftservice AB',role:'CP',scope:'Battery and BESS rooms, inspection only',phone:'+46 70 000 10 61',email:'a.lund@example.com',id06:'ID06-0000-1061',trained:'2026-06-22',authBy:'R. Holm (AP)',expiry:'2027-06-21',status:'Active',emergency:'Hugo Lund · +46 70 000 20 61'},
@@ -61,15 +48,60 @@ const DATA = {
   ]
 };
 const LOGS = {
-  'PTW-2026-0412':[['07:02','Switching programme checked against the SLD by J. Andersson'],['07:05','Keys L-121, L-122, L-123 drawn; tags hung on hooks C2-21 to C2-23'],['07:08','Locks applied; numbers checked against switch labels'],['07:10','Keys placed in LB-06, AP lock P-004 applied, PTW issued'],['07:14','Personal locks P-031, P-037, P-042 applied to LB-06']],
-  'PTW-2026-0415':[['07:30','Keys L-104, L-105 drawn by R. Holm'],['07:40','MCC-A isolated, proved dead, locks applied'],['07:45','Keys in LB-07, PTW issued to S. Nyberg'],['07:48','Personal locks P-018, P-026 applied to LB-07']],
-  'PTW-2026-0416':[['10:30','Keys H-011, H-012 drawn by E. Berg; status With AP'],['10:32','HV switching in progress']],
-  'PTW-2026-0409':[['24 Oct 07:30','PTW issued, keys in LB-03'],['24 Oct 16:40','All personal locks removed, PTW cancelled'],['24 Oct 16:52','L-140 returned to hook, LB-03 returned to bay']],
-  'SFT-2026-0088':[['09:10','Key L-124 drawn by J. Andersson'],['09:20','Key in LB-08, SFT issued to M. Ek'],['09:22','Personal lock P-052 applied to LB-08']],
-  'SFT-2026-0086':[['21 Oct 08:00','SFT issued to T. Sjöberg'],['21 Oct 14:20','Test complete, SFT cancelled, key L-101 returned']],
+  'PTW-2026-0414':[['06:30','Switching programme for T4 checked against the hyperscale SLD by E. Berg'],['06:38','Keys H-048, H-049, H-055 drawn; tags hung on hooks C1-48, C1-49, C1-55'],['06:46','T4 isolated on 22 kV and 11 kV, proved dead, earthed, locks applied'],['06:50','Keys in LB-05, AP lock P-002 applied, PTW issued to J. Wikström'],['06:52','Personal lock P-042 applied to LB-05']],
+  'PTW-2026-0412':[['07:02','Switching programme checked against the Tier IV SLD by J. Andersson'],['07:05','Keys L-013, L-014, L-017 drawn; tags hung on hooks C2-13, C2-14, C2-17'],['07:08','Locks applied; numbers checked against switch labels'],['07:10','Keys placed in LB-06, AP lock P-004 applied, PTW issued'],['07:14','Personal locks P-031, P-037 applied to LB-06']],
+  'PTW-2026-0415':[['07:30','Key L-019 drawn by R. Holm'],['07:40','RPP A2 isolated, proved dead, lock applied'],['07:45','Key in LB-07, PTW issued to S. Nyberg'],['07:48','Personal locks P-018, P-026 applied to LB-07']],
+  'PTW-2026-0416':[['10:30','Key H-010 drawn by E. Berg; status With AP'],['10:32','HV switching in progress']],
+  'PTW-2026-0409':[['24 Oct 07:30','PTW issued, key L-040 in LB-03'],['24 Oct 16:40','All personal locks removed, PTW cancelled'],['24 Oct 16:52','L-040 returned to hook, LB-03 returned to bay']],
+  'SFT-2026-0088':[['09:10','Keys L-041, L-053 drawn by J. Andersson'],['09:20','Keys in LB-08, SFT issued to M. Ek'],['09:22','Personal lock P-052 applied to LB-08']],
+  'SFT-2026-0086':[['21 Oct 08:00','SFT issued to T. Sjöberg'],['21 Oct 14:20','Test complete, SFT cancelled, key L-001 returned']],
   'LOA-2026-0045':[['07:15','Barrier placed at bay 4; LOA issued to K. Lindqvist']],
   'LOA-2026-0046':[['10:00','LOA issued to A. Lund']]
 };
+
+/* ---------- Drawings and dedicated locks ----------
+   Every lock sits at an x,y point on its drawing (pixels on the drawing image).
+   Columns: lock id, number shown in the circle, drawing, system, item of plant, point of isolation, x, y */
+const DRAWINGS = {
+  tier4:{title:'Tier IV data centre',img:'sld-tier4.jpg',w:1825,h:1290,r:0.0105,view:1750},
+  hyper:{title:'Hyperscale 2N architecture',img:'sld-hyperscale.jpg',w:1260,h:1920,r:0.0150,view:1250}
+};
+const LOCKS = [["H-001", 1, "tier4", "HV", "132 kV incomers", "Utility B line disconnector", 1102, 130], ["H-002", 2, "tier4", "HV", "132 kV incomers", "Utility A cable disconnector", 409, 193], ["H-003", 3, "tier4", "HV", "132 kV incomers", "Utility B cable disconnector", 1102, 201], ["H-004", 4, "tier4", "HV", "132 kV incomers", "Incomer A disconnector", 369, 282], ["H-005", 5, "tier4", "HV", "132 kV incomers", "Incomer B disconnector", 1143, 282], ["H-006", 6, "tier4", "HV", "132 kV incomers", "Incomer A circuit breaker", 369, 326], ["H-007", 7, "tier4", "HV", "132 kV incomers", "Incomer B circuit breaker", 1143, 326], ["H-008", 8, "tier4", "HV", "132 kV busbar and transformer feeders", "132 kV bus coupler", 752, 347], ["H-009", 9, "tier4", "HV", "132 kV busbar and transformer feeders", "TR-1 feeder disconnector", 449, 380], ["H-010", 10, "tier4", "HV", "132 kV busbar and transformer feeders", "TR-2 feeder disconnector", 597, 380], ["H-011", 11, "tier4", "HV", "132 kV busbar and transformer feeders", "TR-3 feeder disconnector", 893, 380], ["H-012", 12, "tier4", "HV", "132 kV busbar and transformer feeders", "TR-4 feeder disconnector", 1039, 380], ["H-013", 13, "tier4", "HV", "11 kV section tie", "Section tie isolator, A side", 668, 585], ["H-014", 14, "tier4", "HV", "11 kV section tie", "Section tie circuit breaker", 711, 588], ["H-015", 15, "tier4", "HV", "11 kV section tie", "Section tie isolator, B side", 759, 585], ["H-016", 16, "tier4", "HV", "11 kV Switchboard A", "Outgoing way 1 to ATS-A1", 350, 614], ["H-017", 17, "tier4", "HV", "11 kV Switchboard A", "Outgoing way 2 to ATS-A2", 412, 614], ["H-018", 18, "tier4", "HV", "11 kV Switchboard A", "Outgoing way 3 to ATS-A3", 476, 614], ["H-019", 19, "tier4", "HV", "11 kV Switchboard A", "Outgoing way 4 to ATS-A4", 540, 614], ["H-020", 20, "tier4", "HV", "11 kV Switchboard A", "Outgoing way 5 to ATS-A5", 602, 614], ["H-021", 21, "tier4", "HV", "11 kV Switchboard B", "Outgoing way 1 to ATS-B1", 820, 614], ["H-022", 22, "tier4", "HV", "11 kV Switchboard B", "Outgoing way 2 to ATS-B2", 883, 614], ["H-023", 23, "tier4", "HV", "11 kV Switchboard B", "Outgoing way 3 to ATS-B3", 947, 614], ["H-024", 24, "tier4", "HV", "11 kV Switchboard B", "Outgoing way 4 to ATS-B4", 1011, 614], ["H-025", 25, "tier4", "HV", "11 kV Switchboard B", "Outgoing way 5 to ATS-B5", 1069, 614], ["L-001", 1, "tier4", "LV", "ATS bank A", "ATS-A1", 364, 664], ["L-002", 2, "tier4", "LV", "ATS bank A", "ATS-A2", 426, 664], ["L-003", 3, "tier4", "LV", "ATS bank A", "ATS-A3", 490, 664], ["L-004", 4, "tier4", "LV", "ATS bank A", "ATS-A4", 554, 664], ["L-005", 5, "tier4", "LV", "ATS bank A", "ATS-A5", 616, 664], ["L-006", 6, "tier4", "LV", "ATS bank B", "ATS-B1", 834, 664], ["L-007", 7, "tier4", "LV", "ATS bank B", "ATS-B2", 897, 664], ["L-008", 8, "tier4", "LV", "ATS bank B", "ATS-B3", 961, 664], ["L-009", 9, "tier4", "LV", "ATS bank B", "ATS-B4", 1025, 664], ["L-010", 10, "tier4", "LV", "ATS bank B", "ATS-B5", 1083, 664], ["L-011", 11, "tier4", "LV", "LV Main Distribution A", "Incomer 1", 452, 738], ["L-012", 12, "tier4", "LV", "LV Main Distribution A", "Incomer 2", 506, 738], ["L-013", 13, "tier4", "LV", "LV Main Distribution B", "Incomer 1", 914, 738], ["L-014", 14, "tier4", "LV", "LV Main Distribution B", "Incomer 2", 967, 738], ["L-015", 15, "tier4", "LV", "LV tie breaker", "Tie isolator, A side", 663, 818], ["L-016", 16, "tier4", "LV", "LV tie breaker", "Tie breaker", 700, 822], ["L-017", 17, "tier4", "LV", "LV tie breaker", "Tie isolator, B side", 754, 818], ["L-018", 18, "tier4", "LV", "LV Main Distribution A", "Outgoing to RPP A1", 358, 844], ["L-019", 19, "tier4", "LV", "LV Main Distribution A", "Outgoing to RPP A2", 453, 844], ["L-020", 20, "tier4", "LV", "LV Main Distribution A", "Outgoing to RPP A3", 543, 844], ["L-021", 21, "tier4", "LV", "LV Main Distribution A", "Outgoing to RPP A4", 627, 844], ["L-022", 22, "tier4", "LV", "LV Main Distribution B", "Outgoing to RPP B1", 824, 844], ["L-023", 23, "tier4", "LV", "LV Main Distribution B", "Outgoing to RPP B2", 927, 844], ["L-024", 24, "tier4", "LV", "LV Main Distribution B", "Outgoing to RPP B3", 1002, 844], ["L-025", 25, "tier4", "LV", "LV Main Distribution B", "Outgoing to RPP B4", 1065, 844], ["L-026", 26, "tier4", "LV", "RPPs, A side", "RPP A1 way 1", 321, 928], ["L-027", 27, "tier4", "LV", "RPPs, A side", "RPP A1 way 2", 348, 928], ["L-028", 28, "tier4", "LV", "RPPs, A side", "RPP A1 way 3", 378, 928], ["L-029", 29, "tier4", "LV", "RPPs, A side", "RPP A2 way 1", 425, 928], ["L-030", 30, "tier4", "LV", "RPPs, A side", "RPP A2 way 2", 453, 928], ["L-031", 31, "tier4", "LV", "RPPs, A side", "RPP A2 way 3", 482, 928], ["L-032", 32, "tier4", "LV", "RPPs, A side", "RPP A3 way 1", 523, 928], ["L-033", 33, "tier4", "LV", "RPPs, A side", "RPP A3 way 2", 552, 928], ["L-034", 34, "tier4", "LV", "RPPs, A side", "RPP A4 way 1", 609, 928], ["L-035", 35, "tier4", "LV", "RPPs, A side", "RPP A4 way 2", 635, 928], ["L-036", 36, "tier4", "LV", "RPPs, A side", "RPP A4 way 3", 665, 928], ["L-037", 37, "tier4", "LV", "RPPs, B side", "RPP B1 way 1", 791, 928], ["L-038", 38, "tier4", "LV", "RPPs, B side", "RPP B1 way 2", 820, 928], ["L-039", 39, "tier4", "LV", "RPPs, B side", "RPP B1 way 3", 849, 928], ["L-040", 40, "tier4", "LV", "RPPs, B side", "RPP B2 way 1", 902, 928], ["L-041", 41, "tier4", "LV", "RPPs, B side", "RPP B2 way 2", 929, 928], ["L-042", 42, "tier4", "LV", "RPPs, B side", "RPP B2 way 3", 958, 928], ["L-043", 43, "tier4", "LV", "RPPs, B side", "RPP B3 way 1", 989, 928], ["L-044", 44, "tier4", "LV", "RPPs, B side", "RPP B3 way 2", 1015, 928], ["L-045", 45, "tier4", "LV", "RPPs, B side", "RPP B4 way 1", 1059, 928], ["L-046", 46, "tier4", "LV", "RPPs, B side", "RPP B4 way 2", 1088, 928], ["L-047", 47, "tier4", "LV", "RPPs, B side", "RPP B4 way 3", 1117, 928], ["L-048", 48, "tier4", "LV", "Row PDUs, A side", "Row PDU A1 feed to IT load", 342, 1011], ["L-049", 49, "tier4", "LV", "Row PDUs, A side", "Row PDU A2 feed to IT load", 436, 1011], ["L-050", 50, "tier4", "LV", "Row PDUs, A side", "Row PDU A3 feed to IT load", 524, 1011], ["L-051", 51, "tier4", "LV", "Row PDUs, A side", "Row PDU A4 feed to IT load", 635, 1011], ["L-052", 52, "tier4", "LV", "Row PDUs, B side", "Row PDU B1 feed to IT load", 818, 1011], ["L-053", 53, "tier4", "LV", "Row PDUs, B side", "Row PDU B2 feed to IT load", 902, 1011], ["L-054", 54, "tier4", "LV", "Row PDUs, B side", "Row PDU B3 feed to IT load", 975, 1011], ["L-055", 55, "tier4", "LV", "Row PDUs, B side", "Row PDU B4 feed to IT load", 1080, 1011], ["H-026", 26, "hyper", "HV", "400 kV GIS, source A", "Circuit breaker, T1 feeder", 227, 170], ["H-027", 27, "hyper", "HV", "400 kV GIS, source A", "Disconnector, T1 feeder", 227, 214], ["H-028", 28, "hyper", "HV", "400 kV GIS, source A", "Circuit breaker, coupler side", 351, 170], ["H-029", 29, "hyper", "HV", "400 kV GIS, source A", "Disconnector, coupler side", 351, 214], ["H-030", 30, "hyper", "HV", "400 kV GIS, source A", "Earth switch, coupler side", 351, 251], ["H-031", 31, "hyper", "HV", "400 kV bus coupler", "Coupler disconnector, A side", 431, 216], ["H-032", 32, "hyper", "HV", "400 kV bus coupler", "Bus coupler circuit breaker", 537, 251], ["H-033", 33, "hyper", "HV", "400 kV bus coupler", "Coupler disconnector, B side", 614, 216], ["H-034", 34, "hyper", "HV", "400 kV GIS, source B", "Earth switch, coupler side", 690, 251], ["H-035", 35, "hyper", "HV", "400 kV GIS, source B", "Disconnector, coupler side", 690, 214], ["H-036", 36, "hyper", "HV", "400 kV GIS, source B", "Circuit breaker, coupler side", 690, 170], ["H-037", 37, "hyper", "HV", "400 kV GIS, source B", "Disconnector, T2 feeder", 812, 214], ["H-038", 38, "hyper", "HV", "400 kV GIS, source B", "Circuit breaker, T2 feeder", 812, 170], ["H-039", 39, "hyper", "HV", "22 kV MV incomers", "MV incomer A circuit breaker", 244, 439], ["H-040", 40, "hyper", "HV", "22 kV MV incomers", "MV incomer B circuit breaker", 798, 439], ["H-041", 41, "hyper", "HV", "22 kV capacitor banks", "Capacitor bank A switch", 190, 492], ["H-042", 42, "hyper", "HV", "22 kV ring bus coupler", "Ring coupler disconnector, A side", 449, 446], ["H-043", 43, "hyper", "HV", "22 kV ring bus coupler", "Ring bus coupler circuit breaker", 492, 479], ["H-044", 44, "hyper", "HV", "22 kV ring bus coupler", "Ring coupler disconnector, B side", 599, 446], ["H-045", 45, "hyper", "HV", "22 kV capacitor banks", "Capacitor bank B switch", 850, 492], ["H-046", 46, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T3 feeder circuit breaker", 303, 485], ["H-047", 47, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T3 feeder disconnector", 303, 521], ["H-048", 48, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T4 feeder circuit breaker", 430, 485], ["H-049", 49, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T4 feeder disconnector", 430, 521], ["H-050", 50, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T5 feeder circuit breaker", 651, 485], ["H-051", 51, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T5 feeder disconnector", 651, 521], ["H-052", 52, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T6 feeder circuit breaker", 770, 485], ["H-053", 53, "hyper", "HV", "22 kV transformer feeders, T3 to T6", "T6 feeder disconnector", 770, 521], ["H-054", 54, "hyper", "HV", "11 kV genset incomers", "T3 genset incomer", 306, 736], ["H-055", 55, "hyper", "HV", "11 kV genset incomers", "T4 genset incomer", 433, 736], ["H-056", 56, "hyper", "HV", "11 kV genset incomers", "T5 genset incomer", 650, 736], ["H-057", 57, "hyper", "HV", "11 kV genset incomers", "T6 genset incomer", 770, 736], ["L-056", 56, "hyper", "LV", "400 V LV SWBD A", "Incomer 1", 287, 960], ["L-057", 57, "hyper", "LV", "400 V LV SWBD A", "Incomer 2", 345, 960], ["L-058", 58, "hyper", "LV", "400 V LV SWBD B", "Incomer 1", 652, 960], ["L-059", 59, "hyper", "LV", "400 V LV SWBD B", "Incomer 2", 710, 960], ["L-060", 60, "hyper", "LV", "400 V LV SWBD B", "Incomer 3", 917, 960], ["L-061", 61, "hyper", "LV", "400 V bus tie", "Bus tie isolator, A side", 419, 977], ["L-062", 62, "hyper", "LV", "400 V bus tie", "Bus tie circuit breaker", 541, 1019], ["L-063", 63, "hyper", "LV", "400 V bus tie", "Bus tie isolator, B side", 596, 977], ["L-064", 64, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 1, UPS A feed", 95, 1025], ["L-065", 65, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 2, UPS A feed", 147, 1025], ["L-066", 66, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 3, UPS A feed", 205, 1025], ["L-067", 67, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 4, UPS A feed", 262, 1025], ["L-068", 68, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 5, UPS A feed", 319, 1025], ["L-069", 69, "hyper", "LV", "400 V LV SWBD A", "Outgoing CB 6, UPS A feed", 378, 1025], ["L-070", 70, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 1, UPS B feed", 617, 1025], ["L-071", 71, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 2, UPS B feed", 681, 1025], ["L-072", 72, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 3, UPS B feed", 742, 1025], ["L-073", 73, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 4, UPS B feed", 802, 1025], ["L-074", 74, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 5, UPS B feed", 860, 1025], ["L-075", 75, "hyper", "LV", "400 V LV SWBD B", "Outgoing CB 6, UPS B feed", 919, 1025], ["L-076", 76, "hyper", "LV", "UPS maintenance bypass", "Maintenance bypass isolator, A side", 481, 1135], ["L-077", 77, "hyper", "LV", "UPS maintenance bypass", "Maintenance bypass isolator, B side", 558, 1135], ["L-078", 78, "hyper", "LV", "Static transfer switches", "STS A", 131, 1308], ["L-079", 79, "hyper", "LV", "Static transfer switches", "STS A to B automatic bypass, A side", 418, 1327], ["L-080", 80, "hyper", "LV", "Static transfer switches", "STS A to B automatic bypass, B side", 614, 1327], ["L-081", 81, "hyper", "LV", "Static transfer switches", "STS B", 850, 1308]];
+const OUT_OF_SERVICE = {'L-047':'Hasp damaged, replacement ordered'};
+DATA.keys = LOCKS.map(([id,n,dw,sys,plant,label,x,y]) => ({id,n,dw,sys,board:plant,point:label,x,y,hook:`${sys==='HV'?'C1':'C2'}-${String(n).padStart(2,'0')}`,status:OUT_OF_SERVICE[id]?'Out of service':'In cabinet',doc:'',box:'',sld:DRAWINGS[dw].title,fitted:'2026-09-15',cond:OUT_OF_SERVICE[id]||'Good'}));
+const PLANTS = (() => { const m = new Map(); DATA.keys.forEach(k => { const key = `${k.dw}|${k.board}`; if(!m.has(key)) m.set(key,{key,dw:k.dw,sys:k.sys,name:k.board,ids:[]}); m.get(key).ids.push(k.id); }); return [...m.values()]; })();
+/* Key status always follows the safety documents: Live → in lockout box, Pending issue → with AP */
+function syncKeys(){
+  DATA.keys.forEach(k => { if(k.status !== 'Out of service'){ k.status = 'In cabinet'; k.doc = ''; k.box = ''; } });
+  [...DATA.ptw, ...DATA.sft].forEach(d => {
+    if(d.status !== 'Live' && d.status !== 'Pending issue') return;
+    (d.keys || []).forEach(id => { const k = DATA.keys.find(x => x.id === id); if(!k || k.status === 'Out of service') return; k.doc = d.id; k.box = d.box || ''; k.status = d.status === 'Live' ? 'In lockout box' : 'With AP'; });
+  });
+}
+/* One drawing with a tappable circle on every lock.
+   opts.picked: Set of lock ids chosen in the form · opts.focus: plant key to highlight · opts.sys: only this system tappable */
+function drawingHTML(dw, opts = {}){
+  const D = DRAWINGS[dw];
+  const circles = DATA.keys.filter(k => k.dw === dw).map(k => {
+    const inUse = k.doc && k.status !== 'In cabinet', oos = k.status === 'Out of service';
+    const picked = opts.picked && opts.picked.has(k.id);
+    const focus = opts.focus && `${k.dw}|${k.board}` === opts.focus;
+    const off = opts.sys && !opts.sys.includes(k.sys);
+    const cls = ['lk', k.sys === 'HV' ? 'hv' : 'lv', inUse ? 'used' : '', oos ? 'oos' : '', picked ? 'picked' : '', focus ? 'focus' : '', off ? 'off' : '', opts.highlight === k.id ? 'hl' : ''].join(' ');
+    const title = `${k.id} · ${k.board} · ${k.point}${inUse ? ` · in use on ${k.doc}` : oos ? ' · out of service' : ''}`;
+    return `<button type="button" class="${cls}" data-lock="${k.id}" style="left:${(k.x / D.w * 100).toFixed(3)}%;top:${(k.y / D.h * 100).toFixed(3)}%" title="${esc(title)}" aria-label="${esc(title)}">${k.n}</button>`;
+  }).join('');
+  return `<div class="dwgscroll"><div class="dwgbox" data-dw="${dw}" style="--dw:${D.view}px;--r:${D.r};aspect-ratio:${D.w}/${D.h}"><img src="${D.img}" alt="${esc(D.title)} single line diagram" draggable="false">${circles}</div></div>`;
+}
+function scrollToLocks(scroller, box, ids){
+  const pts = DATA.keys.filter(k => ids.includes(k.id)); if(!pts.length) return;
+  const D = DRAWINGS[pts[0].dw];
+  const cx = pts.reduce((a,k) => a + k.x, 0) / pts.length / D.w * box.offsetWidth;
+  const cy = pts.reduce((a,k) => a + k.y, 0) / pts.length / D.h * box.offsetHeight;
+  scroller.scrollLeft = Math.max(0, cx - scroller.clientWidth / 2);
+  const top = box.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+  scroller.scrollTop = Math.max(0, top + cy - scroller.clientHeight / 2);
+}
 
 /* ---------- Page definitions ---------- */
 /* ROOT is set on each page's <body data-root="...">: '' at the top level, '../' inside a folder. */
@@ -77,7 +109,7 @@ const ROOT = document.body.dataset.root || '';
 const LOGO = 'logo.png', MARK = 'mark.png';
 const PAGES = {
   keys:{file:'keys.html',title:'Key tracker',code:'H · L',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
-    cols:[['id','Lock no.'],['sys','System'],['board','Board'],['point','Point of isolation'],['status','Status'],['where','Key location']]},
+    cols:[['id','Lock no.'],['sys','System'],['board','Plant'],['point','Point of isolation'],['status','Status'],['where','Key location']]},
   info:{file:'info.html',title:'Information tracker',code:'LB',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
     cols:[['id','Box no.'],['status','Status'],['doc','Safety document'],['keysN','Keys inside'],['plocksN','Personal locks'],['issued','Issued']]},
   ptw:{file:'ptw.html',title:'Permit to work tracker',code:'PTW',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
@@ -132,7 +164,7 @@ function chipClass(s){
   return 's-idle';
 }
 const chip = s => `<span class="chip ${chipClass(s)}">${esc(s)}</span>`;
-const sys = s => `<span class="sys ${s.toLowerCase()}">${s}</span>`;
+const sys = s => String(s || '').split(/\s*&\s*/).filter(Boolean).map(x => `<span class="sys ${x.toLowerCase()}">${x}</span>`).join(' ');
 
 /* ---------- Header, menu, footer ---------- */
 function shell(page, heroHtml, mainHtml){
@@ -152,7 +184,7 @@ function shell(page, heroHtml, mainHtml){
   <footer class="site-foot"><div class="wrap">
     <a class="foot-brand" href="${U('index.html')}"><img src="${MARK}" alt=""><span><b>powertec</b><small>isolation control</small></span></a>
     <nav class="foot-nav">${NAV.map(([href,label,code]) => `<a href="${U(href)}">${code==='HOME'?'Home':code}</a>`).join('')}</nav>
-    <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Records shown are example data. Version 4.</p>
+    <p class="foot-legal">© ${new Date().getFullYear()} Powertec Utilities Ltd. Registered in England &amp; Wales, company no. 08117942. Records shown are example data. Version 5.</p>
   </div></footer>`;
   const menu = document.getElementById('menu'), open = document.getElementById('openMenu');
   const close = () => { menu.hidden = true; open.setAttribute('aria-expanded','false'); document.body.style.overflow=''; open.focus(); };
@@ -279,7 +311,7 @@ function record(){
   const {set, r} = hit, p = PAGES[set];
   let body = '', side = '';
   if(set==='keys'){
-    body = fields([['Lock no.',mono(r.id)],['System',sys(r.sys)],['Board',esc(r.board)],['Cabinet hook',mono(r.hook)],['Point of isolation',esc(r.point),1],['SLD drawing',mono(r.sld)],['Lock fitted',mono(r.fitted)],['Condition',esc(r.cond),1]]);
+    body = fields([['Lock no.',mono(r.id)],['System',sys(r.sys)],['Board',esc(r.board)],['Cabinet hook',mono(r.hook)],['Point of isolation',esc(r.point),1],['Drawing',`<a class="plink" href="${U('lv-schematic.html')}?lock=${esc(r.id)}">${esc(r.sld)} · view on drawing →</a>`],['Lock fitted',mono(r.fitted)],['Condition',esc(r.cond),1]]);
     const tag = (r.status==='In lockout box' || r.status==='With AP') ? `<div class="hooktag"><b>KEY-OUT TAG · HOOK ${esc(r.hook)}</b><div><span>Lock / key</span><span class="mono">${esc(r.id)}</span></div><div><span>Status</span><span>${esc(r.status.toUpperCase())}</span></div><div><span>Lockout box</span><span class="mono">${esc(r.box || '—')}</span></div><div><span>Document</span><span class="mono">${esc(r.doc)}</span></div></div>`
       : r.status==='Out of service' ? '<p>Hook empty. Lock withdrawn from service; see condition.</p>' : `<p>Key is on hook <span class="mono">${esc(r.hook)}</span>.</p>`;
     side = `<div class="panel"><h3>Hook ${esc(r.hook)}</h3>${tag}</div><div class="panel"><h3>Linked records</h3>${linkList([r.doc, r.box].filter(Boolean))}</div>${r.doc ? logPanel(r.doc) : ''}`;
@@ -323,17 +355,27 @@ function record(){
 
 /* ---------- LV schematic ---------- */
 function schematic(){
-  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Lock numbers', 'Schematics', 'Every switch, circuit breaker and isolator carries a numbered circle: red for HV, blue for LV. The number is the dedicated lock for that point, H-number for HV and L-number for LV. Tap a drawing to open it full size and zoom in.');
-  const dwg = (file, title, sub, h, l) => `<figure class="dwg"><figcaption><div><h3>${title}</h3><p>${sub}</p></div><div class="dwg-count"><span class="pill hv">${h} HV</span><span class="pill lv">${l} LV</span></div></figcaption><a href="${file}" target="_blank" rel="noopener"><img src="${file}" alt="${title}, numbered" loading="lazy"></a><a class="btn ghost small" href="${file}" target="_blank" rel="noopener">Open full size ${I.arrow}</a></figure>`;
+  const q = new URLSearchParams(location.search), hl = (q.get('lock') || '').toUpperCase();
+  const hlKey = DATA.keys.find(k => k.id === hl);
+  const used = DATA.keys.filter(k => k.doc).length;
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Live lock status', 'Schematics', 'Every switch, circuit breaker and isolator has its dedicated lock number: red for HV, blue for LV. Numbers in use on a live or pending safety document are greyed out and struck through. Tap one to open its document; tap a free number to see the lock.');
+  const fig = dw => { const D = DRAWINGS[dw], ks = DATA.keys.filter(k => k.dw === dw); const h = ks.filter(k => k.sys === 'HV').length, l = ks.length - h, u = ks.filter(k => k.doc).length;
+    return `<figure class="dwg"><figcaption><div><h3>${D.title}</h3><p>${h} HV and ${l} LV locks · ${u} in use</p></div><div class="dwg-count"><span class="pill hv">H-${String(ks.find(k=>k.sys==='HV').n).padStart(3,'0')} to H-${String([...ks].reverse().find(k=>k.sys==='HV').n).padStart(3,'0')}</span><span class="pill lv">L-${String(ks.find(k=>k.sys==='LV').n).padStart(3,'0')} to L-${String([...ks].reverse().find(k=>k.sys==='LV').n).padStart(3,'0')}</span></div></figcaption>${drawingHTML(dw, {highlight:hl})}<p class="dwg-hint">Drag or scroll the drawing to move around it.</p></figure>`; };
   const main = `<section class="block"><div class="wrap">
-    <div class="legend" style="margin:0 0 24px"><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#C81E1E" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#C81E1E">1</text></svg>HV switch, CB or isolator · lock H-001</span><span><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="#fff" stroke="#145AC8" stroke-width="2.5"/><text x="11" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#145AC8">1</text></svg>LV switch, CB, ATS or STS · lock L-001</span></div>
-    <div class="dwgs">
-      ${dwg('sld-tier4.jpg','Tier IV data centre','132 kV dual utility feed, 11 kV switchboards, 415 V distribution to row PDUs',25,55)}
-      ${dwg('sld-hyperscale.jpg','Hyperscale 2N architecture','400 kV GIS, 22 kV ring main, 11 kV generators, 400 V switchboards to STS',32,26)}
-    </div>
-    <p class="hint" style="margin-top:20px">Earth switches on the 400 kV drawing are numbered too, as they take a dedicated lock. Generators, transformers, CTs and PTs are not switching points and carry no number.</p>
+    <div class="plegend static"><span><i class="lk hv mini">1</i>HV lock, free</span><span><i class="lk lv mini">1</i>LV lock, free</span><span><i class="lk hv mini used">1</i>In use: tap to open the document</span><span><i class="lk lv mini oos">1</i>Out of service</span></div>
+    <p class="hint" style="margin:10px 0 24px">${used} of ${DATA.keys.length} locks are in use right now.${hlKey ? ` Showing <b>${hlKey.id}</b>, ${esc(hlKey.board)} · ${esc(hlKey.point)}.` : ''}</p>
+    <div class="dwgs">${fig('tier4')}${fig('hyper')}</div>
   </div></section>`;
   shell('schematic', hero, main);
+  document.querySelectorAll('.dwgbox').forEach(box => box.addEventListener('click', e => {
+    const b = e.target.closest('.lk'); if(!b) return;
+    const k = DATA.keys.find(x => x.id === b.dataset.lock);
+    location.href = recUrl(k.doc || k.id);
+  }));
+  if(hlKey) requestAnimationFrame(() => {
+    const box = document.querySelector(`.dwgbox[data-dw="${hlKey.dw}"]`), sc = box.parentElement;
+    box.closest('.dwg').scrollIntoView({block:'start'}); scrollToLocks(sc, box, [hlKey.id]);
+  });
 }
 
 /* ---------- System procedure (step-by-step plan of the system) ---------- */
@@ -355,7 +397,7 @@ const STAGES = [
    site:'Key tracker: each key → In lockout box, LB-nn. Information tracker: AP lock recorded.',
    stop:'Key count must match the switching programme exactly.'},
   {k:'issue',name:'Issue the safety document',who:'AP and CP',icon:'ptw',
-   steps:['Write the lockout box number and every lock number on the PTW or SFT.','At the point of work, show the CP the isolation, earths and notices, and brief the work.','Issue the document. The CP signs receipt.','The CP and every member of the working party fit their own personal lock to the lockout box. Record each P-number on the document.'],
+   steps:['Raise the PTW or SFT with + New safety document. Under Points of isolation choose HV, LV or both, pick the plant, then tap each lock number on the drawing.','At the point of work, show the CP the isolation, earths and notices, and brief the work.','Issue the document. The CP signs receipt.','The CP and every member of the working party fit their own personal lock to the lockout box. Record each P-number on the document.'],
    site:'PTW or SFT tracker: document → Live. Information tracker: personal locks recorded. CP register: document shown against the CP.',
    stop:'Nobody works without their own lock on the box.'},
   {k:'work',name:'During the work',who:'CP and working party',icon:'people',
@@ -474,7 +516,6 @@ function newDoc(){
     <form class="docform" id="docform" novalidate>
       <div class="fgroup"><h3>1 · Document</h3><div class="fgrid">
         <label class="f"><span>Document type *</span><select id="f-type" required>${opts([['Permit to Work (PTW)','PTW'],['Sanction for Test (SFT)','SFT'],['Limitation of Access (LOA)','LOA']],'Choose a document type')}</select></label>
-        <label class="f" data-for="PTW SFT"><span>System *</span><select id="f-sys">${opts([['LV','LV'],['HV','HV']],'Choose HV or LV')}</select></label>
         <label class="f" data-for="PTW"><span>Work *</span><select id="f-work-ptw">${opts(OPTIONS.ptwWork,'Choose the work')}</select></label>
         <label class="f" data-for="SFT"><span>Work *</span><select id="f-work-sft">${opts(OPTIONS.sftWork,'Choose the work')}</select></label>
         <label class="f" data-for="SFT"><span>Test *</span><select id="f-test">${opts(OPTIONS.sftTest,'Choose the test')}</select></label>
@@ -484,10 +525,14 @@ function newDoc(){
         <label class="f" data-for="LOA"><span>Boundaries *</span><select id="f-bounds">${opts(OPTIONS.loaBounds,'Choose the boundaries')}</select></label>
         <label class="f" data-for="LOA"><span>Linked permit</span><select id="f-ptw"></select></label>
       </div></div>
-      <div class="fgroup" data-for="PTW SFT"><h3>2 · Isolation</h3><div class="fgrid">
-        <div class="f wide"><span>Isolation locks * <small>Choose the system first. Only locks IN CABINET are listed.</small></span>
-          <div class="addrow"><select id="f-lock"></select><button type="button" class="btn ghost small" id="addLock">Add lock</button></div>
-          <ul class="picked" id="pickedLocks"></ul></div>
+      <div class="fgroup" data-for="PTW SFT"><h3>2 · Points of isolation</h3><div class="fgrid">
+        <label class="f wide"><span>System * <small>Choose HV, LV or both. Each opens its own list of plant.</small></span><select id="f-sys">${opts([['HV','HV'],['LV','LV'],['HV and LV','HV,LV']],'Choose HV, LV or both')}</select></label>
+        <div class="f" id="wrap-hv" hidden><span><i class="dot hv"></i>HV plant * <small>Choose an item of plant to open its drawing.</small></span>
+          <div class="addrow"><select id="f-plant-hv"></select><button type="button" class="btn ghost small" data-open="hv">Drawing</button></div></div>
+        <div class="f" id="wrap-lv" hidden><span><i class="dot lv"></i>LV plant * <small>Choose an item of plant to open its drawing.</small></span>
+          <div class="addrow"><select id="f-plant-lv"></select><button type="button" class="btn ghost small" data-open="lv">Drawing</button></div></div>
+        <div class="f wide"><span>Lock numbers selected <small>Tap the lock numbers on the drawing. They are added here as the points of isolation.</small></span>
+          <ul class="picked" id="pickedLocks"></ul><p class="none-yet" id="noLocks">No points of isolation selected yet.</p></div>
         <label class="f"><span>Lockout box *</span><select id="f-box"></select></label>
       </div></div>
       <div class="fgroup"><h3><span data-num></span> · People</h3><div class="fgrid">
@@ -514,6 +559,11 @@ function newDoc(){
 
   const $ = id => document.getElementById(id);
   const locks = [], wp = [];
+  const picker = document.createElement('div');
+  picker.className = 'picker'; picker.id = 'picker'; picker.hidden = true;
+  picker.setAttribute('role','dialog'); picker.setAttribute('aria-modal','true'); picker.setAttribute('aria-label','Choose lock numbers on the drawing');
+  document.body.appendChild(picker);
+  const sysList = () => ($('f-sys').value || '').split(',').filter(Boolean);
   const type = () => $('f-type').value;
   function show(){
     const t = type();
@@ -522,12 +572,53 @@ function newDoc(){
     document.querySelector('[data-num]').textContent = t === 'LOA' ? '2' : '3';
     document.querySelector('[data-num2]').textContent = t === 'LOA' ? '3' : '4';
   }
-  function fillLocks(){
-    const s = $('f-sys').value;
-    const free = DATA.keys.filter(k => k.status === 'In cabinet' && (!s || k.sys === s) && !locks.includes(k.id));
-    $('f-lock').innerHTML = s ? opts(free.map(k => [`${k.id} · ${k.board} · ${k.point}`, k.id]), free.length ? 'Choose a lock' : 'No free locks for this system') : '<option value="">Choose the system first</option>';
-    $('pickedLocks').innerHTML = locks.map(id => { const k = DATA.keys.find(x => x.id === id); return `<li><span class="mono">${id}</span> ${esc(k.board)} · ${esc(k.point)}<button type="button" data-rm-lock="${id}" aria-label="Remove ${id}">×</button></li>`; }).join('');
+  function plantOptions(sysName){
+    const groups = Object.keys(DRAWINGS).map(dw => {
+      const list = PLANTS.filter(p => p.dw === dw && p.sys === sysName);
+      if(!list.length) return '';
+      return `<optgroup label="${esc(DRAWINGS[dw].title)}">${list.map(p => { const free = p.ids.filter(id => DATA.keys.find(k => k.id === id).status === 'In cabinet').length; return `<option value="${esc(p.key)}">${esc(p.name)} · ${free} of ${p.ids.length} free</option>`; }).join('')}</optgroup>`;
+    }).join('');
+    return `<option value="">Choose ${sysName} plant</option>${groups}`;
   }
+  function showSys(){
+    const sl = sysList();
+    $('wrap-hv').hidden = !sl.includes('HV'); $('wrap-lv').hidden = !sl.includes('LV');
+    for(let i = locks.length - 1; i >= 0; i--){ const k = DATA.keys.find(x => x.id === locks[i]); if(!sl.includes(k.sys)) locks.splice(i,1); }
+    fillLocks();
+  }
+  function fillLocks(){
+    $('pickedLocks').innerHTML = locks.map(id => { const k = DATA.keys.find(x => x.id === id); return `<li><i class="dot ${k.sys.toLowerCase()}"></i><span class="mono">${id}</span><span class="pl">${esc(k.board)} · ${esc(k.point)} <em>${esc(DRAWINGS[k.dw].title)}</em></span><button type="button" data-rm-lock="${id}" aria-label="Remove ${id}">×</button></li>`; }).join('');
+    $('noLocks').hidden = locks.length > 0;
+  }
+  let toastTimer;
+  function toast(html){ const t = picker.querySelector('.ptoast'); t.innerHTML = html; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 6000); }
+  function openPicker(plantKey){
+    const p = PLANTS.find(x => x.key === plantKey); if(!p) return;
+    const D = DRAWINGS[p.dw];
+    picker.innerHTML = `<div class="phead"><div class="ptitle"><span class="kicker orange">${esc(p.sys)} · ${esc(D.title)}</span><b>${esc(p.name)}</b><small>Tap a lock number to add it. Tap again to remove. Grey, struck-through numbers are already in use.</small></div><button type="button" class="btn primary small" id="pickDone">Done · <span id="pickCount"></span></button></div>
+      <div class="pbody" id="pickBody">${drawingHTML(p.dw, {picked:new Set(locks), focus:p.key, sys:sysList()})}</div>
+      <div class="plegend"><span><i class="lk hv mini">1</i>Free</span><span><i class="lk hv mini picked">1</i>Selected</span><span><i class="lk hv mini used">1</i>In use</span><span><i class="lk hv mini focus">1</i>${esc(p.name)}</span></div>
+      <div class="ptoast" hidden></div>`;
+    picker.hidden = false; document.body.style.overflow = 'hidden';
+    const count = () => { picker.querySelector('#pickCount').textContent = `${locks.length} selected`; };
+    count();
+    const body = picker.querySelector('#pickBody');
+    requestAnimationFrame(() => scrollToLocks(body, body.querySelector('.dwgbox'), p.ids));
+    body.addEventListener('click', e => {
+      const b = e.target.closest('.lk'); if(!b) return;
+      const k = DATA.keys.find(x => x.id === b.dataset.lock);
+      if(k.status === 'Out of service'){ toast(`<b>${k.id}</b> is out of service: ${esc(k.cond)}.`); return; }
+      if(k.doc){ toast(`<b>${k.id}</b> is in use on <a href="${recUrl(k.doc)}">${esc(k.doc)}</a> (${esc(find(k.doc).r.status)}). Open the document to see who holds it.`); return; }
+      if(!sysList().includes(k.sys)){ toast(`<b>${k.id}</b> is ${k.sys}. Change the system to ${k.sys === 'HV' ? 'HV' : 'LV'} or HV and LV to select it.`); return; }
+      const i = locks.indexOf(k.id);
+      if(i > -1){ locks.splice(i,1); b.classList.remove('picked'); } else { locks.push(k.id); b.classList.add('picked'); toast(`<b>${k.id}</b> added · ${esc(k.board)} · ${esc(k.point)}`); }
+      count(); fillLocks();
+    });
+    picker.querySelector('#pickDone').addEventListener('click', closePicker);
+    picker.querySelector('#pickDone').focus();
+  }
+  function closePicker(){ picker.hidden = true; document.body.style.overflow = ''; fillLocks(); document.getElementById('pickedLocks').scrollIntoView({block:'center'}); }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !picker.hidden) closePicker(); });
   function fillBoxes(){ $('f-box').innerHTML = opts(DATA.info.filter(b => b.status === 'In cabinet').map(b => [`${b.id} · Cabinet 3 bay ${b.bay}`, b.id]), 'Choose a free lockout box'); }
   function fillPtw(){ $('f-ptw').innerHTML = opts(DATA.ptw.filter(p => p.status === 'Live').map(p => [`${p.id} · ${p.work}`, p.id]), 'None'); }
   function fillWp(){
@@ -542,8 +633,12 @@ function newDoc(){
     box.innerHTML = cpCard(find(id).r, false); box.hidden = false;
   }
   $('f-type').addEventListener('change', show);
-  $('f-sys').addEventListener('change', () => { locks.length = 0; fillLocks(); });
-  $('addLock').addEventListener('click', () => { const v = $('f-lock').value; if(v){ locks.push(v); fillLocks(); } });
+  $('f-plant-hv').innerHTML = plantOptions('HV'); $('f-plant-lv').innerHTML = plantOptions('LV');
+  $('f-sys').addEventListener('change', showSys);
+  ['hv','lv'].forEach(t => {
+    $(`f-plant-${t}`).addEventListener('change', e => { if(e.target.value) openPicker(e.target.value); });
+    document.querySelector(`[data-open="${t}"]`).addEventListener('click', () => { const v = $(`f-plant-${t}`).value; if(v) openPicker(v); else $(`f-plant-${t}`).focus(); });
+  });
   $('pickedLocks').addEventListener('click', e => { const b = e.target.closest('[data-rm-lock]'); if(b){ locks.splice(locks.indexOf(b.dataset.rmLock),1); fillLocks(); } });
   $('f-cp').addEventListener('change', () => { const i = wp.indexOf($('f-cp').value); if(i > -1) wp.splice(i,1); fillWp(); cpPreview(); });
   $('addWp').addEventListener('click', () => { const v = $('f-wp').value; if(v){ wp.push(v); fillWp(); } });
@@ -557,11 +652,11 @@ function newDoc(){
     const need = (id, msg) => { if(!$(id).value) err.push(msg); };
     need('f-type','Choose a document type.');
     if(t === 'PTW' || t === 'SFT'){
-      need('f-sys','Choose the system.');
+      need('f-sys','Choose HV, LV or both for the points of isolation.');
       need(t === 'PTW' ? 'f-work-ptw' : 'f-work-sft','Choose the work.');
       if(t === 'SFT') need('f-test','Choose the test.');
       need('f-loc','Choose the location.');
-      if(!locks.length) err.push('Add at least one isolation lock.');
+      if(!locks.length) err.push('Select at least one lock number on the drawing as a point of isolation.');
       need('f-box','Choose a lockout box.');
     }
     if(t === 'LOA'){ need('f-area','Choose the area.'); need('f-reason','Choose the reason.'); need('f-bounds','Choose the boundaries.'); }
@@ -580,7 +675,7 @@ function newDoc(){
       log = [[hhmm(now), `LOA issued by ${ap.name} to ${cp.name} (${cp.id}). Boundaries set.`]];
     } else {
       const plocks = [cp.id, ...wp];
-      doc = {...base, sys:$('f-sys').value, work:$(t === 'PTW' ? 'f-work-ptw' : 'f-work-sft').value, ...(t === 'SFT' ? {test:$('f-test').value} : {}), loc:$('f-loc').value, cp:`${cp.name} · ${cp.id}`, keys:[...locks], box:$('f-box').value, loa:'', apLock:`${ap.id} · ${ap.name}`, plocks};
+      doc = {...base, sys:sysList().join(' & '), work:$(t === 'PTW' ? 'f-work-ptw' : 'f-work-sft').value, ...(t === 'SFT' ? {test:$('f-test').value} : {}), loc:$('f-loc').value, cp:`${cp.name} · ${cp.id}`, keys:[...locks], box:$('f-box').value, loa:'', apLock:`${ap.id} · ${ap.name}`, plocks};
       log = [[hhmm(now), `Keys ${locks.join(', ')} drawn by ${ap.name}; tags hung on hooks`],[hhmm(now), `Keys placed in ${doc.box}, AP lock ${ap.id} applied, ${t} issued to ${cp.name}`],[hhmm(now), `Personal locks ${plocks.join(', ')} applied to ${doc.box}`]];
     }
     if(!addEvent({op:'create', doc, log})){ box.innerHTML = '<b>Could not save.</b> This browser is blocking storage, for example in a private window. Open the site in a normal window and try again.'; box.hidden = false; return; }
@@ -620,6 +715,7 @@ function wireRecord(r){
 
 /* ---------- Start ---------- */
 loadEvents().forEach(applyEvent);
+syncKeys();
 const page = document.body.dataset.page;
 if(page==='home') home();
 else if(PAGES[page]) tracker(page);
