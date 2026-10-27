@@ -138,3 +138,6 @@ Select the alert to open `expired.html` and select any document number to open i
 The preview is generated in memory, not saved as actual site data. The preview banner clearly identifies it.
 To inspect the register without preview records, use `index.html?mode=live` (the alert links to `expired.html?mode=live`).
 This is a static browser demonstration; no shared real-time alerting is provided.
+
+
+UI refinement: wide, slim expired-documents banner above the dashboard and homepage action links; prominent 3.2-second pulse; slate/charcoal interior panels.

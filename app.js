@@ -296,6 +296,7 @@ function home(){
     <h1 class="mega">One lock on every switch. Every key accounted for.</h1>
     <p class="sub">A structured lock and key system for data centre AP offices: a dedicated numbered lock on every point of isolation, and a register that shows where every key is.</p>
     <p class="lead">When a key leaves its hook, a tag takes its place. Every permit, sanction and limitation of access shows exactly which locks, which lockout box and which competent person it relies on.</p>
+    <div class="home-expiry-position">${expiryAlertMarkup()}</div>
     <div class="textlinks">
       <a href="${U('keys.html')}">Open key tracker <span>→</span></a>
       <a href="${U('new.html')}">New safety document <span>→</span></a>
@@ -305,7 +306,6 @@ function home(){
   <section class="block dashboard-block"><div class="wrap">
     <div class="dashboard-heading"><div><div class="eyebrow">Operational overview</div><h2>Site dashboard</h2><p>Document status and key custody at a glance.</p></div><a class="btn primary small" href="${U('new.html')}">+ New document</a></div>
     ${DEMO_EXPIRED ? `<div class="demo-notice">INTERACTIVE PREVIEW — Three fictional overdue documents are displayed. Select the alert to inspect them; this preview is not site data. <a href="${U('index.html')}?mode=live">Switch to recorded documents →</a></div>` : ``}
-    ${expiryAlertMarkup()}
     <div class="dashboard-metrics" aria-label="Site status">
       <a href="${U('ptw.html')}"><b>${n('ptw','Live')}</b><span>Live PTWs</span></a>
       <a href="${U('sft.html')}"><b>${n('sft','Live')}</b><span>Live SFTs</span></a>
