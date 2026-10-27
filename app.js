@@ -129,7 +129,7 @@ const PAGES = {
   cp:{file:'cp.html',title:'CP register',code:'P',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
     cols:[['id','Lock no.'],['name','Name'],['company','Company'],['role','Role'],['phone','Phone'],['status','Status'],['expiry','Authorised until']]}
 };
-const NAV = [['references.html','System references','REF','references'],['index.html','Home','HOME','home'],['expired.html','Expired documents','ALERT','expired'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
+const NAV = [['references.html','System references','REF','references'],['index.html','Home','HOME','home'],['registers.html','Control centre','REG','registers'],['expired.html','Expired documents','ALERT','expired'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
 const U = path => ROOT + path;
 
 /* Expiry is derived from the document's absolute local expiry timestamp, not its issue duration.
@@ -314,8 +314,20 @@ function home(){
       <a href="${U('keys.html')}"><b>${n('keys','With AP')}</b><span>Keys with AP</span></a>
       <a href="${U('keys.html')}"><b>${n('keys','Out of service')}</b><span>Out of service</span></a>
     </div>
-    <div class="dashboard-heading dashboard-subheading"><div><div class="eyebrow">Registers</div><h2>Control centre</h2></div></div>
-    <div class="dashboard-links">
+    <a class="control-centre-launch" href="${U('registers.html')}" aria-label="Open Control Centre registers">
+      <span class="control-centre-launch-icon" aria-hidden="true">▦</span>
+      <span class="control-centre-launch-copy"><span class="eyebrow">REGISTERS</span><strong>Control centre</strong><span class="control-centre-launch-desc">Open all registers, personnel records and system resources</span></span>
+      <span class="control-centre-launch-arrow" aria-hidden="true">→</span>
+    </a>
+  </div></section>`;
+  shell('home', hero, main);
+}
+
+/* ---------- Dedicated control centre ---------- */
+function registersPage(){
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Control centre</span>`, 'Registers', 'Control centre', 'Access the isolation control registers, safety documents and supporting resources from one location.');
+  const main = `<section class="block registers-page"><div class="wrap"><div class="registers-intro"><div><div class="eyebrow">SYSTEM NAVIGATION</div><h2>Registers &amp; resources</h2><p>Select a register to view its entries and individual records.</p></div></div>
+    <div class="dashboard-links registers-grid">
       <a href="${U('keys.html')}"><strong>Key control</strong><span>Locks, keys and custody</span><i>→</i></a>
       <a href="${U('info.html')}"><strong>Lockout boxes</strong><span>Box status and assignments</span><i>→</i></a>
       <a href="${U('ptw.html')}"><strong>Permit to Work</strong><span>PTW register</span><i>→</i></a>
@@ -325,8 +337,8 @@ function home(){
       <a href="${U('lv-schematic.html')}"><strong>Electrical drawings</strong><span>Lock reference diagrams</span><i>→</i></a>
       <a href="${U('procedure.html')}"><strong>Procedures</strong><span>Control and reconciliation</span><i>→</i></a>
     </div>
-  </div></section>`;
-  shell('home', hero, main);
+  <a class="registers-return" href="${U('index.html')}">← Back to dashboard</a></div></section>`;
+  shell('registers', hero, main);
 }
 
 /* ---------- Tracker pages ---------- */
@@ -896,6 +908,7 @@ const page = document.body.dataset.page;
 if(page==='references') references();
 if(page==='expired') expiredPage();
 if(page==='home') home();
+if(page==='registers') registersPage();
 else if(PAGES[page]) tracker(page);
 else if(page==='record') record();
 else if(page==='schematic') schematic();

@@ -141,3 +141,8 @@ This is a static browser demonstration; no shared real-time alerting is provided
 
 
 UI refinement: wide, slim expired-documents banner above the dashboard and homepage action links; prominent 3.2-second pulse; slate/charcoal interior panels.
+
+
+## Control Centre navigation update
+
+The homepage now contains a single full-width Control Centre card beneath the six dashboard metrics. All register navigation cards have moved to `registers.html`, which is also accessible from the site menu.
