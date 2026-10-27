@@ -130,3 +130,11 @@ The page and alert refresh every 15 seconds while open, and on tab focus/visibil
 - The expired-documents alert is centred on the dashboard and slowly pulses red when overdue live documents exist (3.6-second cycle). Reduced-motion settings disable the animation.
 - For a **fictional visual preview only**, visit `index.html?demo=expired` and `expired.html?demo=expired`. Three fabricated expired records are created in memory; they are not stored. Exit preview by visiting the regular page URL.
 - The prototype continues to use browser-local records and browser time; it is NOT a central, server-side real-time alert system.
+
+
+## Interactive expired-document example (default view)
+Opening `index.html` now displays the central red pulsing alert with three fictional overdue documents.
+Select the alert to open `expired.html` and select any document number to open its detailed record.
+The preview is generated in memory, not saved as actual site data. The preview banner clearly identifies it.
+To inspect the register without preview records, use `index.html?mode=live` (the alert links to `expired.html?mode=live`).
+This is a static browser demonstration; no shared real-time alerting is provided.

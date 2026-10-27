@@ -154,8 +154,8 @@ function recipientRecord(doc){
 }
 function expiryAlertMarkup(){
   const count = expiredDocuments().length;
-  return `<a class="expiry-alert${count ? ' has-expired' : ''}" href="${U('expired.html')}" id="expiryAlert" aria-live="polite" aria-label="${count} expired live safety documents. Open expired document list.">
-    <span class="expiry-alert-title">Expired documents</span>${DEMO_EXPIRED ? `<span class="demo-alert-label">PREVIEW · 3 FICTIONAL RECORDS</span>` : ``}<span class="expiry-alert-count" id="expiryAlertCount">${count}</span>
+  return `<a class="expiry-alert${count ? ' has-expired' : ''}" href="${U('expired.html')}${DEMO_EXPIRED ? '?demo=expired' : '?mode=live'}" id="expiryAlert" aria-live="polite" aria-label="${count} expired live safety documents. Open expired document list.">
+    <span class="expiry-alert-title">Expired documents</span>${DEMO_EXPIRED ? `<span class="demo-alert-label">INTERACTIVE PREVIEW · 3 FICTIONAL RECORDS</span>` : ``}<span class="expiry-alert-count" id="expiryAlertCount">${count}</span>
     <span class="expiry-alert-sub" id="expiryAlertSub">${count ? 'Action required — contact the document recipient' : 'No overdue live documents recorded'}</span><span class="expiry-alert-arrow">View register →</span>
   </a>`;
 }
@@ -170,7 +170,7 @@ function refreshExpiryAlert(){
 function expiredPage(){
   const hero=pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Expired documents</span>`, 'Safety document monitoring', 'Expired documents', 'Live PTW, SFT and LOA records that have exceeded their recorded expiry date and time. Contact the recipient and follow the applicable site safety rules.');
   const main=`<section class="block"><div class="wrap">
-    ${DEMO_EXPIRED ? `<div class="demo-notice">DESIGN PREVIEW — Fictional document records for visual review. <a href="${U('index.html')}">Exit preview →</a></div>` : ``}
+    ${DEMO_EXPIRED ? `<div class="demo-notice">INTERACTIVE PREVIEW — Select any document number to open its detailed record. All three entries are fictional. <a href="${U('index.html')}?mode=live">Switch to recorded documents →</a></div>` : ``}
     <div class="expiry-notice"><strong>Overdue does not mean cancelled.</strong> A document remains live in the tracker until formally cancelled. Expiry does not release an isolation or authorise the removal of locks.</div>
     <div class="expiry-register-head"><h2>Overdue live documents <span id="expiryTableCount"></span></h2><span id="expiryLastChecked"></span></div>
     <div class="tablebox expiry-table-wrap"><table class="expiry-table"><thead><tr><th>Document number</th><th>Date issued</th><th>Date expired and time</th><th>Recipient name</th><th>Recipient contact no.</th></tr></thead><tbody id="expiredRows"></tbody></table></div>
@@ -288,7 +288,7 @@ const pageHero = (crumbs, eyebrow, title, lead, extra='') => `
 
 /* ---------- Home ---------- */
 function home(){
-  const n = (set, st) => DATA[set].filter(r => r.status===st).length;
+  const n = (set, st) => DATA[set].filter(r => r.status===st && !r.demo).length;
   const card = key => { const p = PAGES[key]; return `<a class="card" href="${U(p.file)}"><div class="ico">${ICON_FOR[key]}</div><div><h3>${p.title}</h3><p>${p.blurb}</p><div class="n">${DATA[key].length} records · ${p.code}</div><span class="more">Open tracker ${I.arrow}</span></div></a>`; };
   const hero = `
   <section class="hero home"><div class="wrap">
@@ -304,7 +304,7 @@ function home(){
   const main = `
   <section class="block dashboard-block"><div class="wrap">
     <div class="dashboard-heading"><div><div class="eyebrow">Operational overview</div><h2>Site dashboard</h2><p>Document status and key custody at a glance.</p></div><a class="btn primary small" href="${U('new.html')}">+ New document</a></div>
-    ${DEMO_EXPIRED ? `<div class="demo-notice">DESIGN PREVIEW — Three fictional overdue documents. No live site data is being shown. <a href="${U('index.html')}">Exit preview →</a></div>` : ``}
+    ${DEMO_EXPIRED ? `<div class="demo-notice">INTERACTIVE PREVIEW — Three fictional overdue documents are displayed. Select the alert to inspect them; this preview is not site data. <a href="${U('index.html')}?mode=live">Switch to recorded documents →</a></div>` : ``}
     ${expiryAlertMarkup()}
     <div class="dashboard-metrics" aria-label="Site status">
       <a href="${U('ptw.html')}"><b>${n('ptw','Live')}</b><span>Live PTWs</span></a>
@@ -874,7 +874,14 @@ function references(){
 
 /* Preview-only demonstration: three overdue documents, generated relative to the
    visitor's clock. These are never saved and cannot be used for operational control. */
-const DEMO_EXPIRED = new URLSearchParams(location.search).get('demo') === 'expired';
+/* The supplied visual example is the default homepage and expiry-register view.
+   Preview records exist only in memory and are never written to localStorage.
+   ?mode=live disables preview; record links carry ?demo=expired for navigation. */
+const previewParams = new URLSearchParams(location.search);
+const DEMO_EXPIRED = previewParams.get('mode') !== 'live' && (
+  previewParams.get('demo') === 'expired' ||
+  ['home','expired'].includes(document.body.dataset.page)
+);
 if (DEMO_EXPIRED) {
   const now=Date.now();
   const when=hours=>stamp(new Date(now+hours*3600000));
