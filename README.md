@@ -116,3 +116,10 @@ Edit, add or remove rows there; every tracker, record page and front page count 
 The homepage displays an Expired Documents alert. Live PTW/SFT/LOA records with a valid recorded expiry timestamp at or before the device's current time appear in a dedicated `expired.html` register. The five columns are document number (click for full record), date issued, date/time expired, recipient name, and recipient telephone number (click to call). The user asked for four columns but supplied five distinct fields; all five are included.
 
 The page and alert refresh every 15 seconds while open, and on tab focus/visibility. This is *browser-local monitoring*, NOT a real-time server push, background notification, SMS, email, or cross-device alert. It works only while the page is open and relies on the device clock. Production requires a shared database, server clock, authenticated accounts, a scheduled expiry checker and push/notification delivery. An expired document remains LIVE until formally cancelled under site safety rules.
+
+
+## October 2026 dropdown and dashboard update
+- New-document lockout box, CP and working-party selectors show all records, including unavailable ones, with explicit availability labels. Unavailable selections are rejected on submission or when adding a working-party member.
+- Free/occupied inventory is based on the current browser's stored transactions; if none are available, do not issue a document until the physical inventory and record state are reconciled.
+- Homepage replaced with compact metrics and direct register links; expired-document alert remains.
+- Browser-local data is not shared between devices. Dropdown changes do not provide operational authorisation.

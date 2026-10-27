@@ -293,32 +293,27 @@ function home(){
     </div>
   </div></section>`;
   const main = `
-  <section class="block"><div class="wrap">
-    <div class="block-head"><div class="eyebrow">Site status now</div><h2>Live on site.</h2></div>
+  <section class="block dashboard-block"><div class="wrap">
+    <div class="dashboard-heading"><div><div class="eyebrow">Operational overview</div><h2>Site dashboard</h2><p>Document status and key custody at a glance.</p></div><a class="btn primary small" href="${U('new.html')}">+ New document</a></div>
     ${expiryAlertMarkup()}
-    <div class="stats" style="margin-top:0;margin-bottom:12px" aria-label="Site status now">
-      <div><b class="hot">${n('ptw','Live')}</b><span>Live permits</span></div>
-      <div><b class="hot">${n('keys','In lockout box')}</b><span>Keys in lockout boxes</span></div>
-      <div><b>${n('keys','With AP')}</b><span>Keys with an AP</span></div>
-      <div><b>${n('sft','Live')}</b><span>Live sanctions for test</span></div>
-      <div><b>${n('loa','Live')}</b><span>Live limitations of access</span></div>
-      <div><b>${n('keys','Out of service')}</b><span>Locks out of service</span></div>
+    <div class="dashboard-metrics" aria-label="Site status">
+      <a href="${U('ptw.html')}"><b>${n('ptw','Live')}</b><span>Live PTWs</span></a>
+      <a href="${U('sft.html')}"><b>${n('sft','Live')}</b><span>Live SFTs</span></a>
+      <a href="${U('loa.html')}"><b>${n('loa','Live')}</b><span>Live LOAs</span></a>
+      <a href="${U('keys.html')}"><b>${n('keys','In lockout box')}</b><span>Keys in boxes</span></a>
+      <a href="${U('keys.html')}"><b>${n('keys','With AP')}</b><span>Keys with AP</span></a>
+      <a href="${U('keys.html')}"><b>${n('keys','Out of service')}</b><span>Out of service</span></a>
     </div>
-    
-    <div class="block-head"><div class="eyebrow">Trackers</div><h2>Every key, permit and sanction in one place.</h2><p class="lead">Select a tracker, then select any line to open its full record.</p></div>
-    <div class="cards">
-      ${card('keys')}${card('info')}${card('ptw')}${card('sft')}${card('loa')}${card('cp')}
-      <a class="card" href="${U('lv-schematic.html')}"><div class="ico">${I.sld}</div><div><h3>Schematics</h3><p>Two single line diagrams with a numbered lock circle beside every switch, CB and isolator: red HV, blue LV.</p><div class="n">Reference drawing · SLD</div><span class="more">View schematic ${I.arrow}</span></div></a>
-      <a class="card" href="${U('procedure.html')}"><div class="ico">${I.plan.replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="width:64px;height:64px"').replace('stroke-width="2"','stroke-width="1.2"')}</div><div><h3>System procedure</h3><p>Step by step: plan, draw keys, isolate, secure, issue, work, cancel. Plus handover, audits and lost keys.</p><div class="n">7 stages · STEPS</div><span class="more">View procedure ${I.arrow}</span></div></a>
-    </div>
-  </div></section>
-  <section class="block alt"><div class="wrap">
-    <div class="block-head"><div class="eyebrow">How it works</div><h2>Our system is built on four fundamentals.</h2></div>
-    <div class="trio">
-      <div>${I.lock}<b>Dedicated locks</b><p>One numbered lock per switch, shown in a circle on the SLD.</p></div>
-      <div>${I.tag}<b>Key-out tags</b><p>An empty hook always carries a tag: permit, box, AP and time.</p></div>
-      <div>${I.people}<b>Personal locks</b><p>Each CP gets their own numbered lock at CP training.</p></div>
-      <div>${I.shield}<b>One register</b><p>Locks, boxes, people and documents tied together in one record.</p></div>
+    <div class="dashboard-heading dashboard-subheading"><div><div class="eyebrow">Registers</div><h2>Control centre</h2></div></div>
+    <div class="dashboard-links">
+      <a href="${U('keys.html')}"><strong>Key control</strong><span>Locks, keys and custody</span><i>→</i></a>
+      <a href="${U('info.html')}"><strong>Lockout boxes</strong><span>Box status and assignments</span><i>→</i></a>
+      <a href="${U('ptw.html')}"><strong>Permit to Work</strong><span>PTW register</span><i>→</i></a>
+      <a href="${U('sft.html')}"><strong>Sanction for Test</strong><span>SFT register</span><i>→</i></a>
+      <a href="${U('loa.html')}"><strong>Limitation of Access</strong><span>LOA register</span><i>→</i></a>
+      <a href="${U('cp.html')}"><strong>Personnel</strong><span>AP, SAP and CP locks</span><i>→</i></a>
+      <a href="${U('lv-schematic.html')}"><strong>Electrical drawings</strong><span>Lock reference diagrams</span><i>→</i></a>
+      <a href="${U('procedure.html')}"><strong>Procedures</strong><span>Control and reconciliation</span><i>→</i></a>
     </div>
   </div></section>`;
   shell('home', hero, main);
@@ -598,7 +593,11 @@ function newDoc(){
   const qType = (new URLSearchParams(location.search).get('type') || '').toUpperCase();
   const people = DATA.cp;
   const aps = people.filter(c => ['AP','SAP'].includes(c.role) && c.status === 'Active');
-  const cpOptions = people.filter(c => c.role === 'CP').map(c => `<option value="${c.id}"${c.status !== 'Active' || lockPlacement(c.id).state !== 'available' ? ' disabled' : ''}>${esc(cpLabel(c))}${c.status !== 'Active' ? ` (${c.status.toLowerCase()})` : ''}</option>`).join('');
+  const cpOptions = people.filter(c => c.role === 'CP').map(c => {
+    const placement = lockPlacement(c.id);
+    const reason = c.status !== 'Active' ? c.status : placement.state === 'conflict' ? 'LOCK CONFLICT' : placement.state === 'placed' ? `Lock on ${placement.boxes[0].id}` : 'Available';
+    return `<option value="${esc(c.id)}">${esc(cpLabel(c))} · ${esc(reason)}</option>`;
+  }).join('');
   const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>New safety document</span>`, 'Issue · PTW · SFT · LOA', 'New safety document', 'Choose each item from its list. Only locks on their hooks, free lockout boxes and active CPs can be chosen.');
   const main = `<section class="block"><div class="wrap">
     <form class="docform" id="docform" novalidate>
@@ -621,11 +620,11 @@ function newDoc(){
           <div class="addrow"><select id="f-plant-lv"></select><button type="button" class="btn ghost small" data-open="lv">Drawing</button></div></div>
         <div class="f wide"><span>Lock numbers selected <small>Tap the lock numbers on the drawing. They are added here as the points of isolation.</small></span>
           <ul class="picked" id="pickedLocks"></ul><p class="none-yet" id="noLocks">No points of isolation selected yet.</p></div>
-        <label class="f"><span>Lockout box *</span><select id="f-box"></select></label>
+        <label class="f"><span>Lockout box *</span><select id="f-box"></select><small id="boxAvailability" class="select-help" aria-live="polite"></small></label>
       </div></div>
       <div class="fgroup"><h3><span data-num></span> · People</h3><div class="fgrid">
         <label class="f"><span>Issuing AP *</span><select id="f-ap">${opts(aps.map(a => [`${a.name} (${a.role}) · ${a.id}`, a.id]),'Choose the issuing AP')}</select></label>
-        <label class="f"><span><b data-cp-label>Competent person *</b></span><select id="f-cp"><option value="">Choose the CP</option>${cpOptions}</select></label>
+        <label class="f"><span><b data-cp-label>Competent person *</b></span><select id="f-cp"><option value="">Choose the CP</option>${cpOptions}</select><small id="cpAvailability" class="select-help" aria-live="polite"></small></label>
         <div class="f wide" data-for="PTW SFT"><span>Working party <small>Each person's personal lock goes on the box.</small></span>
           <div class="addrow"><select id="f-wp"></select><button type="button" class="btn ghost small" id="addWp">Add person</button></div>
           <ul class="picked" id="pickedWp"></ul></div>
@@ -707,12 +706,31 @@ function newDoc(){
   }
   function closePicker(){ picker.hidden = true; document.body.style.overflow = ''; fillLocks(); document.getElementById('pickedLocks').scrollIntoView({block:'center'}); }
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !picker.hidden) closePicker(); });
-  function fillBoxes(){ $('f-box').innerHTML = opts(DATA.info.filter(b => b.status === 'In cabinet').map(b => [`${b.id} · Cabinet 3 bay ${b.bay}`, b.id]), 'Choose a free lockout box'); }
+  function updateAvailability(){
+    const free = DATA.info.filter(b => b.status === 'In cabinet').length;
+    const box = document.getElementById('boxAvailability');
+    if(box) box.textContent = `${free} of ${DATA.info.length} boxes available. Occupied and out-of-service boxes remain listed for visibility but cannot be selected for issue.`;
+    const cp = document.getElementById('cpAvailability');
+    if(cp){
+      const freeCP = people.filter(c => c.role === 'CP' && c.status === 'Active' && lockPlacement(c.id).state === 'available').length;
+      cp.textContent = `${freeCP} CP personal locks available. Unavailable people remain listed with their current status.`;
+    }
+  }
+  function fillBoxes(){
+    const prev = $('f-box').value;
+    $('f-box').innerHTML = opts(DATA.info.map(b => [`${b.id} · ${b.status === 'In cabinet' ? 'AVAILABLE' : b.status.toUpperCase()} · ${b.bay}`, b.id]), 'Choose a lockout box');
+    if(DATA.info.some(b => b.id === prev)) $('f-box').value = prev;
+    updateAvailability();
+  }
   function fillPtw(){ $('f-ptw').innerHTML = opts(DATA.ptw.filter(p => p.status === 'Live').map(p => [`${p.id} · ${p.work}`, p.id]), 'None'); }
   function fillWp(){
     const cp = $('f-cp').value;
-    const avail = people.filter(c => c.status === 'Active' && c.role === 'CP' && lockPlacement(c.id).state === 'available' && c.id !== cp && !wp.includes(c.id));
-    $('f-wp').innerHTML = opts(avail.map(c => [cpLabel(c), c.id]), 'Choose a person');
+    const candidates = people.filter(c => c.role === 'CP' && c.id !== cp && !wp.includes(c.id));
+    $('f-wp').innerHTML = opts(candidates.map(c => {
+      const placement = lockPlacement(c.id);
+      const reason = c.status !== 'Active' ? c.status : placement.state === 'conflict' ? 'LOCK CONFLICT' : placement.state === 'placed' ? `Lock on ${placement.boxes[0].id}` : 'Available';
+      return [`${cpLabel(c)} · ${reason}`, c.id];
+    }), 'Choose a person');
     $('pickedWp').innerHTML = wp.map(id => { const c = find(id).r; return `<li><span class="mono">${id}</span> ${esc(c.name)} · ${esc(c.company)}<button type="button" data-rm-wp="${id}" aria-label="Remove ${id}">×</button></li>`; }).join('');
   }
   function cpPreview(){
@@ -728,8 +746,14 @@ function newDoc(){
     document.querySelector(`[data-open="${t}"]`).addEventListener('click', () => { const v = $(`f-plant-${t}`).value; if(v) openPicker(v); else $(`f-plant-${t}`).focus(); });
   });
   $('pickedLocks').addEventListener('click', e => { const b = e.target.closest('[data-rm-lock]'); if(b){ locks.splice(locks.indexOf(b.dataset.rmLock),1); fillLocks(); } });
+  $('f-box').addEventListener('change', updateAvailability);
   $('f-cp').addEventListener('change', () => { const i = wp.indexOf($('f-cp').value); if(i > -1) wp.splice(i,1); fillWp(); cpPreview(); });
-  $('addWp').addEventListener('click', () => { const v = $('f-wp').value; if(v){ wp.push(v); fillWp(); } });
+  $('addWp').addEventListener('click', () => {
+    const v = $('f-wp').value; if(!v) return;
+    const c = people.find(x => x.id === v), placement = lockPlacement(v);
+    if(!c || c.status !== 'Active' || placement.state !== 'available') { alert('This person cannot be added: their personal lock is unavailable or their authorisation is not active. Check their personnel record.'); return; }
+    wp.push(v); fillWp();
+  });
   $('pickedWp').addEventListener('click', e => { const b = e.target.closest('[data-rm-wp]'); if(b){ wp.splice(wp.indexOf(b.dataset.rmWp),1); fillWp(); } });
   if(['PTW','SFT','LOA'].includes(qType)) $('f-type').value = qType;
   show(); fillLocks(); fillBoxes(); fillPtw(); fillWp();
@@ -746,10 +770,15 @@ function newDoc(){
       need('f-loc','Choose the location.');
       if(!locks.length) err.push('Select at least one lock number on the drawing as a point of isolation.');
       need('f-box','Choose a lockout box.');
+      const selectedBox = DATA.info.find(b => b.id === $('f-box').value);
+      if(selectedBox && selectedBox.status !== 'In cabinet') err.push(`${selectedBox.id} is ${selectedBox.status.toLowerCase()} and is not available for a new document.`);
     }
     if(t === 'LOA'){ need('f-area','Choose the area.'); need('f-reason','Choose the reason.'); need('f-bounds','Choose the boundaries.'); }
     need('f-ap','Choose the issuing AP.');
     need('f-cp', t === 'LOA' ? 'Choose the LOA holder.' : 'Choose the competent person.');
+    const selectedCP = people.find(c => c.id === $('f-cp').value);
+    if(selectedCP && selectedCP.status !== 'Active') err.push(`${selectedCP.name} is ${selectedCP.status.toLowerCase()} and cannot be selected.`);
+    if(selectedCP && t !== 'LOA' && lockPlacement(selectedCP.id).state !== 'available') err.push(`${selectedCP.name}'s personal lock is already allocated or has a conflict.`);
     need('f-dur','Choose how long the document is valid for.');
     if(t === 'PTW' || t === 'SFT') {
       for(const id of [$('f-ap').value, $('f-cp').value, ...wp].filter(Boolean)) {
