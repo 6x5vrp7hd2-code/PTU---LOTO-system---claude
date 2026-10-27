@@ -91,3 +91,12 @@ drawing is H-026 to H-057 and L-056 to L-081. The positions, plant names and des
 
 All records live at the top of `app.js` under `DATA`. They are example data.
 Edit, add or remove rows there; every tracker, record page and front page count updates automatically.
+
+
+## New visual references and lockout-box matching locks
+
+- `references.html` shows the four supplied illustrative diagrams. They are **not controlled site drawings**.
+- Existing clickable H-/L- overlays remain **unverified example mappings**, not approved lock assignments.
+- Every lockout box `LB-xx` has one dedicated box lock bearing exactly the same identifier `LB-xx`; this is separate from AP/CP personal locks `P-xxx`.
+- The electronic tracker is demonstrative. It cannot authorise switching, key release or document cancellation.
+- The original demo contains invented sample personnel, equipment and document records; do not treat them as live site information.

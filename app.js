@@ -8,13 +8,13 @@ const AP = {J:'J. Andersson (AP)', E:'E. Berg (SAP)', R:'R. Holm (AP)'};
 const DATA = {
   keys: [],  /* built from LOCKS below: one key per dedicated lock on the drawings */
   info: [
-    {id:'LB-05',status:'In use',doc:'PTW-2026-0414',keys:['H-048','H-049','H-055'],aplock:'P-002 · E. Berg',plocks:['P-042'],issued:'2026-10-27 06:50',bay:'C3-05'},
-    {id:'LB-06',status:'In use',doc:'PTW-2026-0412',keys:['L-013','L-014','L-017'],aplock:'P-004 · J. Andersson',plocks:['P-031','P-037'],issued:'2026-10-27 07:10',bay:'C3-06'},
-    {id:'LB-07',status:'In use',doc:'PTW-2026-0415',keys:['L-019'],aplock:'P-009 · R. Holm',plocks:['P-018','P-026'],issued:'2026-10-27 07:45',bay:'C3-07'},
-    {id:'LB-08',status:'In use',doc:'SFT-2026-0088',keys:['L-041','L-053'],aplock:'P-004 · J. Andersson',plocks:['P-052'],issued:'2026-10-27 09:20',bay:'C3-08'},
-    {id:'LB-03',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-03'},
-    {id:'LB-09',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-09'},
-    {id:'LB-10',status:'Out of service',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-10'}
+    {id:'LB-05',boxLock:'LB-05',status:'In use',doc:'PTW-2026-0414',keys:['H-048','H-049','H-055'],aplock:'P-002 · E. Berg',plocks:['P-042'],issued:'2026-10-27 06:50',bay:'C3-05'},
+    {id:'LB-06',boxLock:'LB-06',status:'In use',doc:'PTW-2026-0412',keys:['L-013','L-014','L-017'],aplock:'P-004 · J. Andersson',plocks:['P-031','P-037'],issued:'2026-10-27 07:10',bay:'C3-06'},
+    {id:'LB-07',boxLock:'LB-07',status:'In use',doc:'PTW-2026-0415',keys:['L-019'],aplock:'P-009 · R. Holm',plocks:['P-018','P-026'],issued:'2026-10-27 07:45',bay:'C3-07'},
+    {id:'LB-08',boxLock:'LB-08',status:'In use',doc:'SFT-2026-0088',keys:['L-041','L-053'],aplock:'P-004 · J. Andersson',plocks:['P-052'],issued:'2026-10-27 09:20',bay:'C3-08'},
+    {id:'LB-03',boxLock:'LB-03',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-03'},
+    {id:'LB-09',boxLock:'LB-09',status:'In cabinet',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-09'},
+    {id:'LB-10',boxLock:'LB-10',status:'Out of service',doc:'',keys:[],aplock:'',plocks:[],issued:'',bay:'C3-10'}
   ],
   ptw: [
     {id:'PTW-2026-0416',status:'Pending issue',sys:'HV',work:'Cable termination, TR-2 HV feeder',loc:'HV substation B',ap:AP.E,cp:'Not yet issued',keys:['H-010'],box:'',loa:'',issued:'',expiry:''},
@@ -111,7 +111,7 @@ const PAGES = {
   keys:{file:'keys.html',title:'Key tracker',code:'H · L',blurb:'Every dedicated HV and LV safety lock, its numbered hook, and where its key is right now.',
     cols:[['id','Lock no.'],['sys','System'],['board','Plant'],['point','Point of isolation'],['status','Status'],['where','Key location']]},
   info:{file:'info.html',title:'Information tracker',code:'LB',blurb:'Each lockout box, the safety document it serves, and the keys and personal locks on it.',
-    cols:[['id','Box no.'],['status','Status'],['doc','Safety document'],['keysN','Keys inside'],['plocksN','Personal locks'],['issued','Issued']]},
+    cols:[['id','Box / matching lock'],['status','Status'],['doc','Safety document'],['keysN','Keys inside'],['plocksN','Personal locks'],['issued','Issued']]},
   ptw:{file:'ptw.html',title:'Permit to work tracker',code:'PTW',blurb:'Live, pending and cancelled permits, with their isolations and lockout boxes.',
     cols:[['id','Permit no.'],['status','Status'],['work','Work'],['loc','Location'],['cp','Competent person'],['box','Box']]},
   sft:{file:'sft.html',title:'Sanction for test tracker',code:'SFT',blurb:'Sanctions for test, the test being carried out, and the isolation that secures it.',
@@ -121,7 +121,7 @@ const PAGES = {
   cp:{file:'cp.html',title:'CP register',code:'P',blurb:'Every competent person on site, their personal lock, company, contact details and authorisation.',
     cols:[['id','Lock no.'],['name','Name'],['company','Company'],['role','Role'],['phone','Phone'],['status','Status'],['expiry','Authorised until']]}
 };
-const NAV = [['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
+const NAV = [['references.html','System references','REF','references'],['index.html','Home','HOME','home'],['keys.html','Key tracker','H · L','keys'],['info.html','Information tracker','LB','info'],['ptw.html','Permit to work tracker','PTW','ptw'],['sft.html','Sanction for test tracker','SFT','sft'],['loa.html','Limitation of access tracker','LOA','loa'],['cp.html','CP register','P','cp'],['new.html','New safety document','NEW','new'],['lv-schematic.html','Schematics','SLD','schematic'],['procedure.html','System procedure','STEPS','procedure']];
 const U = path => ROOT + path;
 
 /* ---------- Icons ---------- */
@@ -317,7 +317,7 @@ function record(){
     side = `<div class="panel"><h3>Hook ${esc(r.hook)}</h3>${tag}</div><div class="panel"><h3>Linked records</h3>${linkList([r.doc, r.box].filter(Boolean))}</div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='info'){
-    body = fields([['Box no.',mono(r.id)],['Cabinet 3 bay',mono(r.bay)],['Safety document',link(r.doc)],['Issued',mono(r.issued)],['AP lock',person(r.aplock),1],['Isolation keys inside',r.keys.length?linkList(r.keys):'',1],['Personal locks applied',r.plocks.length?linkList(r.plocks):'',1]]);
+    body = fields([['Box no.',mono(r.id)],['Dedicated box lock no.',mono(r.boxLock || r.id)],['Cabinet 3 bay',mono(r.bay)],['Safety document',link(r.doc)],['Issued',mono(r.issued)],['AP lock',person(r.aplock),1],['Isolation keys inside',r.keys.length?linkList(r.keys):'',1],['Personal locks applied',r.plocks.length?linkList(r.plocks):'',1]]);
     side = `<div class="panel"><h3>Box can be opened when</h3><p>${r.plocks.length ? `All ${r.plocks.length} personal locks have been removed by their holders, then the AP removes their own lock.` : 'Box is empty and not in use.'}</p></div>${r.doc ? logPanel(r.doc) : ''}`;
   }
   if(set==='ptw' || set==='sft'){
@@ -358,7 +358,7 @@ function schematic(){
   const q = new URLSearchParams(location.search), hl = (q.get('lock') || '').toUpperCase();
   const hlKey = DATA.keys.find(k => k.id === hl);
   const used = DATA.keys.filter(k => k.doc).length;
-  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Live lock status', 'Schematics', 'Every switch, circuit breaker and isolator has its dedicated lock number: red for HV, blue for LV. Numbers in use on a live or pending safety document are greyed out and struck through. Tap one to open its document; tap a free number to see the lock.');
+  const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>Schematics</span>`, 'Single line diagrams · Live lock status', 'Schematics', 'DEMONSTRATION ONLY: provisional HV and LV lock markers are shown on the two illustrative diagrams. They are not verified against site apparatus or an approved switching schedule. Tap a marker to view its example record.');
   const fig = dw => { const D = DRAWINGS[dw], ks = DATA.keys.filter(k => k.dw === dw); const h = ks.filter(k => k.sys === 'HV').length, l = ks.length - h, u = ks.filter(k => k.doc).length;
     return `<figure class="dwg"><figcaption><div><h3>${D.title}</h3><p>${h} HV and ${l} LV locks · ${u} in use</p></div><div class="dwg-count"><span class="pill hv">H-${String(ks.find(k=>k.sys==='HV').n).padStart(3,'0')} to H-${String([...ks].reverse().find(k=>k.sys==='HV').n).padStart(3,'0')}</span><span class="pill lv">L-${String(ks.find(k=>k.sys==='LV').n).padStart(3,'0')} to L-${String([...ks].reverse().find(k=>k.sys==='LV').n).padStart(3,'0')}</span></div></figcaption>${drawingHTML(dw, {highlight:hl})}<p class="dwg-hint">Drag or scroll the drawing to move around it.</p></figure>`; };
   const main = `<section class="block"><div class="wrap">
@@ -393,7 +393,7 @@ const STAGES = [
    site:'No change. Keys stay in the AP\'s hand.',
    stop:'A lock number that does not match the label or SLD: stop. Do not fit a different lock.'},
   {k:'secure',name:'Secure the keys',who:'AP',icon:'box',
-   steps:['Place every isolation key in the lockout box. Count them against the switching programme.','Close the box and fit your own personal lock (your P-number) as the AP lock.','Update each hook tag from WITH AP to IN LOCKOUT BOX, LB-nn.'],
+   steps:['Place every isolation key in the selected box and independently reconcile the count against the approved switching programme.','Verify that the lockout box LB-nn has its own dedicated lock permanently allocated with the identical number LB-nn; apply it only as required by the approved site procedure. Separate AP and CP personal locks P-nnn provide individual protection under the approved arrangement.','Update each hook tag from WITH AP to IN LOCKOUT BOX, LB-nn.'],
    site:'Key tracker: each key → In lockout box, LB-nn. Information tracker: AP lock recorded.',
    stop:'Key count must match the switching programme exactly.'},
   {k:'issue',name:'Issue the safety document',who:'AP and CP',icon:'ptw',
@@ -469,7 +469,7 @@ function applyEvent(e){
     if(DATA[set].some(x => x.id === d.id)) return;
     d.local = true; DATA[set].unshift(d);
     (d.keys || []).forEach(k => { const r = DATA.keys.find(x => x.id === k); if(r){ r.status = 'In lockout box'; r.doc = d.id; r.box = d.box; } });
-    if(d.box){ const b = DATA.info.find(x => x.id === d.box); if(b){ b.status = 'In use'; b.doc = d.id; b.keys = [...(d.keys || [])]; b.aplock = d.apLock || ''; b.plocks = [...(d.plocks || [])]; b.issued = d.issued; } }
+    if(d.box){ const b = DATA.info.find(x => x.id === d.box); if(b){ b.boxLock = b.id; b.status = 'In use'; b.doc = d.id; b.keys = [...(d.keys || [])]; b.aplock = d.apLock || ''; b.plocks = [...(d.plocks || [])]; b.issued = d.issued; } }
     if(set === 'loa' && d.ptw){ const p = DATA.ptw.find(x => x.id === d.ptw); if(p) p.loa = d.id; }
     LOGS[d.id] = (LOGS[d.id] || []).concat(e.log || []);
   }
@@ -478,7 +478,7 @@ function applyEvent(e){
     const d = hit.r; d.status = 'Cancelled';
     (d.keys || []).forEach(k => { const r = DATA.keys.find(x => x.id === k); if(r && r.doc === d.id){ r.status = 'In cabinet'; r.doc = ''; r.box = ''; } });
     if(d.box){ const b = DATA.info.find(x => x.id === d.box); if(b && b.doc === d.id){ b.status = 'In cabinet'; b.doc = ''; b.keys = []; b.aplock = ''; b.plocks = []; b.issued = ''; } }
-    LOGS[d.id] = (LOGS[d.id] || []).concat([[hhmm(e.at), `${d.id} cancelled by ${e.by}. ${d.keys && d.keys.length ? 'Keys returned to their hooks' : 'Boundaries removed'}${d.box ? `, ${d.box} returned to its bay` : ''}.`]]);
+    LOGS[d.id] = (LOGS[d.id] || []).concat([[hhmm(e.at), `${d.id} cancelled by ${e.by}. ${d.keys && d.keys.length ? 'Physical key return requires independent confirmation' : 'Boundaries removed'}${d.box ? `, ${d.box} returned to its bay` : ''}.`]]);
   }
 }
 
@@ -713,10 +713,26 @@ function wireRecord(r){
   });
 }
 
+
+/* Uploaded architectural references: illustrative only; never use as a controlled site SLD. */
+function references(){
+ const refs = [
+  ['reference-tier-iv-sld.jpg','Tier IV conceptual electrical single-line diagram','Illustrative dual-feed, MV/LV, UPS and distribution arrangement. This image is not an approved as-built drawing.'],
+  ['reference-electrical-room.jpg','Electrical room equipment overview','Illustrates switchgear, ATS, UPS, battery banks, power distribution and mechanical interfaces.'],
+  ['reference-dc-infrastructure.jpg','Data centre infrastructure overview','Shows utility, generation, UPS, data hall and cooling equipment in context.'],
+  ['reference-power-paths.jpg','Redundant power-path overview','Illustrative alternative architecture and equipment identification.']
+ ];
+ const hero = pageHero(`<a href="${U('index.html')}">Home</a><span>/</span><span>System references</span>`, 'Engineering reference · Concept images', 'System references', 'Visual orientation for new personnel. These images are illustrative, not controlled operating drawings or evidence of installed equipment.');
+ const cards = refs.map(([file,title,desc])=>`<figure class="reference-card"><a href="${U(file)}" target="_blank" rel="noopener"><img src="${U(file)}" alt="${esc(title)}" loading="lazy"></a><figcaption><h3>${esc(title)}</h3><p>${esc(desc)}</p><a class="plink" href="${U(file)}" target="_blank" rel="noopener">Open full image →</a></figcaption></figure>`).join('');
+ const main = `<section class="block"><div class="wrap"><div class="reference-warning"><b>CONTROLLED-DRAWING RULE</b><p>The H- and L-number overlays on the prototype schematic are unverified demonstration mappings. Do not use them to select or apply isolation locks. Only an approved, equipment-verified lock schedule and current controlled SLD may be used for actual operations.</p><p><b>Box / box-lock rule:</b> each lockout box LB-nn is allocated one dedicated lock also marked LB-nn. That matching box lock is distinct from any AP or CP personal lock P-nnn.</p></div><div class="reference-grid">${cards}</div><div class="panel"><h3>Numbering conventions</h3><p><b>H-001…</b> proposed HV isolation lock identifier; <b>L-001…</b> proposed LV isolation lock identifier; <b>LB-01…</b> lockout box and its own matching dedicated box lock; <b>P-001…</b> individual personal lock. All require site allocation and verification before use.</p><a class="btn primary" href="${U('lv-schematic.html')}">View prototype lock overlays →</a></div></div></section>`;
+ shell('references',hero,main);
+}
+
 /* ---------- Start ---------- */
 loadEvents().forEach(applyEvent);
 syncKeys();
 const page = document.body.dataset.page;
+if(page==='references') references();
 if(page==='home') home();
 else if(PAGES[page]) tracker(page);
 else if(page==='record') record();
