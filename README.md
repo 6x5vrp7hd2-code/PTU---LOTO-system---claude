@@ -1,19 +1,27 @@
 # Powertec Isolation Control
 
-AP office key, lock and safety document control, built on the Powertec Utilities website styles.
+AP office key, lock and safety document control, in the Powertec Utilities dark style:
+transparent PNG logo that phases in on the front page, page photos that fade in behind
+a dark gradient, Montserrat type and Powertec orange #F58220.
 All 21 files sit in one folder. There are no sub-folders.
+
+## Important: use its own repository
+
+This site has its own `index.html` and `styles.css`. Uploading it into the repository of
+the main Powertec Utilities site would overwrite that site's files. Create a new repository
+for it, for example `isolation-control`.
 
 ## Upload to GitHub (works on a phone)
 
 1. Unzip `powertec-isolation-control.zip` in the Files app.
-2. In Safari, open your repository on github.com.
-3. If the repository holds files from an earlier version (for example `logo.js` or `implementation.html`), delete them first.
-4. Tap **Add file → Upload files → choose your files**.
-5. Open the unzipped folder, tap **Select**, select all 21 files, tap **Open**.
-6. Tap **Commit changes**.
-7. Go to **Settings → Pages → Deploy from a branch → main → / (root) → Save**.
+2. In Safari, open the new repository on github.com.
+3. Tap **Add file → Upload files → choose your files**.
+4. Open the unzipped folder, tap **Select**, select all 21 files, tap **Open**.
+5. Tap **Commit changes**.
+6. Go to **Settings → Pages → Deploy from a branch → main → / (root) → Save**.
 
 The site appears at `https://<your-username>.github.io/<repository-name>/` within a few minutes.
+File names must stay exactly as they are, lower case. GitHub Pages treats `Logo.png` and `logo.png` as different files.
 
 ## Pages
 
@@ -34,21 +42,21 @@ The site appears at `https://<your-username>.github.io/<repository-name>/` withi
 
 | File | What it is |
 | --- | --- |
-| `styles.css` | The Powertec Utilities site styles, with the tracker styles added at the end |
+| `styles.css` | Colours, fonts, layout, photo and logo phase-in |
 | `app.js` | Menu, trackers, record pages, procedure and example data |
-| `logo.png` | Header logo |
-| `logo-footer.png` | Footer logo |
+| `logo.png` | Main logo, transparent background |
+| `mark.png` | Swoosh mark for the header and footer |
 | `favicon.png` | Browser tab icon |
 | `hero.jpg` | Front page photo |
-| `banner-keys.jpg` | Banner: key and information trackers |
-| `banner-permits.jpg` | Banner: PTW and SFT trackers |
-| `banner-substation.jpg` | Banner: LOA tracker and CP register |
-| `banner-network.jpg` | Banner: procedure and schematic |
+| `banner-keys.jpg` | Photo: key and information trackers |
+| `banner-permits.jpg` | Photo: PTW, SFT and record pages |
+| `banner-substation.jpg` | Photo: LOA tracker and CP register |
+| `banner-network.jpg` | Photo: procedure and schematic |
 
 ## Sharper photos
 
 The photos were made from small thumbnails. Upload your full-size originals with the
-same file names (for example `hero.jpg`) and they replace these with no code changes.
+same file names and they replace these with no code changes.
 
 ## Changing the records
 
